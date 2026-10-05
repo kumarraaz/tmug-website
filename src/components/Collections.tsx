@@ -12,21 +12,29 @@ function CollectionCard({
   collection,
   onSelect,
   active,
+  preview,
+  onPreview,
 }: {
   collection: Collection;
   onSelect: (c: Collection) => void;
   active: boolean;
+  preview: boolean;
+  onPreview: () => void;
 }) {
-  const [tapped, setTapped] = useState(false);
   const count = collectionProducts(collection).length;
-  const expanded = tapped; // mobile tap toggles the info overlay
+  const expanded = preview || active; // mobile tap previews; desktop uses hover
 
   return (
     <motion.button
       type="button"
       onClick={() => {
-        setTapped((v) => !v);
-        onSelect(collection);
+        // Mobile: first tap previews the info, second tap filters + scrolls.
+        // Desktop: hover already reveals info, so a click filters + scrolls.
+        if (preview || active) {
+          onSelect(collection);
+        } else {
+          onPreview();
+        }
       }}
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -89,6 +97,7 @@ export default function Collections({
   onSelect: (c: Collection | null) => void;
   activeId: string | null;
 }) {
+  const [previewId, setPreviewId] = useState<string | null>(null);
   return (
     <section id="collections" className="scroll-mt-24 bg-cream py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -103,6 +112,8 @@ export default function Collections({
               key={c.id}
               collection={c}
               active={activeId === c.id}
+              preview={previewId === c.id}
+              onPreview={() => setPreviewId((id) => (id === c.id ? null : c.id))}
               onSelect={(col) => onSelect(activeId === col.id ? null : col)}
             />
           ))}
