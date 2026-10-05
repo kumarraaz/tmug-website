@@ -1,10 +1,12 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
+  useMotionValue,
   useReducedMotion,
   useScroll,
+  useSpring,
   useTransform,
 } from "framer-motion";
 import FloatingLogo from "./motion/FloatingLogo";
@@ -15,22 +17,63 @@ import { IconArrowRight } from "./icons";
  *
  * No product packs. A hand-drawn style kulhad cup with rising steam that
  * dissolves into botanical leaves and tiny flowers, floating sprigs, gold
- * accents and a whisper-quiet TMUG watermark. All motion is slow and
- * cinematic (steam 7s, float 6–11s, dots 5s) — no spin, no bounce.
+ * accents and a whisper-quiet TMUG watermark. Desktop gets a subtle
+ * mouse-driven 3D tilt; touch devices get the gentle float loop instead.
+ * All motion is slow and cinematic — no spin, no bounce.
  */
 function HeroVisual() {
+  const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
+  const [canTilt, setCanTilt] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const update = () => setCanTilt(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const mx = useMotionValue(0.5);
+  const my = useMotionValue(0.5);
+  const rotateX = useSpring(useTransform(my, [0, 1], [4, -4]), { stiffness: 120, damping: 22 });
+  const rotateY = useSpring(useTransform(mx, [0, 1], [-5, 5]), { stiffness: 120, damping: 22 });
+
+  const onMove = (e: React.MouseEvent) => {
+    if (!canTilt || reduce || !ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    mx.set((e.clientX - r.left) / r.width);
+    my.set((e.clientY - r.top) / r.height);
+  };
+  const onLeave = () => {
+    mx.set(0.5);
+    my.set(0.5);
+  };
 
   return (
-    <div className="relative mx-auto w-[52vw] max-w-[300px] sm:max-w-[340px]" aria-hidden="true">
+    <div
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className="perspective-1000 relative mx-auto w-[76vw] max-w-[400px] sm:max-w-[480px]"
+      aria-hidden="true"
+    >
+      {/* ambient glow behind the cup */}
+      <div className="absolute left-1/2 top-1/2 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(216,166,42,0.22),rgba(23,107,77,0.10)_55%,transparent_70%)] blur-2xl" />
+      {/* soft ground shadow */}
+      <div className="absolute bottom-[2%] left-1/2 h-[4%] w-[62%] -translate-x-1/2 rounded-[100%] bg-tea-ink/15 blur-xl" />
+
       <motion.div
-        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        initial={{ opacity: 0, y: 28, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.8, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+        style={canTilt && !reduce ? { rotateX, rotateY, transformStyle: "preserve-3d" } : undefined}
+        className="relative"
       >
+        <div className={reduce ? undefined : "animate-cup-float"}>
         <svg
           viewBox="0 0 420 470"
-          className="h-auto w-full"
+          className="h-auto w-full drop-shadow-[0_24px_36px_rgba(8,42,32,0.18)]"
           role="presentation"
           focusable="false"
         >
@@ -163,7 +206,7 @@ function HeroVisual() {
           <circle cx="330" cy="272" r="3.5" fill="#d8a62a" className={reduce ? undefined : "animate-dot-pulse"} />
 
           {/* ── the kulhad cup ── */}
-          <g className={reduce ? undefined : "animate-cup-float"}>
+          <g>
             {/* saucer */}
             <ellipse cx="210" cy="398" rx="118" ry="22" fill="#fffdf7" stroke="#0e513b" strokeWidth="3" />
             <ellipse cx="210" cy="398" rx="78" ry="13" fill="none" stroke="#d8a62a" strokeWidth="2" opacity="0.7" />
@@ -189,6 +232,7 @@ function HeroVisual() {
             <ellipse cx="210" cy="300" rx="60" ry="12.5" fill="#e8a93d" opacity="0.9" />
           </g>
         </svg>
+        </div>
       </motion.div>
     </div>
   );
@@ -198,16 +242,19 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 40]);
+  // gentle parallax: copy drifts up a touch, visual drifts down — never excessive
+  const textY = useTransform(scrollYProgress, [0, 1], [0, 30]);
+  const visualY = useTransform(scrollYProgress, [0, 1], [0, 70]);
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden bg-cream">
       <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_20%_10%,rgba(216,166,42,0.12),transparent),radial-gradient(ellipse_55%_45%_at_85%_85%,rgba(23,107,77,0.08),transparent)]" />
       <FloatingLogo opacity={0.04} size="95%" />
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pb-10 pt-8 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:pb-14 lg:pt-12">
-        <motion.div style={reduce ? undefined : { y: textY }} className="text-center lg:text-left">
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+      {/* centered editorial composition on every breakpoint */}
+      <div className="relative mx-auto max-w-4xl px-4 pb-12 pt-10 text-center sm:px-6 sm:pt-14">
+        <motion.div style={reduce ? undefined : { y: textY }}>
+          <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}>
             <span className="inline-flex items-center gap-2 rounded-full border border-tea-green/20 bg-white/70 px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.16em] text-tea-green">
               <span className="h-1.5 w-1.5 rounded-full bg-gold" aria-hidden="true" />
               Modern Indian Tea Co.
@@ -215,10 +262,10 @@ export default function Hero() {
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="text-hero mt-5 font-display font-extrabold text-tea-ink"
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="text-hero-xl mx-auto mt-6 max-w-3xl font-display font-extrabold text-tea-ink"
           >
             Tea, but
             <br />
@@ -226,30 +273,30 @@ export default function Hero() {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.18 }}
-            className="mt-5 max-w-md text-[15px] leading-relaxed text-ink-soft lg:mx-0"
+            transition={{ duration: 0.65, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-ink-soft sm:text-lg"
           >
             Colour-changing blue teas, tangy ruby reds and properly kadak chai —
             packed fresh for your everyday ritual.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.26 }}
-            className="mt-7 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+            transition={{ duration: 0.65, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-8 flex flex-wrap items-center justify-center gap-3"
           >
             <a
               href="#shop"
-              className="inline-flex items-center gap-2 rounded-full bg-tea-green px-7 py-3.5 text-[15px] font-extrabold text-cream shadow-[0_14px_30px_-12px_rgba(23,107,77,0.6)] transition-transform duration-200 hover:scale-[1.03] active:scale-[0.97]"
+              className="inline-flex items-center gap-2 rounded-full bg-tea-green px-8 py-4 text-base font-extrabold text-cream shadow-[0_14px_30px_-12px_rgba(23,107,77,0.6)] transition-transform duration-200 hover:scale-[1.03] active:scale-[0.97]"
             >
               Shop Tea <IconArrowRight className="h-4 w-4" />
             </a>
             <a
               href="/collections"
-              className="inline-flex items-center gap-2 rounded-full border border-tea-green/25 bg-white/60 px-7 py-3.5 text-[15px] font-bold text-tea-green transition-colors duration-200 hover:border-tea-green/50"
+              className="inline-flex items-center gap-2 rounded-full border border-tea-green/25 bg-white/60 px-8 py-4 text-base font-bold text-tea-green transition-colors duration-200 hover:border-tea-green/50"
             >
               Explore Collections
             </a>
@@ -258,14 +305,16 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-6 text-xs font-bold uppercase tracking-[0.18em] text-ink-soft"
+            transition={{ duration: 0.6, delay: 0.45 }}
+            className="mt-7 text-xs font-bold uppercase tracking-[0.18em] text-ink-soft"
           >
             7 teas · 13 packs · Ships across India
           </motion.p>
         </motion.div>
 
-        <HeroVisual />
+        <motion.div style={reduce ? undefined : { y: visualY }} className="mt-10 sm:mt-12">
+          <HeroVisual />
+        </motion.div>
       </div>
     </section>
   );

@@ -44,14 +44,14 @@ export default function CollectionsShowcase() {
                   onMouseLeave={(e) => (e.currentTarget.style.borderColor = "")}
                   aria-label={`Browse ${c.name} — ${count} teas`}
                 >
-                  <span className="relative block h-[104px] overflow-hidden sm:h-[128px]">
+                  <span className="relative block h-[132px] overflow-hidden bg-cream-light sm:h-[168px]">
                     <Image
                       src={c.image}
                       alt={c.imageAlt}
                       fill
                       sizes="(max-width: 640px) 45vw, 25vw"
                       loading="lazy"
-                      className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                      className="object-contain p-3 transition-transform duration-300 group-hover:scale-[1.04]"
                     />
                   </span>
                   <span className="flex items-center justify-between gap-2 px-4 py-3">

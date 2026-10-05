@@ -121,12 +121,13 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay: (index % 4) * 0.06, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ y: -6 }}
+      whileTap={{ scale: 0.98 }}
       onMouseEnter={(e) => (e.currentTarget.style.borderColor = product.accent)}
       onMouseLeave={(e) => (e.currentTarget.style.borderColor = "")}
       className="group relative flex h-full flex-col overflow-hidden rounded-[1.25rem] border border-ink/8 bg-white shadow-[0_10px_28px_-16px_rgba(11,61,46,0.22)] transition-shadow duration-300 hover:shadow-[0_22px_45px_-18px_rgba(11,61,46,0.35)]"
     >
-      {/* Image */}
-      <div className="relative aspect-square w-full overflow-hidden" style={{ backgroundColor: product.accentSoft }}>
+      {/* Image — full pack always visible, never cropped */}
+      <div className="relative aspect-[4/5] w-full overflow-hidden" style={{ backgroundColor: product.accentSoft }}>
         <Link href={`/products/${product.slug}`} aria-label={`View ${product.name}`} className="absolute inset-0 z-10">
           <span className="sr-only">View {product.name}</span>
         </Link>
@@ -136,7 +137,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
           fill
           sizes="(max-width: 640px) 60vw, (max-width: 1024px) 30vw, 22vw"
           loading="lazy"
-          className={`object-cover transition-all duration-300 ease-out group-hover:rotate-1 group-hover:scale-[1.04] ${
+          className={`object-contain p-4 transition-all duration-300 ease-out group-hover:scale-[1.05] ${
             back ? "group-hover:opacity-0" : ""
           }`}
         />
@@ -148,7 +149,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
             fill
             sizes="(max-width: 640px) 60vw, (max-width: 1024px) 30vw, 22vw"
             loading="lazy"
-            className="object-cover opacity-0 transition-all duration-300 ease-out group-hover:rotate-1 group-hover:scale-[1.04] group-hover:opacity-100"
+            className="object-contain p-4 opacity-0 transition-all duration-300 ease-out group-hover:scale-[1.05] group-hover:opacity-100"
           />
         )}
         {product.featured && (

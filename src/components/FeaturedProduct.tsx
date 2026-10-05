@@ -34,7 +34,7 @@ export default function FeaturedProduct() {
                   className="absolute -left-8 -top-8 h-32 w-32 rounded-full opacity-30 blur-2xl"
                   style={{ backgroundColor: product.accent }}
                 />
-                <div className="animate-float relative overflow-hidden rounded-3xl border border-ink/8">
+                <div className="animate-float relative overflow-hidden rounded-3xl border border-ink/8 bg-white">
                   <div className="relative aspect-[4/5]">
                     <Image
                       src={variant.images[0].src}
@@ -42,7 +42,7 @@ export default function FeaturedProduct() {
                       fill
                       sizes="(max-width: 768px) 80vw, 320px"
                       loading="lazy"
-                      className="object-cover"
+                      className="object-contain p-4"
                     />
                   </div>
                 </div>

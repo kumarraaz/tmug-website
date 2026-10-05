@@ -68,10 +68,10 @@ export default function ProductRail({
       </div>
       <div
         ref={trackRef}
-        className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:px-6 lg:px-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]"
+        className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 px-4 pb-2 sm:scroll-px-6 sm:px-6 lg:px-[max(1.5rem,calc((100vw-80rem)/2+1.5rem)]"
       >
         {products.map((p, i) => (
-          <div key={p.id} className="w-[230px] shrink-0 snap-start sm:w-[260px]">
+          <div key={p.id} className="w-[240px] shrink-0 snap-start sm:w-[270px]">
             <ProductCard product={p} index={i} />
           </div>
         ))}
