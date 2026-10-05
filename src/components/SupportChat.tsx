@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { siteConfig, whatsappLink } from "@/config/site";
+import { PRODUCTS } from "@/data/products";
+import { formatINR } from "@/lib/format";
 import { IconChat, IconClose, IconWhatsApp } from "./icons";
 
 interface Message {
@@ -56,8 +58,15 @@ export default function SupportChat() {
       return "Add teas to your cart, then tap “Order on WhatsApp” — your order details go straight to our team. Online checkout is coming soon.";
     if (/(ship|deliver|dispatch)/.test(q))
       return "We ship across India. Shipping is calculated when you confirm your order on WhatsApp.";
-    if (/(price|cost|discount|offer|promo|coupon)/.test(q))
-      return `Festive offer: ${siteConfig.promo.discountPercent}% off — mention code ${siteConfig.promo.code} when you order on WhatsApp. Prices on each pack are MRP.`;
+    if (/(price|cost|kitna|discount|offer|promo|coupon)/.test(q)) {
+      const lines = PRODUCTS.map(
+        (p) => `${p.name}: from ${formatINR(Math.min(...p.variants.map((v) => v.price)))}`,
+      );
+      return (
+        `Our prices: ${lines.join(" • ")}. ` +
+        `Festive offer: ${siteConfig.promo.discountPercent}% off with code ${siteConfig.promo.code} — apply it in your cart.`
+      );
+    }
     if (/(caffeine)/.test(q))
       return "Butterfly pea, chamomile, hibiscus and lemongrass are caffeine-free herbals. Darjeeling green tea and our CTC chai contain natural caffeine.";
     if (/(hi|hello|hey|namaste)/.test(q))

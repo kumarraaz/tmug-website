@@ -18,8 +18,8 @@ export function AnnouncementBar() {
           {promo.discountPercent}% OFF
         </span>
         <span>
-          Festive offer — use code <span className="font-extrabold text-gold-soft">{promo.code}</span> on
-          WhatsApp orders
+          Festive offer — apply code <span className="font-extrabold text-gold-soft">{promo.code}</span> in
+          your cart for {promo.discountPercent}% off
         </span>
       </p>
     </div>

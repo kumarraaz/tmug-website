@@ -10,13 +10,22 @@ import {
   type ReactNode,
 } from "react";
 import type { CartLine, Product, ProductVariant } from "@/types";
+import { siteConfig } from "@/config/site";
+import { roundPaise } from "@/lib/format";
 
 const STORAGE_KEY = "tmug-cart-v1";
+const COUPON_KEY = "tmug-coupon-v1";
 
 interface ShopState {
   lines: CartLine[];
   count: number;
   subtotal: number;
+  discount: number;
+  total: number;
+  coupon: string | null;
+  couponError: string | null;
+  applyCoupon: (code: string) => boolean;
+  removeCoupon: () => void;
   cartOpen: boolean;
   setCartOpen: (open: boolean) => void;
   quickViewId: string | null;
@@ -42,6 +51,18 @@ function loadCart(): CartLine[] {
   }
 }
 
+function loadCoupon(): string | null {
+  try {
+    const raw = localStorage.getItem(COUPON_KEY);
+    if (!raw) return null;
+    // Only restore if the promo is still enabled and the code still matches
+    const { promo } = siteConfig;
+    return promo.enabled && raw.trim().toUpperCase() === promo.code.toUpperCase() ? promo.code : null;
+  } catch {
+    return null;
+  }
+}
+
 export function ShopProvider({ children }: { children: ReactNode }) {
   // Lazy initializer: cart hydrates from localStorage on first render, no effect needed.
   const [lines, setLines] = useState<CartLine[]>(() => {
@@ -52,7 +73,13 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   const [quickViewId, setQuickViewId] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  // Persist on every change (writes back the just-loaded cart on mount — harmless).
+  const [coupon, setCoupon] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    return loadCoupon();
+  });
+  const [couponError, setCouponError] = useState<string | null>(null);
+
+  // Persist cart + coupon on every change
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(lines));
@@ -60,6 +87,36 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       /* storage full/blocked — cart still works for the session */
     }
   }, [lines]);
+
+  useEffect(() => {
+    try {
+      if (coupon) localStorage.setItem(COUPON_KEY, coupon);
+      else localStorage.removeItem(COUPON_KEY);
+    } catch {
+      /* ignore */
+    }
+  }, [coupon]);
+
+  const applyCoupon = useCallback((code: string): boolean => {
+    const { promo } = siteConfig;
+    const normalized = code.trim().toUpperCase();
+    if (!promo.enabled) {
+      setCouponError("This offer has ended.");
+      return false;
+    }
+    if (normalized === promo.code.toUpperCase()) {
+      setCoupon(promo.code);
+      setCouponError(null);
+      return true;
+    }
+    setCouponError(`"${code.trim()}" is not a valid coupon code.`);
+    return false;
+  }, []);
+
+  const removeCoupon = useCallback(() => {
+    setCoupon(null);
+    setCouponError(null);
+  }, []);
 
   const addToCart = useCallback(
     (product: Product, variant: ProductVariant, qty = 1) => {
@@ -103,18 +160,26 @@ export function ShopProvider({ children }: { children: ReactNode }) {
 
   const clearCart = useCallback(() => setLines([]), []);
 
-  const { count, subtotal } = useMemo(() => {
-    return {
-      count: lines.reduce((n, l) => n + l.qty, 0),
-      subtotal: lines.reduce((n, l) => n + l.qty * l.price, 0),
-    };
-  }, [lines]);
+  const { count, subtotal, discount, total } = useMemo(() => {
+    const count = lines.reduce((n, l) => n + l.qty, 0);
+    const subtotal = lines.reduce((n, l) => n + l.qty * l.price, 0);
+    const discount = coupon
+      ? roundPaise((subtotal * siteConfig.promo.discountPercent) / 100)
+      : 0;
+    return { count, subtotal, discount, total: roundPaise(subtotal - discount) };
+  }, [lines, coupon]);
 
   const value = useMemo(
     () => ({
       lines,
       count,
       subtotal,
+      discount,
+      total,
+      coupon,
+      couponError,
+      applyCoupon,
+      removeCoupon,
       cartOpen,
       setCartOpen,
       quickViewId,
@@ -126,7 +191,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       removeLine,
       clearCart,
     }),
-    [lines, count, subtotal, cartOpen, quickViewId, searchOpen, addToCart, updateQty, removeLine, clearCart],
+    [lines, count, subtotal, discount, total, coupon, couponError, applyCoupon, removeCoupon, cartOpen, quickViewId, searchOpen, addToCart, updateQty, removeLine, clearCart],
   );
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;

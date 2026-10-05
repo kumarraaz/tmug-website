@@ -22,21 +22,24 @@ export const siteConfig = {
   },
 
   /**
-   * IMPORTANT: prices in data/products.ts are PLACEHOLDER values only.
-   * Set this to true only after real MRP has been entered there.
+   * Prices in data/products.ts are the REAL selling prices (confirmed).
    * While false, prices are hidden from search-engine structured data.
    */
-  pricesAreReal: false,
+  pricesAreReal: true,
 
-  /** Festive / promotional popup. Turn `enabled` off after the season ends. */
+  /**
+   * Festive / promotional offer. Turn `enabled` off after the season ends —
+   * the popup, announcement bar and coupon validation all respect this flag.
+   * The coupon gives `discountPercent`% off the cart subtotal when applied.
+   */
   promo: {
     enabled: true,
-    code: "TMUG10",
+    code: "TMUG10", // the ONE valid coupon code (case-insensitive)
     discountPercent: 10,
     title: "Festive Offer",
     headline: "Get 10% OFF your first order",
     message:
-      "Mention the code on WhatsApp when you place your order and we’ll take 10% off. No auto-applied discounts — just show the code.",
+      "Add teas to your cart, apply the code at checkout, and get 10% off instantly. No minimum order — the discount shows right in your cart.",
     cta: "Shop Tea",
     /** Days before the popup may show again after dismissal. */
     remindAfterDays: 7,
@@ -67,14 +70,29 @@ export function whatsappLink(message?: string): string {
 }
 
 /** Build a pre-filled WhatsApp order message from cart lines. */
-export function whatsappOrderLink(lines: string[], subtotal: string): string {
-  const message = [
-    "Hi TMUG! I’d like to order:",
+export function whatsappOrderLink(
+  lines: { name: string; variant: string; qty: number; unitPrice: string; lineTotal: string }[],
+  subtotal: string,
+  discount?: { code: string; percent: number; amount: string },
+  total?: string,
+): string {
+  const messageLines = [
+    "Hello TMUG,",
     "",
-    ...lines.map((l) => `• ${l}`),
+    "I would like to order:",
     "",
+    ...lines.flatMap((l, i) => [
+      `${i + 1}. ${l.name}`,
+      `Variant: ${l.variant}`,
+      `Qty: ${l.qty}`,
+      `Price: ${l.unitPrice} each`,
+      "",
+    ]),
     `Subtotal: ${subtotal}`,
-    `Promo code: ${siteConfig.promo.code} (10% off)`,
-  ].join("\n");
-  return whatsappLink(message);
+    ...(discount ? [`Discount (${discount.code} — ${discount.percent}% off): -${discount.amount}`] : []),
+    ...(total ? [`Total: ${total}`] : []),
+    "",
+    "Please confirm my order.",
+  ];
+  return whatsappLink(messageLines.join("\n"));
 }

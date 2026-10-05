@@ -50,12 +50,14 @@ public/
 └── products/               # 31 supplied product photos, URL-safe names
 ```
 
-## Before launch — real prices
+## Pricing
 
-Prices in `src/data/products.ts` are **placeholders**. Replace every
-`price` / `compareAtPrice`, then set `pricesAreReal: true` in
-`src/config/site.ts`. Until then, prices are hidden from search-engine
-structured data.
+Real selling prices live in `src/data/products.ts` (the single source of
+truth) and `pricesAreReal: true` is set in `src/config/site.ts`, so prices
+are included in Product structured data. No MRP / compare-at prices are
+shown — none were provided. The festive coupon is `TMUG10` (10% off, applied
+in the cart); disable it after the season via `promo.enabled: false` in
+`src/config/site.ts`.
 
 ## Admin panel
 

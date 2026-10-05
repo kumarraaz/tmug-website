@@ -4,13 +4,67 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useShop } from "@/lib/store";
-import { formatINR } from "@/lib/format";
+import { formatINR, formatMoney } from "@/lib/format";
 import { siteConfig, whatsappOrderLink } from "@/config/site";
 import { IconClose, IconTrash, IconWhatsApp } from "./icons";
 import { QuantitySelector } from "./ProductCard";
 
+/** Coupon input + applied state. */
+function CouponBox() {
+  const { coupon, couponError, applyCoupon, removeCoupon } = useShop();
+  const [input, setInput] = useState("");
+
+  if (coupon) {
+    return (
+      <div className="flex items-center justify-between rounded-xl bg-tea-green/10 px-4 py-2.5">
+        <p className="text-sm font-bold text-tea-green">
+          ✓ {coupon} applied — {siteConfig.promo.discountPercent}% off
+        </p>
+        <button
+          type="button"
+          onClick={removeCoupon}
+          className="text-xs font-bold text-ink-soft underline-offset-2 hover:underline"
+        >
+          Remove
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (applyCoupon(input)) setInput("");
+        }}
+        className="flex gap-2"
+      >
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder={`Coupon code (try ${siteConfig.promo.code})`}
+          aria-label="Coupon code"
+          className="min-w-0 flex-1 rounded-xl border border-ink/15 bg-cream px-3.5 py-2.5 text-sm font-bold uppercase outline-none placeholder:normal-case placeholder:font-normal focus:border-tea-green"
+        />
+        <button
+          type="submit"
+          className="shrink-0 rounded-xl bg-ink px-5 py-2.5 text-sm font-extrabold text-cream transition-transform active:scale-95"
+        >
+          Apply
+        </button>
+      </form>
+      {couponError && (
+        <p role="alert" className="mt-1.5 text-xs font-semibold text-red-600">
+          {couponError}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export default function CartDrawer() {
-  const { cartOpen, setCartOpen, lines, updateQty, removeLine, subtotal, count } = useShop();
+  const { cartOpen, setCartOpen, lines, updateQty, removeLine, subtotal, discount, total, coupon, count } = useShop();
   const [checkoutNote, setCheckoutNote] = useState(false);
 
   useEffect(() => {
@@ -26,8 +80,19 @@ export default function CartDrawer() {
     };
   }, [cartOpen, setCartOpen]);
 
-  const orderLines = lines.map(
-    (l) => `${l.productName} — ${l.variantLabel} × ${l.qty} (${formatINR(l.price * l.qty)})`,
+  const orderLines = lines.map((l) => ({
+    name: l.productName,
+    variant: l.variantLabel,
+    qty: l.qty,
+    unitPrice: formatINR(l.price),
+    lineTotal: formatINR(l.price * l.qty),
+  }));
+
+  const waLink = whatsappOrderLink(
+    orderLines,
+    formatINR(subtotal),
+    coupon ? { code: coupon, percent: siteConfig.promo.discountPercent, amount: formatMoney(discount) } : undefined,
+    coupon ? formatMoney(total) : undefined,
   );
 
   return (
@@ -138,17 +203,32 @@ export default function CartDrawer() {
 
                 {/* Footer */}
                 <div className="space-y-3 border-t border-ink/10 bg-white px-5 py-4">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-semibold text-ink-soft">Subtotal</span>
-                    <span className="font-display text-xl font-extrabold text-ink">
-                      {formatINR(subtotal)}
-                    </span>
-                  </div>
+                  <CouponBox />
+                  <dl className="space-y-1.5 text-sm">
+                    <div className="flex items-center justify-between">
+                      <dt className="font-semibold text-ink-soft">Subtotal</dt>
+                      <dd className="font-bold text-ink">{formatINR(subtotal)}</dd>
+                    </div>
+                    {coupon && (
+                      <div className="flex items-center justify-between text-tea-green">
+                        <dt className="font-semibold">
+                          Discount ({coupon} — {siteConfig.promo.discountPercent}%)
+                        </dt>
+                        <dd className="font-bold">−{formatMoney(discount)}</dd>
+                      </div>
+                    )}
+                    <div className="flex items-center justify-between border-t border-ink/10 pt-2">
+                      <dt className="font-bold text-ink">Total</dt>
+                      <dd className="font-display text-xl font-extrabold text-ink">
+                        {coupon ? formatMoney(total) : formatINR(subtotal)}
+                      </dd>
+                    </div>
+                  </dl>
                   <p className="text-xs text-ink-soft">
-                    Shipping calculated at order confirmation. Pay easily on WhatsApp — no account needed.
+                    Shipping calculated when you confirm on WhatsApp. No account needed.
                   </p>
                   <a
-                    href={whatsappOrderLink(orderLines, formatINR(subtotal))}
+                    href={waLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3.5 text-base font-extrabold text-white transition-transform hover:scale-[1.01] active:scale-95"

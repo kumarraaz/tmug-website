@@ -3,10 +3,10 @@ import type { Collection, Product, ProductVariant } from "@/types";
 /* ============================================================================
  * TMUG PRODUCT CATALOG — the single source of truth for all product data.
  *
- * ⚠️  PRICES ARE PLACEHOLDERS.
- * Real MRP has NOT been provided yet. Replace every `price` / `compareAtPrice`
- * below with the real selling price before launch, then set
- * `pricesAreReal: true` in src/config/site.ts.
+ * Prices below are the REAL selling prices (confirmed 2026-10-06).
+ * No MRP / compare-at prices are shown — none were provided.
+ * Change a price here and it updates everywhere (cards, quick view,
+ * cart, WhatsApp order, structured data).
  * ========================================================================== */
 
 const img = (slug: string, kind: "front" | "back" | "fssai", alt: string) => ({
@@ -20,7 +20,6 @@ function variant(
   weight: string,
   pack: "jar" | "pouch",
   price: number,
-  compareAtPrice: number | undefined,
   images: ReturnType<typeof img>[],
 ): ProductVariant {
   const label = `${weight} ${pack === "jar" ? "Jar" : "Pouch"}`;
@@ -31,7 +30,6 @@ function variant(
     weight,
     pack,
     price,
-    compareAtPrice,
     images,
     inStock: true,
   };
@@ -54,12 +52,12 @@ export const PRODUCTS: Product[] = [
     metaDescription:
       "Buy TMUG Butterfly Pea Flower Tea online — whole dried aparajita flowers that brew natural blue. Available in 50g jar & 100g pouch.",
     variants: [
-      variant("butterfly-pea", "50g", "jar", 349, 399, [
+      variant("butterfly-pea", "50g", "jar", 99, [
         img("butterfly-pea-50g-jar-front", "front", "TMUG butterfly pea flower tea 50g jar with dried blue flowers"),
         img("butterfly-pea-50g-jar-back", "back", "Back of TMUG butterfly pea flower tea 50g jar with ingredients and brewing steps"),
         img("butterfly-pea-50g-jar-fssai", "fssai", "TMUG butterfly pea flower tea 50g jar showing FSSAI and packer details"),
       ]),
-      variant("butterfly-pea", "100g", "pouch", 449, 549, [
+      variant("butterfly-pea", "100g", "pouch", 189, [
         img("butterfly-pea-100g-pouch-front", "front", "TMUG blue butterfly pea flower tea 100g pouch"),
         img("butterfly-pea-100g-pouch-back", "back", "Back of TMUG butterfly pea flower tea 100g pouch with brewing steps"),
       ]),
@@ -80,12 +78,12 @@ export const PRODUCTS: Product[] = [
     metaDescription:
       "Buy TMUG Chamomile Flower Tea online — whole dried babune ke phool, gentle caffeine-free brew. 50g jar & 100g pouch.",
     variants: [
-      variant("chamomile", "50g", "jar", 349, 399, [
+      variant("chamomile", "50g", "jar", 129, [
         img("chamomile-50g-jar-front", "front", "TMUG chamomile flower tea 50g jar with dried chamomile flowers"),
         img("chamomile-50g-jar-back", "back", "Back of TMUG chamomile flower tea 50g jar with ingredients and brewing steps"),
         img("chamomile-50g-jar-fssai", "fssai", "TMUG chamomile flower tea 50g jar showing FSSAI and packer details"),
       ]),
-      variant("chamomile", "100g", "pouch", 449, 549, [
+      variant("chamomile", "100g", "pouch", 209, [
         img("chamomile-100g-pouch-front", "front", "TMUG chamomile flower tea 100g pouch"),
         img("chamomile-100g-pouch-back", "back", "Back of TMUG chamomile flower tea 100g pouch with brewing steps"),
       ]),
@@ -107,12 +105,12 @@ export const PRODUCTS: Product[] = [
     metaDescription:
       "Buy TMUG Hibiscus Flower Tea online — dried red gudhal petals, tangy caffeine-free brew. 50g jar & 100g pouch.",
     variants: [
-      variant("hibiscus", "50g", "jar", 349, 399, [
+      variant("hibiscus", "50g", "jar", 119, [
         img("hibiscus-50g-jar-front", "front", "TMUG hibiscus flower tea 50g jar with dried red hibiscus petals"),
         img("hibiscus-50g-jar-back", "back", "Back of TMUG hibiscus flower tea 50g jar with ingredients and brewing steps"),
         img("hibiscus-50g-jar-fssai", "fssai", "TMUG hibiscus flower tea 50g jar showing FSSAI and packer details"),
       ]),
-      variant("hibiscus", "100g", "pouch", 449, 549, [
+      variant("hibiscus", "100g", "pouch", 199, [
         img("hibiscus-100g-pouch-front", "front", "TMUG hibiscus flower tea 100g pouch"),
         img("hibiscus-100g-pouch-back", "back", "Back of TMUG hibiscus flower tea 100g pouch with brewing steps"),
       ]),
@@ -133,12 +131,12 @@ export const PRODUCTS: Product[] = [
     metaDescription:
       "Buy TMUG Lemongrass Tea online — dried nimbu ghas leaves, fresh citrusy caffeine-free brew. 50g jar & 100g pouch.",
     variants: [
-      variant("lemongrass", "50g", "jar", 329, 379, [
+      variant("lemongrass", "50g", "jar", 99, [
         img("lemongrass-50g-jar-front", "front", "TMUG lemongrass tea 50g jar with dried lemongrass"),
         img("lemongrass-50g-jar-back", "back", "Back of TMUG lemongrass tea 50g jar with ingredients and brewing steps"),
         img("lemongrass-50g-jar-fssai", "fssai", "TMUG lemongrass tea 50g jar showing FSSAI and packer details"),
       ]),
-      variant("lemongrass", "100g", "pouch", 429, 499, [
+      variant("lemongrass", "100g", "pouch", 199, [
         img("lemongrass-100g-pouch-front", "front", "TMUG lemongrass tea 100g pouch"),
         img("lemongrass-100g-pouch-back", "back", "Back of TMUG lemongrass tea 100g pouch with brewing steps"),
       ]),
@@ -160,7 +158,7 @@ export const PRODUCTS: Product[] = [
     metaDescription:
       "Buy TMUG Darjeeling Green Tea online — long loose-leaf green tea in a 100g jar. Delicate, floral, smooth.",
     variants: [
-      variant("darjeeling-green", "100g", "jar", 499, 599, [
+      variant("darjeeling-green", "100g", "jar", 149, [
         img("darjeeling-100g-jar-front", "front", "TMUG Darjeeling green tea 100g jar with loose long leaf green tea"),
         img("darjeeling-100g-jar-back", "back", "Back of TMUG Darjeeling green tea 100g jar with ingredients and brewing steps"),
         img("darjeeling-100g-jar-fssai", "fssai", "TMUG Darjeeling green tea 100g jar showing FSSAI and packer details"),
@@ -182,11 +180,11 @@ export const PRODUCTS: Product[] = [
     metaDescription:
       "Buy TMUG Premium Tea online — strong CTC chai patti for kadak doodh chai. 250g & 500g pouches.",
     variants: [
-      variant("premium-tea", "250g", "pouch", 199, 249, [
+      variant("premium-tea", "250g", "pouch", 299, [
         img("premium-250g-pouch-front", "front", "TMUG Premium chai patti tea 250g pouch"),
         img("premium-250g-pouch-back", "back", "Back of TMUG Premium tea 250g pouch"),
       ]),
-      variant("premium-tea", "500g", "pouch", 379, 449, [
+      variant("premium-tea", "500g", "pouch", 449, [
         img("premium-500g-pouch-front", "front", "TMUG Premium chai patti tea 500g pouch"),
         img("premium-500g-pouch-back", "back", "Back of TMUG Premium tea 500g pouch"),
       ]),
@@ -208,11 +206,11 @@ export const PRODUCTS: Product[] = [
     metaDescription:
       "Buy TMUG Gold Tea online — bold Assam-style CTC chai patti, rich and malty. 250g & 500g pouches.",
     variants: [
-      variant("gold-tea", "250g", "pouch", 229, 279, [
+      variant("gold-tea", "250g", "pouch", 399, [
         img("gold-250g-pouch-front", "front", "TMUG Gold chai patti tea 250g pouch"),
         img("gold-250g-pouch-back", "back", "Back of TMUG Gold tea 250g pouch"),
       ]),
-      variant("gold-tea", "500g", "pouch", 429, 499, [
+      variant("gold-tea", "500g", "pouch", 749, [
         img("gold-500g-pouch-front", "front", "TMUG Gold chai patti tea 500g pouch"),
         img("gold-500g-pouch-back", "back", "Back of TMUG Gold tea 500g pouch"),
       ]),
