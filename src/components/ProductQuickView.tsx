@@ -7,15 +7,16 @@ import { getProduct, getVariant } from "@/data/products";
 import type { Product } from "@/types";
 import { useShop } from "@/lib/store";
 import { formatINR } from "@/lib/format";
-import { IconClose, IconPlus } from "./icons";
+import { IconClose } from "./icons";
 import { QuantitySelector, VariantSelector } from "./ProductCard";
+import AddToCartButton from "./cart/AddToCartButton";
+import Link from "next/link";
 
 /**
  * Modal body, keyed by product id — variant/gallery/qty state initializes
  * from props, so no reset effect is needed when switching products.
  */
 function QuickViewBody({ product, onClose }: { product: Product; onClose: () => void }) {
-  const { addToCart, setCartOpen } = useShop();
   const [variantId, setVariantId] = useState(product.variants[0].id);
   const [imgIndex, setImgIndex] = useState(0);
   const [qty, setQty] = useState(1);
@@ -24,12 +25,6 @@ function QuickViewBody({ product, onClose }: { product: Product; onClose: () => 
   const images = variant.images;
   const activeImage = images[Math.min(imgIndex, images.length - 1)];
 
-  const handleAdd = () => {
-    addToCart(product, variant, qty);
-    onClose();
-    setCartOpen(true);
-  };
-
   return (
     <motion.div
       initial={{ y: 60, opacity: 0, scale: 0.98 }}
@@ -37,7 +32,7 @@ function QuickViewBody({ product, onClose }: { product: Product; onClose: () => 
       exit={{ y: 60, opacity: 0, scale: 0.98 }}
       transition={{ type: "spring", stiffness: 300, damping: 32 }}
       onClick={(e) => e.stopPropagation()}
-      className="nice-scroll relative grid max-h-[92vh] w-full max-w-4xl grid-cols-1 overflow-y-auto rounded-t-[1.75rem] bg-cream sm:rounded-[1.75rem] md:grid-cols-2"
+      className="nice-scroll relative grid max-h-[92vh] w-full max-w-4xl grid-cols-1 overflow-y-auto rounded-t-[1.75rem] bg-cream-light sm:rounded-[1.75rem] md:grid-cols-2"
     >
       <button
         type="button"
@@ -49,8 +44,8 @@ function QuickViewBody({ product, onClose }: { product: Product; onClose: () => 
       </button>
 
       {/* Gallery */}
-      <div className="bg-cream-dark p-4 sm:p-6">
-        <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-white">
+      <div className="p-4 sm:p-6" style={{ backgroundColor: product.accentSoft }}>
+        <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-white ring-1 ring-ink/10">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeImage.src}
@@ -98,10 +93,11 @@ function QuickViewBody({ product, onClose }: { product: Product; onClose: () => 
       {/* Details */}
       <div className="flex flex-col gap-4 p-5 sm:p-7">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-tea-green">
+          <p className="text-xs font-extrabold uppercase tracking-[0.18em]" style={{ color: product.accent }}>
             {product.tagline}
           </p>
-          <h3 className="mt-1 font-display text-3xl font-extrabold text-ink">{product.name}</h3>
+          <h3 className="mt-1 font-display text-3xl font-black text-ink">{product.name}</h3>
+          <p className="mt-1 text-xs font-bold uppercase tracking-widest text-ink-soft">{product.profile}</p>
           <p className="mt-3 text-sm leading-relaxed text-ink-soft">{product.description}</p>
         </div>
 
@@ -118,27 +114,32 @@ function QuickViewBody({ product, onClose }: { product: Product; onClose: () => 
         </div>
 
         <div className="flex items-end justify-between">
-          <p className="text-2xl font-extrabold text-tea-green">
-            {formatINR(variant.price)}{" "}
-            {variant.compareAtPrice && (
-              <span className="text-base font-semibold text-ink-soft/70 line-through">
-                {formatINR(variant.compareAtPrice)}
-              </span>
-            )}
+          <p className="font-display text-3xl font-black text-tea-deep">
+            {formatINR(variant.price)}
           </p>
           <span className="text-xs font-semibold text-ink-soft">{variant.sku}</span>
         </div>
 
         <div className="flex items-center gap-3">
           <QuantitySelector qty={qty} onChange={setQty} />
-          <button
-            type="button"
-            onClick={handleAdd}
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-tea-green px-6 py-3 text-base font-extrabold text-cream transition-transform hover:scale-[1.02] active:scale-95"
-          >
-            <IconPlus className="h-5 w-5" /> Add to Cart
-          </button>
+          <AddToCartButton
+            product={product}
+            variant={variant}
+            qty={qty}
+            openCart
+            onAdded={onClose}
+            className="flex-1 px-6 py-3 text-base"
+          />
         </div>
+
+        <Link
+          href={`/products/${product.slug}`}
+          onClick={onClose}
+          className="text-center text-sm font-bold text-tea-green underline decoration-2 underline-offset-4"
+          style={{ textDecorationColor: product.accent }}
+        >
+          View full product page →
+        </Link>
 
         <dl className="space-y-3 rounded-2xl bg-white p-4 text-sm">
           <div>

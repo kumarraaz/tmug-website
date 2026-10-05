@@ -1,4 +1,4 @@
-import type { Collection, Product, ProductVariant } from "@/types";
+import type { Product, ProductVariant } from "@/types";
 
 /* ============================================================================
  * TMUG PRODUCT CATALOG — the single source of truth for all product data.
@@ -47,6 +47,9 @@ export const PRODUCTS: Product[] = [
     brewGuide:
       "Add 1 tsp of flowers to 200ml hot water (85–90°C). Steep 3–5 minutes, strain and sip. For iced tea, brew double-strength and pour over ice with lemon.",
     ingredients: "100% dried butterfly pea (aparajita) flowers. No added flavours or colours.",
+    profile: "Earthy · Floral · Turns citrus-bright with lemon",
+    accent: "#4A6FD4",
+    accentSoft: "#DBE4FF",
     featured: true,
     seoTitle: "Butterfly Pea Flower Tea (Blue Tea) Online India | TMUG",
     metaDescription:
@@ -74,6 +77,9 @@ export const PRODUCTS: Product[] = [
     brewGuide:
       "Add 1 tsp of flowers to 200ml hot water (85–90°C). Steep 4–5 minutes, strain and sip. Lovely with a drizzle of honey.",
     ingredients: "100% dried chamomile flowers. No added flavours or colours.",
+    profile: "Apple-blossom · Honeyed · Soft & mellow",
+    accent: "#E8A93D",
+    accentSoft: "#FFEFD2",
     seoTitle: "Chamomile Flower Tea Online India | TMUG",
     metaDescription:
       "Buy TMUG Chamomile Flower Tea online — whole dried babune ke phool, gentle caffeine-free brew. 50g jar & 100g pouch.",
@@ -100,6 +106,9 @@ export const PRODUCTS: Product[] = [
     brewGuide:
       "Add 1 tsp of petals to 200ml hot water (85–90°C). Steep 3–5 minutes and strain. For iced tea, brew double-strength, chill and serve over ice.",
     ingredients: "100% dried hibiscus petals. No added flavours or colours.",
+    profile: "Tangy · Berry-bright · Ruby-red",
+    accent: "#D84F6D",
+    accentSoft: "#FFDDE6",
     featured: true,
     seoTitle: "Hibiscus Flower Tea Online India | TMUG",
     metaDescription:
@@ -127,6 +136,9 @@ export const PRODUCTS: Product[] = [
     brewGuide:
       "Add 1 tsp of leaves to 200ml hot water (90°C). Steep 3–5 minutes and strain. Also great blended with green tea or ginger.",
     ingredients: "100% dried lemongrass leaves. No added flavours or colours.",
+    profile: "Citrusy · Grassy-fresh · Clean finish",
+    accent: "#6FA32A",
+    accentSoft: "#E9F6D2",
     seoTitle: "Lemongrass Tea Online India | TMUG",
     metaDescription:
       "Buy TMUG Lemongrass Tea online — dried nimbu ghas leaves, fresh citrusy caffeine-free brew. 50g jar & 100g pouch.",
@@ -153,6 +165,9 @@ export const PRODUCTS: Product[] = [
     brewGuide:
       "Add 1 tsp of leaves to 200ml water at 80–85°C (not boiling). Steep 2–3 minutes and strain. Re-steep the leaves once for a lighter second cup.",
     ingredients: "100% Darjeeling green tea, long loose leaf.",
+    profile: "Floral · Delicate · Muscatel-light",
+    accent: "#2E7D4F",
+    accentSoft: "#DDF0E2",
     featured: true,
     seoTitle: "Darjeeling Green Tea (Loose Leaf) Online India | TMUG",
     metaDescription:
@@ -176,6 +191,9 @@ export const PRODUCTS: Product[] = [
     brewGuide:
       "Boil 1 tsp per cup with water, add milk and simmer 2–3 minutes. Sweeten to taste. Add crushed ginger or cardamom for masala chai.",
     ingredients: "CTC black tea blend.",
+    profile: "Bold · Malty · Properly kadak",
+    accent: "#0E513B",
+    accentSoft: "#DCEDE4",
     seoTitle: "TMUG Premium Chai Patti Online India",
     metaDescription:
       "Buy TMUG Premium Tea online — strong CTC chai patti for kadak doodh chai. 250g & 500g pouches.",
@@ -201,6 +219,9 @@ export const PRODUCTS: Product[] = [
     brewGuide:
       "Boil 1 tsp per cup with water, add milk and simmer 2–3 minutes. Sweeten to taste. Stands up beautifully to spices.",
     ingredients: "CTC black tea blend (Assam style).",
+    profile: "Rich · Malty · Full-bodied",
+    accent: "#D8A62A",
+    accentSoft: "#FBEFD2",
     featured: true,
     seoTitle: "TMUG Gold Chai Patti Online India",
     metaDescription:
@@ -218,57 +239,15 @@ export const PRODUCTS: Product[] = [
   },
 ];
 
-export const COLLECTIONS: Collection[] = [
-  {
-    id: "herbal-flower",
-    slug: "herbal-flower-teas",
-    name: "Herbal Flower Teas",
-    tagline: "Caffeine-free & colourful",
-    description: "Whole dried flowers that brew beautiful. Butterfly pea, chamomile, hibiscus and lemongrass.",
-    image: "/products/butterfly-pea-50g-jar-front.jpg",
-    imageAlt: "TMUG butterfly pea flower tea 50g jar with dried blue flowers",
-    productIds: ["butterfly-pea", "chamomile", "hibiscus", "lemongrass"],
-    accent: "#7C9A5B",
-  },
-  {
-    id: "green-tea",
-    slug: "green-tea",
-    name: "Green Tea",
-    tagline: "Long leaf, light cup",
-    description: "Single-origin style Darjeeling long leaf — delicate, floral and smooth.",
-    image: "/products/darjeeling-100g-jar-front.jpg",
-    imageAlt: "TMUG Darjeeling green tea 100g jar with loose long leaf green tea",
-    productIds: ["darjeeling-green"],
-    accent: "#286021",
-  },
-  {
-    id: "premium-chai",
-    slug: "premium-chai",
-    name: "Premium Chai",
-    tagline: "Your everyday kadak",
-    description: "Strong CTC chai patti for the perfect doodh chai, every single morning.",
-    image: "/products/premium-250g-pouch-front.jpg",
-    imageAlt: "TMUG Premium chai patti tea 250g pouch",
-    productIds: ["premium-tea"],
-    accent: "#B07C1F",
-  },
-  {
-    id: "gold-chai",
-    slug: "gold-chai",
-    name: "Gold Chai",
-    tagline: "Bold & malty",
-    description: "Assam-style CTC with depth and character. For serious chai people.",
-    image: "/products/gold-250g-pouch-front.jpg",
-    imageAlt: "TMUG Gold chai patti tea 250g pouch",
-    productIds: ["gold-tea"],
-    accent: "#DBA51E",
-  },
-];
 
 /* ---------- helpers ---------- */
 
 export function getProduct(id: string): Product | undefined {
   return PRODUCTS.find((p) => p.id === id);
+}
+
+export function getProductBySlug(slug: string): Product | undefined {
+  return PRODUCTS.find((p) => p.slug === slug);
 }
 
 export function getVariant(product: Product, variantId: string): ProductVariant {
@@ -277,10 +256,4 @@ export function getVariant(product: Product, variantId: string): ProductVariant 
 
 export function frontImage(v: ProductVariant) {
   return v.images.find((i) => i.kind === "front") ?? v.images[0];
-}
-
-export function collectionProducts(c: Collection): Product[] {
-  return c.productIds
-    .map(getProduct)
-    .filter((p): p is Product => Boolean(p));
 }

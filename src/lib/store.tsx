@@ -16,6 +16,16 @@ import { roundPaise } from "@/lib/format";
 const STORAGE_KEY = "tmug-cart-v1";
 const COUPON_KEY = "tmug-coupon-v1";
 
+export interface FlyPayload {
+  img: string;
+  alt: string;
+  fromX: number;
+  fromY: number;
+  toX: number;
+  toY: number;
+  key: number;
+}
+
 interface ShopState {
   lines: CartLine[];
   count: number;
@@ -26,6 +36,12 @@ interface ShopState {
   couponError: string | null;
   applyCoupon: (code: string) => boolean;
   removeCoupon: () => void;
+  /** Fly-to-cart animation payload (null when idle). */
+  fly: FlyPayload | null;
+  triggerFly: (img: string, alt: string, fromX: number, fromY: number, toX: number, toY: number) => void;
+  clearFly: () => void;
+  /** Increments on every add — header badge pulses on change. */
+  cartPulse: number;
   cartOpen: boolean;
   setCartOpen: (open: boolean) => void;
   quickViewId: string | null;
@@ -78,6 +94,14 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     return loadCoupon();
   });
   const [couponError, setCouponError] = useState<string | null>(null);
+  const [fly, setFly] = useState<FlyPayload | null>(null);
+  const [cartPulse, setCartPulse] = useState(0);
+
+  const triggerFly = useCallback((img: string, alt: string, fromX: number, fromY: number, toX: number, toY: number) => {
+    setFly({ img, alt, fromX, fromY, toX, toY, key: Date.now() });
+  }, []);
+
+  const clearFly = useCallback(() => setFly(null), []);
 
   // Persist cart + coupon on every change
   useEffect(() => {
@@ -142,6 +166,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
           },
         ];
       });
+      setCartPulse((p) => p + 1);
     },
     [],
   );
@@ -180,6 +205,10 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       couponError,
       applyCoupon,
       removeCoupon,
+      fly,
+      triggerFly,
+      clearFly,
+      cartPulse,
       cartOpen,
       setCartOpen,
       quickViewId,
@@ -191,7 +220,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       removeLine,
       clearCart,
     }),
-    [lines, count, subtotal, discount, total, coupon, couponError, applyCoupon, removeCoupon, cartOpen, quickViewId, searchOpen, addToCart, updateQty, removeLine, clearCart],
+    [lines, count, subtotal, discount, total, coupon, couponError, applyCoupon, removeCoupon, fly, triggerFly, clearFly, cartPulse, cartOpen, quickViewId, searchOpen, addToCart, updateQty, removeLine, clearCart],
   );
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;

@@ -7,9 +7,10 @@ import { IconClose } from "./icons";
 
 const STORAGE_KEY = "tmug-promo-dismissed";
 
-/** Festive promo popup — shows once per `remindAfterDays`, easy to disable via config. */
+/** Festive promo popup — premium colorful card, floating animation, no fake urgency. */
 export default function PromoModal() {
   const [visible, setVisible] = useState(false);
+  const [copied, setCopied] = useState(false);
   const { promo } = siteConfig;
 
   useEffect(() => {
@@ -36,6 +37,14 @@ export default function PromoModal() {
     document.querySelector("#shop")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const copyCode = async () => {
+    try {
+      await navigator.clipboard.writeText(promo.code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch { /* clipboard unavailable */ }
+  };
+
   return (
     <AnimatePresence>
       {visible && promo.enabled && (
@@ -43,48 +52,71 @@ export default function PromoModal() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-tea-dark/70 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-tea-ink/60 p-4 backdrop-blur-md"
           onClick={dismiss}
           role="dialog"
           aria-modal="true"
           aria-label={promo.title}
         >
           <motion.div
-            initial={{ scale: 0.9, y: 30, opacity: 0 }}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
+            initial={{ scale: 0.85, y: 40, opacity: 0, rotate: -2 }}
+            animate={{ scale: 1, y: 0, opacity: 1, rotate: 0 }}
             exit={{ scale: 0.9, y: 30, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 28 }}
+            transition={{ type: "spring", stiffness: 260, damping: 24 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-sm overflow-hidden rounded-[1.75rem] bg-tea-green text-cream shadow-2xl"
+            className="relative w-full max-w-sm overflow-hidden rounded-[2rem] shadow-[0_40px_90px_-20px_rgba(0,0,0,0.6)]"
+            style={{ background: "linear-gradient(140deg, #0E513B 0%, #176B4D 55%, #0B3D2E 100%)" }}
           >
-            <div aria-hidden="true" className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gold/20 blur-2xl" />
+            {/* floating decorative blobs */}
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+              <div className="animate-float absolute -left-10 -top-10 h-40 w-40 rounded-full bg-gold/25 blur-2xl" />
+              <div className="animate-float-slow absolute -bottom-12 -right-8 h-44 w-44 rounded-full bg-blossom/25 blur-2xl" />
+              <div className="animate-wiggle absolute left-8 top-16 text-3xl">🍃</div>
+              <div className="animate-float absolute bottom-20 right-8 text-2xl">✨</div>
+            </div>
+
             <button
               type="button"
               onClick={dismiss}
               aria-label="Close offer"
-              className="absolute right-3 top-3 z-10 rounded-full bg-white/10 p-2 transition-colors hover:bg-white/20"
+              className="absolute right-3 top-3 z-10 rounded-full bg-white/15 p-2 text-cream transition-colors hover:bg-white/25"
             >
               <IconClose className="h-4 w-4" />
             </button>
-            <div className="relative px-7 py-9 text-center">
-              <p className="text-xs font-bold uppercase tracking-[0.22em] text-gold-soft">
-                {promo.title}
-              </p>
-              <p className="mt-3 font-display text-4xl font-extrabold leading-none">
-                {promo.discountPercent}% OFF
-              </p>
-              <p className="mt-2 font-display text-xl font-bold">{promo.headline.replace(/^\D*\d+% OFF\s*/i, "")}</p>
-              <p className="mt-3 text-sm leading-relaxed text-cream/75">{promo.message}</p>
-              <div className="mx-auto mt-5 inline-flex items-center gap-2 rounded-xl border-2 border-dashed border-gold/60 bg-tea-dark/40 px-5 py-2.5">
-                <span className="text-xs font-semibold uppercase tracking-widest text-cream/60">Code</span>
-                <span className="font-display text-xl font-extrabold tracking-widest text-gold">
+
+            <div className="relative px-7 py-10 text-center text-cream">
+              <motion.div
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-gold-soft">
+                  {promo.title}
+                </p>
+                <p className="mt-3 font-display text-6xl font-black leading-none">
+                  {promo.discountPercent}
+                  <span className="text-3xl">% OFF</span>
+                </p>
+              </motion.div>
+              <p className="mt-3 text-sm leading-relaxed text-cream/80">{promo.message}</p>
+
+              <button
+                type="button"
+                onClick={copyCode}
+                aria-live="polite"
+                className="mx-auto mt-6 flex items-center gap-3 rounded-2xl border-2 border-dashed border-gold/70 bg-white/10 px-6 py-3 backdrop-blur transition-colors hover:bg-white/15"
+                aria-label={`Copy coupon code ${promo.code}`}
+              >
+                <span className="text-xs font-bold uppercase tracking-widest text-cream/60">Code</span>
+                <span className="font-display text-2xl font-black tracking-[0.2em] text-gold">
                   {promo.code}
                 </span>
-              </div>
+                <span className="text-xs font-bold text-cream/70">{copied ? "Copied ✓" : "Tap to copy"}</span>
+              </button>
+
               <button
                 type="button"
                 onClick={goShop}
-                className="mt-6 w-full rounded-full bg-gold px-6 py-3.5 text-base font-extrabold text-tea-dark transition-transform hover:scale-[1.02] active:scale-95"
+                className="mt-6 w-full rounded-full bg-gold px-6 py-4 text-base font-black text-tea-ink shadow-[0_15px_35px_-10px_rgba(216,166,42,0.7)] transition-transform hover:scale-[1.03] active:scale-95"
               >
                 {promo.cta}
               </button>

@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Product } from "@/types";
 import { frontImage, getVariant } from "@/data/products";
 import { useShop } from "@/lib/store";
 import { formatINR } from "@/lib/format";
-import { IconPlus } from "./icons";
+import { IconArrowRight, IconStar } from "./icons";
+import AddToCartButton from "./cart/AddToCartButton";
 
 /** Small pill selector for product variants (weight/pack). */
 export function VariantSelector({
@@ -23,7 +25,7 @@ export function VariantSelector({
 }) {
   if (product.variants.length <= 1) return null;
   return (
-    <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={`Choose a pack for ${product.name}`}>
+    <div className="flex flex-wrap gap-1.5" role="radiogroup" aria-label={`Choose a pack for ${product.name}`}>
       {product.variants.map((v) => {
         const selected = v.id === selectedId;
         return (
@@ -36,13 +38,14 @@ export function VariantSelector({
               e.stopPropagation();
               onChange(v.id);
             }}
-            className={`rounded-full border font-bold transition-all ${
-              small ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
+            className={`rounded-full border font-bold transition-all duration-200 ${
+              small ? "px-2.5 py-1 text-[11px]" : "px-4 py-2 text-sm"
             } ${
               selected
-                ? "border-tea-green bg-tea-green text-cream"
-                : "border-ink/15 bg-white text-ink hover:border-tea-green/50"
+                ? "border-transparent text-cream shadow-md"
+                : "border-ink/15 bg-white/70 text-ink hover:border-tea-green/60"
             }`}
+            style={selected ? { backgroundColor: product.accent } : undefined}
           >
             {v.label}
           </button>
@@ -100,38 +103,43 @@ export function QuantitySelector({
   );
 }
 
+/**
+ * Premium D2C product card: accent-tinted, hover lift + image zoom/rotate,
+ * quick-view + product-page links, animated Add to Cart.
+ */
 export default function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
-  const { addToCart, setQuickViewId } = useShop();
+  const { setQuickViewId } = useShop();
   const [variantId, setVariantId] = useState(product.variants[0].id);
-  const [added, setAdded] = useState(false);
   const variant = getVariant(product, variantId);
   const front = frontImage(variant);
   const back = variant.images.find((i) => i.kind === "back");
-
-  const handleAdd = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    addToCart(product, variant, 1);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1200);
-  };
 
   return (
     <motion.article
       initial={{ opacity: 0, y: 26 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay: (index % 4) * 0.06, ease: [0.22, 1, 0.36, 1] }}
-      className="group flex cursor-pointer flex-col overflow-hidden rounded-[1.5rem] bg-white shadow-[0_10px_35px_-15px_rgba(23,32,24,0.25)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_25px_50px_-15px_rgba(23,32,24,0.35)]"
-      onClick={() => setQuickViewId(product.id)}
+      transition={{ duration: 0.55, delay: (index % 4) * 0.07, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -8 }}
+      className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white shadow-[0_14px_40px_-16px_rgba(11,61,46,0.25)] ring-1 ring-ink/5 transition-shadow duration-300 hover:shadow-[0_30px_60px_-18px_rgba(11,61,46,0.4)]"
     >
-      {/* Image with hover swap */}
-      <div className="relative aspect-square w-full overflow-hidden bg-cream-dark">
+      {/* Image */}
+      <div className="relative aspect-square w-full overflow-hidden" style={{ backgroundColor: product.accentSoft }}>
+        <div
+          aria-hidden="true"
+          className="absolute -right-10 -top-10 h-36 w-36 rounded-full opacity-25 blur-2xl transition-transform duration-500 group-hover:scale-150"
+          style={{ backgroundColor: product.accent }}
+        />
+        <Link href={`/products/${product.slug}`} aria-label={`View ${product.name}`} className="absolute inset-0 z-10">
+          <span className="sr-only">View {product.name}</span>
+        </Link>
         <Image
           src={front.src}
           alt={front.alt}
           fill
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          className={`object-cover transition-all duration-500 group-hover:scale-105 ${
+          sizes="(max-width: 640px) 70vw, (max-width: 1024px) 33vw, 25vw"
+          loading="lazy"
+          className={`object-cover transition-all duration-500 ease-out group-hover:rotate-1 group-hover:scale-[1.06] ${
             back ? "group-hover:opacity-0" : ""
           }`}
         />
@@ -141,22 +149,40 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
             alt=""
             aria-hidden="true"
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover opacity-0 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100"
+            sizes="(max-width: 640px) 70vw, (max-width: 1024px) 33vw, 25vw"
+            loading="lazy"
+            className="object-cover opacity-0 transition-all duration-500 ease-out group-hover:rotate-1 group-hover:scale-[1.06] group-hover:opacity-100"
           />
         )}
-        {variant.compareAtPrice && variant.compareAtPrice > variant.price && (
-          <span className="absolute left-3 top-3 rounded-full bg-tea-green px-2.5 py-1 text-[11px] font-extrabold text-cream">
-            Save {formatINR(variant.compareAtPrice - variant.price)}
+        {product.featured && (
+          <span
+            className="absolute left-3 top-3 z-20 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wide text-white shadow-md"
+            style={{ backgroundColor: product.accent }}
+          >
+            <IconStar className="h-3 w-3" /> Bestseller
           </span>
         )}
+        {/* quick view pill — appears on hover (desktop), always visible on touch */}
+        <button
+          type="button"
+          onClick={() => setQuickViewId(product.id)}
+          className="absolute bottom-3 left-1/2 z-20 -translate-x-1/2 rounded-full bg-tea-ink/85 px-4 py-2 text-xs font-extrabold text-cream backdrop-blur transition-all duration-300 hover:bg-tea-ink sm:translate-y-14 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
+        >
+          Quick view
+        </button>
       </div>
 
-      <div className="flex flex-1 flex-col gap-2.5 p-4 sm:p-5">
+      {/* Body */}
+      <div className="flex flex-1 flex-col gap-2 p-4 sm:p-5">
         <div>
-          <h3 className="font-display text-lg font-extrabold leading-tight text-ink">
-            {product.name}
-          </h3>
+          <p className="text-[11px] font-extrabold uppercase tracking-[0.16em]" style={{ color: product.accent }}>
+            {product.profile.split("·")[0]?.trim()}
+          </p>
+          <Link href={`/products/${product.slug}`} className="hover:underline decoration-2 underline-offset-4" style={{ textDecorationColor: product.accent }}>
+            <h3 className="mt-0.5 font-display text-lg font-extrabold leading-tight text-ink">
+              {product.name}
+            </h3>
+          </Link>
           <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-ink-soft">
             {variant.label}
           </p>
@@ -164,27 +190,19 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
 
         <VariantSelector product={product} selectedId={variantId} onChange={setVariantId} small />
 
-        <div className="mt-auto flex items-center justify-between gap-2 pt-1">
-          <p className="text-lg font-extrabold text-tea-green">
-            {formatINR(variant.price)}{" "}
-            {variant.compareAtPrice && (
-              <span className="text-sm font-semibold text-ink-soft/70 line-through">
-                {formatINR(variant.compareAtPrice)}
-              </span>
-            )}
+        <div className="mt-auto flex items-center justify-between gap-2 pt-2">
+          <p className="font-display text-xl font-extrabold text-tea-deep">
+            {formatINR(variant.price)}
           </p>
-          <button
-            type="button"
-            onClick={handleAdd}
-            aria-label={`Add ${product.name} (${variant.label}) to cart`}
-            className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-extrabold transition-all active:scale-95 ${
-              added ? "bg-tea-green text-cream" : "bg-ink text-cream hover:bg-tea-green"
-            }`}
-          >
-            <IconPlus className="h-4 w-4" />
-            {added ? "Added!" : "Add"}
-          </button>
+          <AddToCartButton product={product} variant={variant} className="px-4 py-2.5 text-sm" />
         </div>
+
+        <Link
+          href={`/products/${product.slug}`}
+          className="inline-flex items-center gap-1 text-xs font-bold text-ink-soft transition-colors hover:text-tea-green"
+        >
+          View details <IconArrowRight className="h-3.5 w-3.5" />
+        </Link>
       </div>
     </motion.article>
   );

@@ -1,19 +1,52 @@
 @import "tailwindcss";
 
 @theme {
-  /* TMUG brand palette (from logo) */
-  --color-tea-green: #286021;
-  --color-tea-deep: #1c4417;
-  --color-tea-dark: #122b0f;
-  --color-gold: #dba51e;
-  --color-gold-soft: #f0cd6e;
-  --color-cream: #f8f4e8;
-  --color-cream-dark: #f1e9d2;
+  /* ── TMUG Phase 1.5 palette ─────────────────────────────
+     Deep botanical greens lead; cream keeps it fresh; gold
+     accents; per-tea accent colors used selectively. */
+  --color-tea-green: #176b4d;
+  --color-tea-deep: #0e513b;
+  --color-tea-dark: #0b3d2e;
+  --color-tea-ink: #082a20;
+  --color-gold: #d8a62a;
+  --color-gold-soft: #efc65e;
+  --color-cream: #fff8ea;
+  --color-cream-light: #fffdf7;
+  --color-cream-dark: #f3e8cf;
   --color-ink: #172018;
   --color-ink-soft: #4a5548;
 
-  --font-display: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif;
+  /* Per-tea accent colors (subtle, intentional) */
+  --color-pea: #4a6fd4;
+  --color-pea-soft: #dbe4ff;
+  --color-blossom: #d84f6d;
+  --color-blossom-soft: #ffdde6;
+  --color-limepop: #8fc93a;
+  --color-limepop-soft: #e9f6d2;
+  --color-honey: #e8a93d;
+  --color-honey-soft: #ffefd2;
+
+  --font-display: "Outfit", "DM Sans", system-ui, sans-serif;
   --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
+
+  --animate-marquee: marquee 28s linear infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-float-slow: float 11s ease-in-out infinite;
+  --animate-spin-slow: spin 24s linear infinite;
+  --animate-wiggle: wiggle 5s ease-in-out infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-16px) rotate(4deg); }
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
 }
 
 html {
@@ -23,21 +56,38 @@ html {
 body {
   @apply bg-cream text-ink font-sans antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
 
 ::selection {
-  background: #dba51e;
-  color: #172018;
+  background: #d8a62a;
+  color: #0b3d2e;
 }
 
-/* Visible, branded focus states */
 :focus-visible {
-  outline: 3px solid #dba51e;
+  outline: 3px solid #d8a62a;
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
-/* Respect reduced motion across the site */
+/* Outlined display text treatment */
+.text-outline {
+  -webkit-text-stroke: 2px currentColor;
+  -webkit-text-fill-color: transparent;
+  paint-order: stroke fill;
+}
+@media (max-width: 640px) {
+  .text-outline {
+    -webkit-text-stroke-width: 1.3px;
+  }
+}
+
+/* Soft grain-free paper texture via radial dots (very subtle) */
+.dot-grid {
+  background-image: radial-gradient(rgba(11, 61, 46, 0.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -51,7 +101,6 @@ body {
   }
 }
 
-/* Thin elegant scrollbar for drawers */
 .nice-scroll::-webkit-scrollbar {
   width: 6px;
 }
@@ -63,17 +112,21 @@ body {
   border-radius: 999px;
 }
 
-/* Gentle marquee used by the value strip */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-/* Hide scrollbars for horizontal swipe rows while keeping scroll */
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* 3D helpers */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
 }

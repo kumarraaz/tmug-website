@@ -35,6 +35,12 @@ export interface Product {
   description: string;
   brewGuide: string;
   ingredients: string;
+  /** Tasting notes — short, no health claims. */
+  profile: string;
+  /** Brand accent color for this tea (hex). */
+  accent: string;
+  /** Soft tinted background for this tea (hex). */
+  accentSoft: string;
   featured?: boolean;
   variants: ProductVariant[];
   seoTitle: string;

@@ -1,60 +1,33 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { PRODUCTS } from "@/data/products";
-import type { Collection } from "@/types";
 import ProductCard from "./ProductCard";
-import SectionHeading from "./SectionHeading";
+import Reveal, { Stagger, RevealItem } from "./motion/Reveal";
 
-/** Product grid with optional collection filtering. */
-export default function ProductGrid({
-  activeCollection,
-  onClear,
-}: {
-  activeCollection: Collection | null;
-  onClear: () => void;
-}) {
-  const products = activeCollection
-    ? PRODUCTS.filter((p) => activeCollection.productIds.includes(p.id))
-    : PRODUCTS;
-
+/** Full product grid — "Shop All Teas". Collection filtering lives on /collections. */
+export default function ProductGrid() {
   return (
     <section id="shop" className="scroll-mt-24 bg-cream py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <SectionHeading
-          eyebrow="The lineup"
-          title={activeCollection ? activeCollection.name : "Shop All Teas"}
-          description={
-            activeCollection
-              ? activeCollection.description
-              : "Seven teas, thirteen packs. Whole flowers, long leaves and kadak chai — pick your ritual."
-          }
-        >
-          <AnimatePresence>
-            {activeCollection && (
-              <motion.button
-                type="button"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                onClick={onClear}
-                className="mt-2 rounded-full border border-tea-green/30 px-4 py-1.5 text-sm font-bold text-tea-green transition-colors hover:bg-tea-green/5"
-              >
-                ✕ Clear filter — show all teas
-              </motion.button>
-            )}
-          </AnimatePresence>
-        </SectionHeading>
-
-        <motion.div layout className="mt-10 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
-          <AnimatePresence mode="popLayout">
-            {products.map((p, i) => (
-              <motion.div key={p.id} layout exit={{ opacity: 0, scale: 0.95 }}>
-                <ProductCard product={p} index={i} />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        <Reveal className="mb-10 text-center">
+          <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-tea-green">
+            The full lineup
+          </p>
+          <h2 className="mt-2 font-display text-3xl font-black tracking-tight text-tea-ink sm:text-5xl">
+            Shop all <span className="text-tea-green">teas</span>
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-ink-soft">
+            Seven teas, thirteen packs. Whole flowers, long leaves and kadak chai —
+            pick your ritual.
+          </p>
+        </Reveal>
+        <Stagger className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4" gap={0.06}>
+          {PRODUCTS.map((p, i) => (
+            <RevealItem key={p.id}>
+              <ProductCard product={p} index={i} />
+            </RevealItem>
+          ))}
+        </Stagger>
       </div>
     </section>
   );

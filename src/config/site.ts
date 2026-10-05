@@ -5,6 +5,8 @@
  * codebase should hard-code these values.
  */
 
+import { formatINR } from "@/lib/format";
+
 export const siteConfig = {
   name: "TMUG",
   tagline: "Tea, but make it TMUG.",
@@ -91,6 +93,32 @@ export function whatsappOrderLink(
     `Subtotal: ${subtotal}`,
     ...(discount ? [`Discount (${discount.code} — ${discount.percent}% off): -${discount.amount}`] : []),
     ...(total ? [`Total: ${total}`] : []),
+    "",
+    "Please confirm my order.",
+  ];
+  return whatsappLink(messageLines.join("\n"));
+}
+
+/**
+ * Pre-filled WhatsApp order link for a single product + variant.
+ * Used on product detail pages and the featured-product section.
+ */
+export function whatsappProductLink(
+  product: { name: string },
+  variant: { label: string; price: number },
+  qty: number,
+): string {
+  const messageLines = [
+    "Hello TMUG,",
+    "",
+    "I would like to order:",
+    "",
+    `1. ${product.name}`,
+    `Variant: ${variant.label}`,
+    `Qty: ${qty}`,
+    `Price: ${formatINR(variant.price)} each`,
+    "",
+    `Total: ${formatINR(variant.price * qty)}`,
     "",
     "Please confirm my order.",
   ];
