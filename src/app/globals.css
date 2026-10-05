@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@theme {
+  /* TMUG brand palette (from logo) */
+  --color-tea-green: #286021;
+  --color-tea-deep: #1c4417;
+  --color-tea-dark: #122b0f;
+  --color-gold: #dba51e;
+  --color-gold-soft: #f0cd6e;
+  --color-cream: #f8f4e8;
+  --color-cream-dark: #f1e9d2;
+  --color-ink: #172018;
+  --color-ink-soft: #4a5548;
+
+  --font-display: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif;
+  --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-cream text-ink font-sans antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #dba51e;
+  color: #172018;
+}
+
+/* Visible, branded focus states */
+:focus-visible {
+  outline: 3px solid #dba51e;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Respect reduced motion across the site */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Thin elegant scrollbar for drawers */
+.nice-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.nice-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.nice-scroll::-webkit-scrollbar-thumb {
+  background: #d8cdb2;
+  border-radius: 999px;
+}
+
+/* Gentle marquee used by the value strip */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Hide scrollbars for horizontal swipe rows while keeping scroll */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
