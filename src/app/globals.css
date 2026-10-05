@@ -32,6 +32,9 @@
   --animate-marquee: marquee 30s linear infinite;
   --animate-float: float 7s ease-in-out infinite;
   --animate-float-slow: float 11s ease-in-out infinite;
+  --animate-steam: steam-rise 7s ease-in-out infinite;
+  --animate-cup-float: cup-float 6s ease-in-out infinite;
+  --animate-dot-pulse: dot-pulse 5s ease-in-out infinite;
 
   @keyframes marquee {
     from { transform: translateX(0); }
@@ -40,6 +43,20 @@
   @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-6px); }
+  }
+  /* Hero brand visual: slow cinematic motion only — no spin, no bounce. */
+  @keyframes steam-rise {
+    0% { transform: translateY(10px); opacity: 0; }
+    35% { opacity: 0.55; }
+    100% { transform: translateY(-20px); opacity: 0; }
+  }
+  @keyframes cup-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+  @keyframes dot-pulse {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 0.85; }
   }
 }
 

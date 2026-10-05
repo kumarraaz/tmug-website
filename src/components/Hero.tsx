@@ -1,88 +1,194 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
 import {
   motion,
-  useMotionValue,
   useReducedMotion,
   useScroll,
-  useSpring,
   useTransform,
 } from "framer-motion";
-import { getProduct, frontImage, getVariant } from "@/data/products";
-import { formatINR } from "@/lib/format";
 import FloatingLogo from "./motion/FloatingLogo";
-import { IconArrowRight, IconLeaf } from "./icons";
+import { IconArrowRight } from "./icons";
 
-/** Compact product composition: one hero product, one mini card, one botanical. */
+/**
+ * TMUG brand visual — an original editorial tea-ritual illustration.
+ *
+ * No product packs. A hand-drawn style kulhad cup with rising steam that
+ * dissolves into botanical leaves and tiny flowers, floating sprigs, gold
+ * accents and a whisper-quiet TMUG watermark. All motion is slow and
+ * cinematic (steam 7s, float 6–11s, dots 5s) — no spin, no bounce.
+ */
 function HeroVisual() {
-  const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
-  const mx = useMotionValue(0.5);
-  const my = useMotionValue(0.5);
-  const rotateX = useSpring(useTransform(my, [0, 1], [3, -3]), { stiffness: 120, damping: 20 });
-  const rotateY = useSpring(useTransform(mx, [0, 1], [-4, 4]), { stiffness: 120, damping: 20 });
-
-  const butterfly = getProduct("butterfly-pea")!;
-  const hibiscus = getProduct("hibiscus")!;
-  const bImg = frontImage(getVariant(butterfly, butterfly.variants[0].id));
-  const hImg = frontImage(getVariant(hibiscus, hibiscus.variants[0].id));
-
-  const onMove = (e: React.MouseEvent) => {
-    if (reduce || !ref.current) return;
-    const r = ref.current.getBoundingClientRect();
-    mx.set((e.clientX - r.left) / r.width);
-    my.set((e.clientY - r.top) / r.height);
-  };
 
   return (
-    <div
-      ref={ref}
-      onMouseMove={onMove}
-      onMouseLeave={() => { mx.set(0.5); my.set(0.5); }}
-      className="perspective-1000 relative mx-auto w-[54vw] max-w-[260px] sm:max-w-[300px]"
-    >
-      <div aria-hidden="true" className="absolute left-1/2 top-1/2 h-[105%] w-[105%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(216,166,42,0.14),transparent_65%)] blur-2xl" />
-
+    <div className="relative mx-auto w-[52vw] max-w-[300px] sm:max-w-[340px]" aria-hidden="true">
       <motion.div
-        style={reduce ? undefined : { rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="relative"
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
       >
-        <motion.div
-          initial={{ opacity: 0, y: 20, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="animate-float relative overflow-hidden rounded-[1.5rem] border border-ink/10 bg-white shadow-[0_20px_45px_-20px_rgba(8,42,32,0.35)]"
+        <svg
+          viewBox="0 0 420 470"
+          className="h-auto w-full"
+          role="presentation"
+          focusable="false"
         >
-          <div className="relative aspect-[4/5] w-full">
-            <Image src={bImg.src} alt={bImg.alt} fill priority sizes="(max-width: 768px) 54vw, 300px" className="object-cover" />
-          </div>
-          <div className="flex items-center justify-between gap-2 px-3.5 py-2.5">
-            <p className="truncate font-display text-sm font-bold text-ink">{butterfly.name}</p>
-            <p className="shrink-0 font-display text-[15px] font-extrabold text-tea-green">{formatINR(99)}</p>
-          </div>
-        </motion.div>
+          <defs>
+            {/* Single leaf motif, reused across the composition */}
+            <g id="tmug-leaf">
+              <path d="M0 0 C 12 -8, 26 -8, 38 2 C 26 10, 12 10, 0 0 Z" fill="#176b4d" />
+              <path d="M5 -0.5 C 15 -2.5, 26 -2.5, 33 0.5" stroke="#fff8ea" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+            </g>
+          </defs>
 
-        {/* one small supporting card */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="absolute -right-3 top-6 w-20 sm:-right-5 sm:w-24"
-          aria-hidden="true"
-        >
-          <div className="animate-float-slow overflow-hidden rounded-xl border border-ink/10 bg-white shadow-[0_10px_25px_-12px_rgba(8,42,32,0.35)]">
-            <div className="relative aspect-square">
-              <Image src={hImg.src} alt="" fill sizes="96px" loading="lazy" className="object-cover" />
-            </div>
-            <p className="px-1.5 py-1 text-center text-[10px] font-extrabold text-ink">{formatINR(119)}</p>
-          </div>
-        </motion.div>
+          {/* soft organic green shape behind the illustration */}
+          <path
+            d="M 215 55 C 305 55, 372 140, 360 245 C 350 340, 285 425, 200 418 C 115 411, 48 335, 58 235 C 68 135, 125 55, 215 55 Z"
+            fill="#176b4d"
+            opacity="0.07"
+          />
 
-        <span className="animate-float-slow absolute -left-3 bottom-3 text-tea-green/25" aria-hidden="true">
-          <IconLeaf className="h-8 w-8" />
-        </span>
+          {/* oversized TMUG watermark */}
+          <text
+            x="210"
+            y="252"
+            textAnchor="middle"
+            fontFamily="Bricolage Grotesque, sans-serif"
+            fontWeight="800"
+            fontSize="74"
+            letterSpacing="10"
+            fill="#0e513b"
+            opacity="0.055"
+          >
+            TMUG
+          </text>
+
+          {/* gold accent dots */}
+          <g fill="#d8a62a" className={reduce ? undefined : "animate-dot-pulse"}>
+            <circle cx="88" cy="150" r="3.5" />
+            <circle cx="332" cy="118" r="3" style={{ animationDelay: "1.2s" }} />
+            <circle cx="352" cy="300" r="4" style={{ animationDelay: "2.1s" }} />
+            <circle cx="70" cy="322" r="3" style={{ animationDelay: "0.6s" }} />
+            <circle cx="300" cy="428" r="3" style={{ animationDelay: "3s" }} />
+            <circle cx="122" cy="424" r="2.5" style={{ animationDelay: "1.7s" }} />
+          </g>
+
+          {/* ── steam: slow continuous rise, staggered ── */}
+          <g
+            stroke="#176b4d"
+            strokeWidth="3"
+            strokeLinecap="round"
+            fill="none"
+            className={reduce ? undefined : "animate-steam"}
+          >
+            <path d="M 188 278 C 180 246, 196 226, 188 196 C 182 174, 190 156, 186 138" />
+            <path d="M 212 280 C 220 248, 204 228, 212 198 C 218 176, 210 158, 214 140" style={{ animationDelay: "2.3s" }} />
+            <path d="M 234 276 C 228 248, 242 230, 236 202 C 231 182, 238 164, 234 148" style={{ animationDelay: "4.6s" }} />
+          </g>
+
+          {/* ── steam dissolving into botanicals ── */}
+          <g className={reduce ? undefined : "animate-float-slow"}>
+            <use href="#tmug-leaf" transform="translate(148,118) rotate(-24) scale(0.9)" opacity="0.85" />
+          </g>
+          <g className={reduce ? undefined : "animate-float-slow"} style={{ animationDelay: "1.8s" }}>
+            <use href="#tmug-leaf" transform="translate(272,98) rotate(20) scale(0.75)" opacity="0.7" />
+          </g>
+          <g className={reduce ? undefined : "animate-float"} style={{ animationDelay: "0.9s" }}>
+            <use href="#tmug-leaf" transform="translate(214,74) rotate(8) scale(0.6)" opacity="0.6" />
+          </g>
+
+          {/* tiny hibiscus-pink blossom */}
+          <g
+            transform="translate(308,168)"
+            className={reduce ? undefined : "animate-float-slow"}
+            style={{ animationDelay: "1.2s" }}
+          >
+            <g fill="#d84f6d" opacity="0.72">
+              <ellipse cx="0" cy="-11" rx="6.5" ry="11" />
+              <ellipse cx="0" cy="-11" rx="6.5" ry="11" transform="rotate(72)" />
+              <ellipse cx="0" cy="-11" rx="6.5" ry="11" transform="rotate(144)" />
+              <ellipse cx="0" cy="-11" rx="6.5" ry="11" transform="rotate(216)" />
+              <ellipse cx="0" cy="-11" rx="6.5" ry="11" transform="rotate(288)" />
+            </g>
+            <circle r="4.5" fill="#d8a62a" />
+          </g>
+
+          {/* tiny butterfly-pea blue blossom */}
+          <g
+            transform="translate(112,198) scale(0.7)"
+            className={reduce ? undefined : "animate-float"}
+            style={{ animationDelay: "2.6s" }}
+          >
+            <g fill="#4a6fd4" opacity="0.7">
+              <ellipse cx="0" cy="-9" rx="5.5" ry="9" />
+              <ellipse cx="0" cy="-9" rx="5.5" ry="9" transform="rotate(90)" />
+              <ellipse cx="0" cy="-9" rx="5.5" ry="9" transform="rotate(180)" />
+              <ellipse cx="0" cy="-9" rx="5.5" ry="9" transform="rotate(270)" />
+            </g>
+            <circle r="3.5" fill="#d8a62a" />
+          </g>
+
+          {/* tiny chamomile daisy */}
+          <g
+            transform="translate(258,52) scale(0.62)"
+            className={reduce ? undefined : "animate-float-slow"}
+            style={{ animationDelay: "3.4s" }}
+          >
+            <g fill="#fffdf7" stroke="#d8a62a" strokeWidth="1.4">
+              <ellipse cx="0" cy="-10" rx="4.5" ry="10" />
+              <ellipse cx="0" cy="-10" rx="4.5" ry="10" transform="rotate(60)" />
+              <ellipse cx="0" cy="-10" rx="4.5" ry="10" transform="rotate(120)" />
+              <ellipse cx="0" cy="-10" rx="4.5" ry="10" transform="rotate(180)" />
+              <ellipse cx="0" cy="-10" rx="4.5" ry="10" transform="rotate(240)" />
+              <ellipse cx="0" cy="-10" rx="4.5" ry="10" transform="rotate(300)" />
+            </g>
+            <circle r="4" fill="#d8a62a" />
+          </g>
+
+          {/* ── floating botanical sprigs flanking the cup ── */}
+          <g stroke="#0e513b" strokeWidth="2.5" fill="none" strokeLinecap="round">
+            <path d="M 96 330 C 92 300, 96 272, 108 250" />
+            <path d="M 342 344 C 346 318, 342 296, 332 278" />
+          </g>
+          <g className={reduce ? undefined : "animate-float-slow"} style={{ animationDelay: "0.5s" }}>
+            <use href="#tmug-leaf" transform="translate(97,308) rotate(-52) scale(0.7)" opacity="0.8" />
+            <use href="#tmug-leaf" transform="translate(100,284) rotate(-128) scale(0.62)" opacity="0.65" />
+            <use href="#tmug-leaf" transform="translate(106,262) rotate(-42) scale(0.55)" opacity="0.6" />
+          </g>
+          <g className={reduce ? undefined : "animate-float-slow"} style={{ animationDelay: "2.2s" }}>
+            <use href="#tmug-leaf" transform="translate(341,322) rotate(52) scale(0.7)" opacity="0.8" />
+            <use href="#tmug-leaf" transform="translate(339,300) rotate(128) scale(0.62)" opacity="0.65" />
+          </g>
+          <circle cx="330" cy="272" r="3.5" fill="#d8a62a" className={reduce ? undefined : "animate-dot-pulse"} />
+
+          {/* ── the kulhad cup ── */}
+          <g className={reduce ? undefined : "animate-cup-float"}>
+            {/* saucer */}
+            <ellipse cx="210" cy="398" rx="118" ry="22" fill="#fffdf7" stroke="#0e513b" strokeWidth="3" />
+            <ellipse cx="210" cy="398" rx="78" ry="13" fill="none" stroke="#d8a62a" strokeWidth="2" opacity="0.7" />
+            {/* body */}
+            <path
+              d="M 136 300 C 138 342, 162 380, 210 382 C 258 380, 282 342, 284 300 Z"
+              fill="#fffdf7"
+              stroke="#0e513b"
+              strokeWidth="3.5"
+              strokeLinejoin="round"
+            />
+            {/* gold band */}
+            <path d="M 141 332 C 172 344, 248 344, 279 332" stroke="#d8a62a" strokeWidth="2.5" fill="none" />
+            <path d="M 146 346 C 175 357, 245 357, 274 346" stroke="#d8a62a" strokeWidth="2" fill="none" opacity="0.55" />
+            {/* tiny sprig motif on the cup */}
+            <path d="M 210 372 C 210 364, 210 358, 210 352" stroke="#176b4d" strokeWidth="2" strokeLinecap="round" />
+            <use href="#tmug-leaf" transform="translate(208,356) rotate(-32) scale(0.42)" />
+            <use href="#tmug-leaf" transform="translate(210,362) rotate(148) scale(0.38)" opacity="0.85" />
+            {/* handle */}
+            <path d="M 284 316 C 316 318, 320 356, 290 364" stroke="#0e513b" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+            {/* rim + tea */}
+            <ellipse cx="210" cy="300" rx="74" ry="17" fill="#fffdf7" stroke="#0e513b" strokeWidth="3.5" />
+            <ellipse cx="210" cy="300" rx="60" ry="12.5" fill="#e8a93d" opacity="0.9" />
+          </g>
+        </svg>
       </motion.div>
     </div>
   );

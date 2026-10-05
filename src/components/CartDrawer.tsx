@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useShop } from "@/lib/store";
@@ -8,6 +9,36 @@ import { formatINR, formatMoney } from "@/lib/format";
 import { siteConfig, whatsappOrderLink } from "@/config/site";
 import { IconClose, IconTrash, IconWhatsApp } from "./icons";
 import { QuantitySelector } from "./ProductCard";
+
+/**
+ * Render into document.body so the drawer is never trapped inside an
+ * ancestor stacking context (transform/filter/overflow). This guarantees
+ * `position: fixed` is relative to the viewport and the z-index hierarchy
+ * below actually holds.
+ */
+function Portal({ children }: { children: ReactNode }) {
+  // Client-only: never portal during SSR.
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+  if (!mounted) return null;
+  return createPortal(children, document.body);
+}
+
+/** true below the `sm` breakpoint — cart renders as a bottom sheet there. */
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  return mobile;
+}
 
 /** Coupon input + applied state. */
 function CouponBox() {
@@ -66,16 +97,20 @@ function CouponBox() {
 export default function CartDrawer() {
   const { cartOpen, setCartOpen, lines, updateQty, removeLine, subtotal, discount, total, coupon, count } = useShop();
   const [checkoutNote, setCheckoutNote] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!cartOpen) return;
+    // Lock body scroll, restoring the *previous* value on close so we never
+    // leave the page permanently locked.
+    const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setCartOpen(false);
     };
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = prev;
       window.removeEventListener("keydown", onKey);
     };
   }, [cartOpen, setCartOpen]);
@@ -95,7 +130,14 @@ export default function CartDrawer() {
     coupon ? formatMoney(total) : undefined,
   );
 
+  // Stacking hierarchy (spec): navbar 40 / dropdown 60 / backdrop 90 /
+  // cart drawer 100 / modal 110 / toast 120.
+  const sheetAnim = isMobile
+    ? { initial: { y: "100%" }, animate: { y: 0 }, exit: { y: "100%" } }
+    : { initial: { x: "100%" }, animate: { x: 0 }, exit: { x: "100%" } };
+
   return (
+    <Portal>
     <AnimatePresence>
       {cartOpen && (
         <>
@@ -103,16 +145,17 @@ export default function CartDrawer() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-tea-dark/60 backdrop-blur-sm"
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[90] bg-black/40 backdrop-blur-[4px]"
             onClick={() => setCartOpen(false)}
             aria-hidden="true"
           />
           <motion.aside
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 320, damping: 34 }}
-            className="fixed right-0 top-0 z-50 flex h-dvh w-full max-w-md flex-col bg-cream shadow-2xl"
+            initial={sheetAnim.initial}
+            animate={sheetAnim.animate}
+            exit={sheetAnim.exit}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-x-0 bottom-0 z-[100] flex max-h-[88dvh] flex-col rounded-t-[1.5rem] bg-cream shadow-2xl sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-0 sm:h-dvh sm:max-h-none sm:w-full sm:max-w-md sm:rounded-none"
             role="dialog"
             aria-modal="true"
             aria-label="Shopping cart"
@@ -262,5 +305,6 @@ export default function CartDrawer() {
         </>
       )}
     </AnimatePresence>
+    </Portal>
   );
 }

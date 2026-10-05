@@ -17,7 +17,7 @@ export default function Toast() {
   }, [toast, clearToast]);
 
   return (
-    <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-6 z-[75] flex justify-center px-4">
+    <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-6 z-[120] flex justify-center px-4">
       <AnimatePresence>
         {toast && (
           <motion.div
