@@ -96,7 +96,7 @@ function QuickViewBody({ product, onClose }: { product: Product; onClose: () => 
           <p className="text-xs font-extrabold uppercase tracking-[0.18em]" style={{ color: product.accent }}>
             {product.tagline}
           </p>
-          <h3 className="mt-1 font-display text-3xl font-black text-ink">{product.name}</h3>
+          <h3 className="mt-1 font-display text-3xl font-extrabold text-ink">{product.name}</h3>
           <p className="mt-1 text-xs font-bold uppercase tracking-widest text-ink-soft">{product.profile}</p>
           <p className="mt-3 text-sm leading-relaxed text-ink-soft">{product.description}</p>
         </div>
@@ -114,7 +114,7 @@ function QuickViewBody({ product, onClose }: { product: Product; onClose: () => 
         </div>
 
         <div className="flex items-end justify-between">
-          <p className="font-display text-3xl font-black text-tea-deep">
+          <p className="font-display text-3xl font-extrabold text-tea-deep">
             {formatINR(variant.price)}
           </p>
           <span className="text-xs font-semibold text-ink-soft">{variant.sku}</span>

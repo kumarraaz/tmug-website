@@ -52,6 +52,17 @@ export const COLLECTIONS: Collection[] = [
     accent: "#2E7D4F",
   },
   {
+    id: "chai",
+    slug: "chai",
+    name: "Chai",
+    tagline: "Kadak & comforting",
+    description: "Premium and Gold CTC — strong, malty chai for proper doodh chai mornings.",
+    image: "/products/gold-250g-pouch-front.jpg",
+    imageAlt: "TMUG Gold chai patti tea 250g pouch",
+    productIds: ["premium-tea", "gold-tea"],
+    accent: "#0E513B",
+  },
+  {
     id: "premium",
     slug: "premium",
     name: "Premium Chai",
@@ -129,16 +140,13 @@ export const COLLECTION_NAV: CollectionNavNode[] = [
     children: [{ label: "Darjeeling Green Tea", href: "/products/darjeeling-green-tea" }],
   },
   {
-    label: "Premium",
-    href: "/collections?c=premium",
+    label: "Chai",
+    href: "/collections?c=chai",
     accent: "#0E513B",
-    children: [{ label: "TMUG Premium Tea", href: "/products/tmug-premium-tea" }],
-  },
-  {
-    label: "Gold",
-    href: "/collections?c=gold",
-    accent: "#D8A62A",
-    children: [{ label: "TMUG Gold Tea", href: "/products/tmug-gold-tea" }],
+    children: [
+      { label: "TMUG Premium Tea", href: "/products/tmug-premium-tea" },
+      { label: "TMUG Gold Tea", href: "/products/tmug-gold-tea" },
+    ],
   },
   { label: "Best Sellers", href: "/collections?c=best-sellers", accent: "#4A6FD4" },
 ];

@@ -277,7 +277,8 @@ export default function Header() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-40 bg-tea-ink/60 backdrop-blur-sm lg:hidden"
+              transition={{ duration: 0.25 }}
+              className="fixed inset-0 z-40 bg-tea-ink/50 backdrop-blur-sm lg:hidden"
               onClick={() => setMenuOpen(false)}
               aria-hidden="true"
             />
@@ -286,71 +287,71 @@ export default function Header() {
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 32 }}
-              className="fixed right-0 top-0 z-50 flex h-dvh w-[85%] max-w-sm flex-col bg-tea-deep text-cream shadow-2xl lg:hidden"
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed right-0 top-0 z-50 flex h-dvh w-[85%] max-w-sm flex-col bg-cream-light text-ink shadow-2xl lg:hidden"
             >
-              <div className="flex items-center justify-between px-5 py-4">
-                <Image src="/logo/tmug-logo.png" alt="TMUG logo" width={140} height={72} className="h-9 w-auto" />
+              <div className="flex items-center justify-between border-b border-ink/8 px-5 py-3.5">
+                <Image src="/logo/tmug-logo.png" alt="TMUG logo" width={140} height={72} className="h-8 w-auto rounded-lg bg-tea-deep px-2 py-1" />
                 <button
                   type="button"
                   onClick={() => setMenuOpen(false)}
                   aria-label="Close menu"
-                  className="rounded-full bg-white/10 p-2.5"
+                  className="rounded-full bg-ink/5 p-2.5 text-ink transition-colors hover:bg-ink/10"
                 >
                   <IconClose />
                 </button>
               </div>
-              <div className="nice-scroll flex-1 overflow-y-auto px-5 pb-8">
-                <ul className="space-y-1">
+              <div className="nice-scroll flex-1 overflow-y-auto px-5 pb-6 pt-2">
+                <ul className="space-y-0.5">
                   {[{ label: "Shop", href: "/#shop" }, ...NAV.slice(1)].map((item, i) => (
                     <motion.li
                       key={item.href}
-                      initial={{ opacity: 0, x: 24 }}
+                      initial={{ opacity: 0, x: 16 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.05 + i * 0.05 }}
+                      transition={{ delay: 0.04 + i * 0.04, duration: 0.25 }}
                     >
                       <Link
                         href={item.href}
                         onClick={() => setMenuOpen(false)}
-                        className="block rounded-2xl px-4 py-3.5 font-display text-2xl font-extrabold transition-colors hover:bg-white/10"
+                        className="block rounded-2xl px-4 py-3 font-display text-[22px] font-extrabold text-tea-ink transition-colors hover:bg-tea-green/5"
                       >
                         {item.label}
                       </Link>
                     </motion.li>
                   ))}
                 </ul>
-                <p className="mt-6 px-4 text-xs font-bold uppercase tracking-[0.2em] text-cream/50">
+                <p className="mt-5 px-4 text-[11px] font-extrabold uppercase tracking-[0.18em] text-ink-soft">
                   Collections
                 </p>
-                <ul className="mt-2 space-y-1">
+                <ul className="mt-2 grid grid-cols-2 gap-1.5">
                   {COLLECTION_NAV.map((node, i) => (
                     <motion.li
                       key={node.label}
-                      initial={{ opacity: 0, x: 24 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.25 + i * 0.04 }}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.18 + i * 0.03, duration: 0.25 }}
                     >
                       <Link
                         href={node.href}
                         onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3 text-sm font-bold"
+                        className="flex items-center gap-2 rounded-2xl border border-ink/8 bg-white px-3 py-2.5 text-[13px] font-bold text-ink"
                       >
                         <span
-                          className="h-3 w-3 rounded-full"
+                          className="h-2.5 w-2.5 shrink-0 rounded-full"
                           style={{ backgroundColor: node.accent ?? "#176B4D" }}
                           aria-hidden="true"
                         />
-                        {node.label}
+                        <span className="truncate">{node.label}</span>
                       </Link>
                     </motion.li>
                   ))}
                 </ul>
               </div>
-              <div className="border-t border-white/10 p-5">
+              <div className="border-t border-ink/8 p-4">
                 <Link
                   href="/#shop"
                   onClick={() => setMenuOpen(false)}
-                  className="block rounded-full bg-gold py-3.5 text-center font-extrabold text-tea-ink"
+                  className="block rounded-full bg-tea-green py-3 text-center text-[15px] font-extrabold text-cream transition-transform duration-200 active:scale-[0.98]"
                 >
                   Shop Tea
                 </Link>

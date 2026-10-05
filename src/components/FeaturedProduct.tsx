@@ -16,7 +16,7 @@ import { IconWhatsApp, IconArrowRight } from "./icons";
  * story + purchase controls right. No giant colour blocks.
  */
 export default function FeaturedProduct() {
-  const product = getProduct("butterfly-pea")!;
+  const product = getProduct("hibiscus")!;
   const [variantId, setVariantId] = useState(product.variants[0].id);
   const [qty, setQty] = useState(1);
   const variant = getVariant(product, variantId);
@@ -28,7 +28,7 @@ export default function FeaturedProduct() {
           <div className="overflow-hidden rounded-[1.75rem] border border-ink/8 bg-cream-light shadow-[0_20px_50px_-24px_rgba(11,61,46,0.3)]">
             <div className="grid items-center gap-8 p-6 sm:p-10 lg:grid-cols-[0.9fr_1.1fr]">
               {/* Visual */}
-              <div className="relative mx-auto w-full max-w-[320px]">
+              <div className="relative mx-auto w-[58vw] max-w-[280px]">
                 <div
                   aria-hidden="true"
                   className="absolute -left-8 -top-8 h-32 w-32 rounded-full opacity-30 blur-2xl"
@@ -60,11 +60,11 @@ export default function FeaturedProduct() {
                   Product spotlight
                 </p>
                 <h2 className="text-section mt-2 font-display font-extrabold text-tea-ink">
-                  The blue tea that changes colour.
+                  Ruby-red, tangy, iced-tea approved.
                 </h2>
                 <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-ink-soft">
-                  Whole butterfly pea flowers brew a stunning indigo cup — squeeze in lemon
-                  and watch it flip violet. {product.tagline}
+                  Whole hibiscus petals brew a brilliant crimson cup — tart, berry-bright and
+                  made for ice. {product.tagline}
                 </p>
                 <p className="mt-2 text-xs font-bold uppercase tracking-[0.16em] text-ink-soft">
                   {product.profile}

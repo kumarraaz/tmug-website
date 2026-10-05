@@ -105,7 +105,7 @@ export default function PromoModal() {
                 aria-label={`Copy coupon code ${promo.code}`}
               >
                 <span className="text-xs font-bold uppercase tracking-widest text-cream/60">Code</span>
-                <span className="font-display text-2xl font-black tracking-[0.2em] text-gold">
+                <span className="font-display text-2xl font-extrabold tracking-[0.2em] text-gold">
                   {promo.code}
                 </span>
                 <span className="text-xs font-bold text-cream/70">{copied ? "Copied ✓" : "Tap to copy"}</span>
@@ -114,7 +114,7 @@ export default function PromoModal() {
               <button
                 type="button"
                 onClick={goShop}
-                className="mt-6 w-full rounded-full bg-gold px-6 py-4 text-base font-black text-tea-ink shadow-[0_15px_35px_-10px_rgba(216,166,42,0.7)] transition-transform hover:scale-[1.03] active:scale-95"
+                className="mt-6 w-full rounded-full bg-gold px-6 py-4 text-base font-extrabold text-tea-ink shadow-[0_15px_35px_-10px_rgba(216,166,42,0.7)] transition-transform hover:scale-[1.03] active:scale-95"
               >
                 {promo.cta}
               </button>

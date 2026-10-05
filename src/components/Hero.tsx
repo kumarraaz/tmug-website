@@ -15,14 +15,14 @@ import { formatINR } from "@/lib/format";
 import FloatingLogo from "./motion/FloatingLogo";
 import { IconArrowRight, IconLeaf } from "./icons";
 
-/** Compact product composition: gentle float, subtle tilt, one accent card. */
+/** Compact product composition: one hero product, one mini card, one botanical. */
 function HeroVisual() {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
-  const rotateX = useSpring(useTransform(my, [0, 1], [4, -4]), { stiffness: 120, damping: 18 });
-  const rotateY = useSpring(useTransform(mx, [0, 1], [-5, 5]), { stiffness: 120, damping: 18 });
+  const rotateX = useSpring(useTransform(my, [0, 1], [3, -3]), { stiffness: 120, damping: 20 });
+  const rotateY = useSpring(useTransform(mx, [0, 1], [-4, 4]), { stiffness: 120, damping: 20 });
 
   const butterfly = getProduct("butterfly-pea")!;
   const hibiscus = getProduct("hibiscus")!;
@@ -41,50 +41,47 @@ function HeroVisual() {
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={() => { mx.set(0.5); my.set(0.5); }}
-      className="perspective-1000 relative mx-auto w-[62vw] max-w-[300px] sm:max-w-[340px]"
+      className="perspective-1000 relative mx-auto w-[54vw] max-w-[260px] sm:max-w-[300px]"
     >
-      <div aria-hidden="true" className="absolute left-1/2 top-1/2 h-[105%] w-[105%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(216,166,42,0.18),transparent_65%)] blur-2xl" />
+      <div aria-hidden="true" className="absolute left-1/2 top-1/2 h-[105%] w-[105%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(216,166,42,0.14),transparent_65%)] blur-2xl" />
 
       <motion.div
         style={reduce ? undefined : { rotateX, rotateY, transformStyle: "preserve-3d" }}
         className="relative"
       >
         <motion.div
-          initial={{ opacity: 0, y: 24, scale: 0.97 }}
+          initial={{ opacity: 0, y: 20, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="animate-float relative overflow-hidden rounded-[1.75rem] bg-white shadow-[0_28px_60px_-24px_rgba(8,42,32,0.4)] ring-1 ring-ink/10"
+          transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          className="animate-float relative overflow-hidden rounded-[1.5rem] border border-ink/10 bg-white shadow-[0_20px_45px_-20px_rgba(8,42,32,0.35)]"
         >
           <div className="relative aspect-[4/5] w-full">
-            <Image src={bImg.src} alt={bImg.alt} fill priority sizes="(max-width: 768px) 62vw, 340px" className="object-cover" />
+            <Image src={bImg.src} alt={bImg.alt} fill priority sizes="(max-width: 768px) 54vw, 300px" className="object-cover" />
           </div>
-          <div className="flex items-center justify-between gap-3 px-4 py-3">
-            <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-pea">Bestseller</p>
-              <p className="font-display text-base font-bold text-ink">{butterfly.name}</p>
-            </div>
-            <p className="font-display text-lg font-extrabold text-tea-green">{formatINR(99)}</p>
+          <div className="flex items-center justify-between gap-2 px-3.5 py-2.5">
+            <p className="truncate font-display text-sm font-bold text-ink">{butterfly.name}</p>
+            <p className="shrink-0 font-display text-[15px] font-extrabold text-tea-green">{formatINR(99)}</p>
           </div>
         </motion.div>
 
-        {/* small floating accent card */}
+        {/* one small supporting card */}
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="absolute -right-5 top-8 w-24 sm:-right-8 sm:w-28"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="absolute -right-3 top-6 w-20 sm:-right-5 sm:w-24"
           aria-hidden="true"
         >
-          <div className="animate-float-slow overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-ink/10">
+          <div className="animate-float-slow overflow-hidden rounded-xl border border-ink/10 bg-white shadow-[0_10px_25px_-12px_rgba(8,42,32,0.35)]">
             <div className="relative aspect-square">
-              <Image src={hImg.src} alt="" fill sizes="112px" loading="lazy" className="object-cover" />
+              <Image src={hImg.src} alt="" fill sizes="96px" loading="lazy" className="object-cover" />
             </div>
-            <p className="px-2 py-1.5 text-center text-[11px] font-extrabold text-ink">{formatINR(119)}</p>
+            <p className="px-1.5 py-1 text-center text-[10px] font-extrabold text-ink">{formatINR(119)}</p>
           </div>
         </motion.div>
 
-        <span className="animate-float absolute -left-4 bottom-4 text-tea-green/20" aria-hidden="true">
-          <IconLeaf className="h-10 w-10" />
+        <span className="animate-float-slow absolute -left-3 bottom-3 text-tea-green/25" aria-hidden="true">
+          <IconLeaf className="h-8 w-8" />
         </span>
       </motion.div>
     </div>
@@ -102,7 +99,7 @@ export default function Hero() {
       <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_20%_10%,rgba(216,166,42,0.12),transparent),radial-gradient(ellipse_55%_45%_at_85%_85%,rgba(23,107,77,0.08),transparent)]" />
       <FloatingLogo opacity={0.04} size="95%" />
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 pb-12 pt-10 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:pb-16 lg:pt-14">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pb-10 pt-8 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:pb-14 lg:pt-12">
         <motion.div style={reduce ? undefined : { y: textY }} className="text-center lg:text-left">
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <span className="inline-flex items-center gap-2 rounded-full border border-tea-green/20 bg-white/70 px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.16em] text-tea-green">
@@ -126,7 +123,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.18 }}
-            className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-ink-soft sm:text-base lg:mx-0"
+            className="mt-5 max-w-md text-[15px] leading-relaxed text-ink-soft lg:mx-0"
           >
             Colour-changing blue teas, tangy ruby reds and properly kadak chai —
             packed fresh for your everyday ritual.
