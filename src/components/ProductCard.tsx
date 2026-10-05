@@ -116,20 +116,17 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 26 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.55, delay: (index % 4) * 0.07, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -8 }}
-      className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white shadow-[0_14px_40px_-16px_rgba(11,61,46,0.25)] ring-1 ring-ink/5 transition-shadow duration-300 hover:shadow-[0_30px_60px_-18px_rgba(11,61,46,0.4)]"
+      transition={{ duration: 0.5, delay: (index % 4) * 0.06, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -6 }}
+      onMouseEnter={(e) => (e.currentTarget.style.borderColor = product.accent)}
+      onMouseLeave={(e) => (e.currentTarget.style.borderColor = "")}
+      className="group relative flex h-full flex-col overflow-hidden rounded-[1.25rem] border border-ink/8 bg-white shadow-[0_10px_28px_-16px_rgba(11,61,46,0.22)] transition-shadow duration-300 hover:shadow-[0_22px_45px_-18px_rgba(11,61,46,0.35)]"
     >
       {/* Image */}
       <div className="relative aspect-square w-full overflow-hidden" style={{ backgroundColor: product.accentSoft }}>
-        <div
-          aria-hidden="true"
-          className="absolute -right-10 -top-10 h-36 w-36 rounded-full opacity-25 blur-2xl transition-transform duration-500 group-hover:scale-150"
-          style={{ backgroundColor: product.accent }}
-        />
         <Link href={`/products/${product.slug}`} aria-label={`View ${product.name}`} className="absolute inset-0 z-10">
           <span className="sr-only">View {product.name}</span>
         </Link>
@@ -137,9 +134,9 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
           src={front.src}
           alt={front.alt}
           fill
-          sizes="(max-width: 640px) 70vw, (max-width: 1024px) 33vw, 25vw"
+          sizes="(max-width: 640px) 60vw, (max-width: 1024px) 30vw, 22vw"
           loading="lazy"
-          className={`object-cover transition-all duration-500 ease-out group-hover:rotate-1 group-hover:scale-[1.06] ${
+          className={`object-cover transition-all duration-300 ease-out group-hover:rotate-1 group-hover:scale-[1.04] ${
             back ? "group-hover:opacity-0" : ""
           }`}
         />
@@ -149,59 +146,59 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
             alt=""
             aria-hidden="true"
             fill
-            sizes="(max-width: 640px) 70vw, (max-width: 1024px) 33vw, 25vw"
+            sizes="(max-width: 640px) 60vw, (max-width: 1024px) 30vw, 22vw"
             loading="lazy"
-            className="object-cover opacity-0 transition-all duration-500 ease-out group-hover:rotate-1 group-hover:scale-[1.06] group-hover:opacity-100"
+            className="object-cover opacity-0 transition-all duration-300 ease-out group-hover:rotate-1 group-hover:scale-[1.04] group-hover:opacity-100"
           />
         )}
         {product.featured && (
           <span
-            className="absolute left-3 top-3 z-20 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wide text-white shadow-md"
+            className="absolute left-2.5 top-2.5 z-20 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-white"
             style={{ backgroundColor: product.accent }}
           >
-            <IconStar className="h-3 w-3" /> Bestseller
+            <IconStar className="h-2.5 w-2.5" /> Bestseller
           </span>
         )}
         {/* quick view pill — appears on hover (desktop), always visible on touch */}
         <button
           type="button"
           onClick={() => setQuickViewId(product.id)}
-          className="absolute bottom-3 left-1/2 z-20 -translate-x-1/2 rounded-full bg-tea-ink/85 px-4 py-2 text-xs font-extrabold text-cream backdrop-blur transition-all duration-300 hover:bg-tea-ink sm:translate-y-14 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
+          className="absolute bottom-2.5 left-1/2 z-20 -translate-x-1/2 rounded-full bg-tea-ink/85 px-3.5 py-1.5 text-[11px] font-extrabold text-cream backdrop-blur transition-all duration-300 hover:bg-tea-ink sm:translate-y-12 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
         >
           Quick view
         </button>
       </div>
 
       {/* Body */}
-      <div className="flex flex-1 flex-col gap-2 p-4 sm:p-5">
+      <div className="flex flex-1 flex-col gap-1.5 p-4">
         <div>
-          <p className="text-[11px] font-extrabold uppercase tracking-[0.16em]" style={{ color: product.accent }}>
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.14em]" style={{ color: product.accent }}>
             {product.profile.split("·")[0]?.trim()}
           </p>
           <Link href={`/products/${product.slug}`} className="hover:underline decoration-2 underline-offset-4" style={{ textDecorationColor: product.accent }}>
-            <h3 className="mt-0.5 font-display text-lg font-extrabold leading-tight text-ink">
+            <h3 className="mt-0.5 font-display text-[17px] font-bold leading-snug text-ink">
               {product.name}
             </h3>
           </Link>
-          <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-ink-soft">
+          <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wider text-ink-soft">
             {variant.label}
           </p>
         </div>
 
         <VariantSelector product={product} selectedId={variantId} onChange={setVariantId} small />
 
-        <div className="mt-auto flex items-center justify-between gap-2 pt-2">
-          <p className="font-display text-xl font-extrabold text-tea-deep">
+        <div className="mt-auto flex items-center justify-between gap-2 pt-1.5">
+          <p className="font-display text-lg font-extrabold text-tea-deep">
             {formatINR(variant.price)}
           </p>
-          <AddToCartButton product={product} variant={variant} className="px-4 py-2.5 text-sm" />
+          <AddToCartButton product={product} variant={variant} className="px-3.5 py-2 text-[13px]" />
         </div>
 
         <Link
           href={`/products/${product.slug}`}
-          className="inline-flex items-center gap-1 text-xs font-bold text-ink-soft transition-colors hover:text-tea-green"
+          className="inline-flex items-center gap-1 text-[11px] font-bold text-ink-soft transition-colors hover:text-tea-green"
         >
-          View details <IconArrowRight className="h-3.5 w-3.5" />
+          View details <IconArrowRight className="h-3 w-3" />
         </Link>
       </div>
     </motion.article>

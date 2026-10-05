@@ -71,8 +71,6 @@ export default function PromoModal() {
             <div aria-hidden="true" className="pointer-events-none absolute inset-0">
               <div className="animate-float absolute -left-10 -top-10 h-40 w-40 rounded-full bg-gold/25 blur-2xl" />
               <div className="animate-float-slow absolute -bottom-12 -right-8 h-44 w-44 rounded-full bg-blossom/25 blur-2xl" />
-              <div className="animate-wiggle absolute left-8 top-16 text-3xl">🍃</div>
-              <div className="animate-float absolute bottom-20 right-8 text-2xl">✨</div>
             </div>
 
             <button
@@ -87,14 +85,14 @@ export default function PromoModal() {
             <div className="relative px-7 py-10 text-center text-cream">
               <motion.div
                 animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
               >
-                <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-gold-soft">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-gold-soft">
                   {promo.title}
                 </p>
-                <p className="mt-3 font-display text-6xl font-black leading-none">
+                <p className="mt-3 font-display text-5xl font-extrabold leading-none">
                   {promo.discountPercent}
-                  <span className="text-3xl">% OFF</span>
+                  <span className="text-2xl">% OFF</span>
                 </p>
               </motion.div>
               <p className="mt-3 text-sm leading-relaxed text-cream/80">{promo.message}</p>

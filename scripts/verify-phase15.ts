@@ -3,7 +3,7 @@
  * Prices, variants, coupon math, WhatsApp links, accents, collections, slugs.
  */
 import { PRODUCTS, getProductBySlug, frontImage } from "../src/data/products";
-import { COLLECTIONS, COLLECTION_NAV, collectionProducts, getCollection } from "../src/data/collections";
+import { COLLECTIONS, COLLECTION_NAV, collectionProducts } from "../src/data/collections";
 import { siteConfig, whatsappProductLink } from "../src/config/site";
 
 let passed = 0;

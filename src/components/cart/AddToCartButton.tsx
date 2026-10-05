@@ -31,7 +31,7 @@ export default function AddToCartButton({
   /** Called right after the item is added to the cart. */
   onAdded?: () => void;
 }) {
-  const { addToCart, triggerFly, setCartOpen } = useShop();
+  const { addToCart, triggerFly, setCartOpen, showToast } = useShop();
   const [phase, setPhase] = useState<Phase>("idle");
   const btnRef = useRef<HTMLButtonElement>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -51,6 +51,7 @@ export default function AddToCartButton({
     if (r) triggerFly(img.src, img.alt, r.left + r.width / 2, r.top + r.height / 2, toX, toY);
 
     addToCart(product, variant, qty);
+    showToast(`${product.name} added to cart`);
     onAdded?.();
 
     timers.current.push(setTimeout(() => setPhase("added"), 450));
@@ -74,7 +75,7 @@ export default function AddToCartButton({
           ? `${product.name} added to cart`
           : `Add ${product.name} (${variant.label}) to cart`
       }
-      className={`relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-extrabold transition-all active:scale-95 ${
+      className={`group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-extrabold transition-all duration-200 hover:shadow-[0_10px_24px_-10px_rgba(11,61,46,0.5)] active:scale-[0.97] ${
         phase === "added" ? "bg-tea-green text-cream" : "bg-ink text-cream hover:bg-tea-green"
       } ${className}`}
     >
@@ -101,7 +102,7 @@ export default function AddToCartButton({
             transition={{ duration: 0.18 }}
             className="inline-flex items-center gap-2"
           >
-            <IconPlus className="h-4 w-4" /> Add to Cart
+            <IconPlus className="h-4 w-4 transition-transform duration-200 group-hover/btn:rotate-90" /> Add to Cart
           </motion.span>
         )}
         {phase === "adding" && (

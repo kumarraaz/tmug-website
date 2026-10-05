@@ -42,6 +42,10 @@ interface ShopState {
   clearFly: () => void;
   /** Increments on every add — header badge pulses on change. */
   cartPulse: number;
+  /** Small toast notification (null when hidden). */
+  toast: { message: string; key: number } | null;
+  showToast: (message: string) => void;
+  clearToast: () => void;
   cartOpen: boolean;
   setCartOpen: (open: boolean) => void;
   quickViewId: string | null;
@@ -96,6 +100,13 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   const [couponError, setCouponError] = useState<string | null>(null);
   const [fly, setFly] = useState<FlyPayload | null>(null);
   const [cartPulse, setCartPulse] = useState(0);
+  const [toast, setToast] = useState<{ message: string; key: number } | null>(null);
+
+  const showToast = useCallback((message: string) => {
+    setToast({ message, key: Date.now() });
+  }, []);
+
+  const clearToast = useCallback(() => setToast(null), []);
 
   const triggerFly = useCallback((img: string, alt: string, fromX: number, fromY: number, toX: number, toY: number) => {
     setFly({ img, alt, fromX, fromY, toX, toY, key: Date.now() });
@@ -209,6 +220,9 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       triggerFly,
       clearFly,
       cartPulse,
+      toast,
+      showToast,
+      clearToast,
       cartOpen,
       setCartOpen,
       quickViewId,
@@ -220,7 +234,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       removeLine,
       clearCart,
     }),
-    [lines, count, subtotal, discount, total, coupon, couponError, applyCoupon, removeCoupon, fly, triggerFly, clearFly, cartPulse, cartOpen, quickViewId, searchOpen, addToCart, updateQty, removeLine, clearCart],
+    [lines, count, subtotal, discount, total, coupon, couponError, applyCoupon, removeCoupon, fly, triggerFly, clearFly, cartPulse, toast, showToast, clearToast, cartOpen, quickViewId, searchOpen, addToCart, updateQty, removeLine, clearCart],
   );
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;

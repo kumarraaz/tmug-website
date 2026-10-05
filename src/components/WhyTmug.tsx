@@ -30,28 +30,28 @@ const PILLARS = [
 /** Product philosophy section. */
 export default function WhyTmug() {
   return (
-    <section id="why" className="scroll-mt-24 bg-cream py-16 sm:py-24">
+    <section id="why" className="scroll-mt-24 bg-cream py-10 sm:py-14">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading
           eyebrow="Why TMUG"
           title="Tea with nothing to hide"
           description="No miracle claims, no 47-ingredient “wellness blends”. Just good tea, packed honestly."
         />
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+        <div className="mt-8 grid gap-3.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
           {PILLARS.map((p, i) => (
             <motion.div
               key={p.title}
-              initial={{ opacity: 0, y: 26 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="group rounded-[1.5rem] bg-white p-6 shadow-[0_10px_35px_-15px_rgba(23,32,24,0.2)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_25px_50px_-15px_rgba(23,32,24,0.3)]"
+              transition={{ duration: 0.5, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+              className="group rounded-3xl border border-ink/8 bg-white p-5 shadow-[0_10px_28px_-16px_rgba(23,32,24,0.2)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-18px_rgba(23,32,24,0.3)]"
             >
-              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-tea-green text-cream transition-colors group-hover:bg-gold group-hover:text-tea-dark">
-                <p.icon className="h-6 w-6" />
+              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-tea-green text-cream transition-colors duration-300 group-hover:bg-gold group-hover:text-tea-dark">
+                <p.icon className="h-5 w-5" />
               </span>
-              <h3 className="mt-4 font-display text-xl font-extrabold text-ink">{p.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-soft">{p.text}</p>
+              <h3 className="mt-3.5 font-display text-[17px] font-bold text-ink">{p.title}</h3>
+              <p className="mt-1.5 text-[13px] leading-relaxed text-ink-soft">{p.text}</p>
             </motion.div>
           ))}
         </div>

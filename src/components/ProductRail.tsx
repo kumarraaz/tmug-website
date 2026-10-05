@@ -31,14 +31,14 @@ export default function ProductRail({
   };
 
   return (
-    <section id={id} aria-label={title} className="relative overflow-hidden py-14 sm:py-20">
+    <section id={id} aria-label={title} className="relative overflow-hidden py-10 sm:py-14">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <Reveal className="mb-8 flex items-end justify-between gap-4">
+        <Reveal className="mb-6 flex items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.22em]" style={{ color: accent }}>
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.2em]" style={{ color: accent }}>
               {subtitle ?? "The lineup"}
             </p>
-            <h2 className="mt-2 font-display text-3xl font-black tracking-tight text-tea-ink sm:text-5xl">
+            <h2 className="text-section mt-1.5 font-display font-extrabold text-tea-ink">
               {title}
             </h2>
           </div>
@@ -47,31 +47,31 @@ export default function ProductRail({
               type="button"
               onClick={() => scrollBy(-1)}
               aria-label="Scroll products left"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-ink/15 bg-white text-ink transition-all hover:text-cream"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 bg-white text-ink transition-all duration-200 hover:text-cream"
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = accent; e.currentTarget.style.borderColor = "transparent"; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = ""; e.currentTarget.style.borderColor = ""; }}
             >
-              <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-2"><path d="M19 12H5m7-7-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 fill-none stroke-current stroke-2"><path d="M19 12H5m7-7-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
             <button
               type="button"
               onClick={() => scrollBy(1)}
               aria-label="Scroll products right"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-ink/15 bg-white text-ink transition-all hover:text-cream"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 bg-white text-ink transition-all duration-200 hover:text-cream"
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = accent; e.currentTarget.style.borderColor = "transparent"; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = ""; e.currentTarget.style.borderColor = ""; }}
             >
-              <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-2"><path d="M5 12h14m-7-7 7 7-7 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 fill-none stroke-current stroke-2"><path d="M5 12h14m-7-7 7 7-7 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
           </div>
         </Reveal>
       </div>
       <div
         ref={trackRef}
-        className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-4 sm:px-6 lg:px-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]"
+        className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:px-6 lg:px-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]"
       >
         {products.map((p, i) => (
-          <div key={p.id} className="w-[270px] shrink-0 snap-start sm:w-[310px]">
+          <div key={p.id} className="w-[230px] shrink-0 snap-start sm:w-[260px]">
             <ProductCard product={p} index={i} />
           </div>
         ))}

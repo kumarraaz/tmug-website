@@ -104,10 +104,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <ProductDetail product={product} />
 
       {/* Product FAQ */}
-      <section aria-label="Product FAQs" className="bg-cream py-14 sm:py-20">
+      <section aria-label="Product FAQs" className="bg-cream-light py-10 sm:py-14">
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
-          <Reveal className="mb-8 text-center">
-            <h2 className="font-display text-3xl font-black tracking-tight text-tea-ink sm:text-4xl">
+          <Reveal className="mb-6 text-center">
+            <h2 className="font-display text-2xl font-extrabold text-tea-ink sm:text-3xl">
               Quick questions
             </h2>
           </Reveal>

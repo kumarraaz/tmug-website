@@ -34,12 +34,12 @@ export default function ProductDetail({ product }: { product: Product }) {
         </ol>
       </nav>
 
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-8 sm:px-6 lg:grid-cols-2 lg:py-12">
+      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[42%_58%] lg:gap-12 lg:py-10">
         {/* Gallery */}
         <div>
           <motion.div
             layout
-            className="relative aspect-square overflow-hidden rounded-[2rem] shadow-[0_30px_70px_-25px_rgba(11,61,46,0.4)] ring-1 ring-ink/10"
+            className="relative aspect-square max-h-[46vh] w-full overflow-hidden rounded-3xl border border-ink/8 shadow-[0_20px_50px_-24px_rgba(11,61,46,0.35)] lg:max-h-none"
             style={{ backgroundColor: product.accentSoft }}
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -95,55 +95,55 @@ export default function ProductDetail({ product }: { product: Product }) {
         {/* Info */}
         <div>
           <Reveal kind="fade-in">
-            <p className="text-xs font-extrabold uppercase tracking-[0.22em]" style={{ color: product.accent }}>
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.2em]" style={{ color: product.accent }}>
               {product.tagline}
             </p>
-            <h1 className="mt-2 font-display text-4xl font-black tracking-tight text-tea-ink sm:text-5xl">
+            <h1 className="text-section mt-2 font-display font-extrabold text-tea-ink">
               {product.name}
             </h1>
-            <p className="mt-3 text-sm font-bold uppercase tracking-widest text-ink-soft">
+            <p className="mt-2 text-xs font-bold uppercase tracking-[0.14em] text-ink-soft">
               {product.profile}
             </p>
           </Reveal>
 
-          <Reveal delay={0.08} className="mt-6">
-            <p className="text-xs font-bold uppercase tracking-widest text-ink-soft">Choose your pack</p>
+          <Reveal delay={0.06} className="mt-5">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-ink-soft">Choose your pack</p>
             <div className="mt-2">
               <VariantSelector product={product} selectedId={variantId} onChange={(id) => { setVariantId(id); setActiveImg(0); }} />
             </div>
           </Reveal>
 
-          <Reveal delay={0.12} className="mt-6 flex flex-wrap items-center gap-5">
-            <p className="font-display text-4xl font-black text-tea-deep">{formatINR(variant.price)}</p>
+          <Reveal delay={0.1} className="mt-5 flex flex-wrap items-center gap-4">
+            <p className="font-display text-3xl font-extrabold text-tea-deep">{formatINR(variant.price)}</p>
             <QuantitySelector qty={qty} onChange={setQty} />
           </Reveal>
 
-          <Reveal delay={0.16} className="mt-6 flex flex-wrap gap-3">
+          <Reveal delay={0.14} className="mt-5 flex flex-wrap gap-2.5">
             <AddToCartButton
               product={product}
               variant={variant}
               qty={qty}
               openCart
-              className="px-8 py-4 text-base"
+              className="px-7 py-3.5 text-[15px]"
             />
             <a
               href={whatsappProductLink(product, variant, qty)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border-2 border-tea-green/30 px-8 py-[14px] text-base font-extrabold text-tea-green transition-colors hover:border-tea-green"
+              className="inline-flex items-center gap-2 rounded-full border border-tea-green/30 px-6 py-3.5 text-[15px] font-bold text-tea-green transition-colors duration-200 hover:border-tea-green"
             >
-              <IconWhatsApp className="h-5 w-5" /> Order on WhatsApp
+              <IconWhatsApp className="h-4.5 w-4.5" /> Order on WhatsApp
             </a>
           </Reveal>
 
-          <Reveal delay={0.2} className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-xs font-bold text-ink-soft">
+          <Reveal delay={0.16} className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 text-[11px] font-bold text-ink-soft">
             <span>SKU: {variant.sku}</span>
             <span>Pack: {variant.label}</span>
             <span>Ships across India</span>
           </Reveal>
 
           {/* Info accordion */}
-          <div className="mt-8 divide-y divide-ink/10 rounded-3xl bg-white p-2 ring-1 ring-ink/5">
+          <div className="mt-6 divide-y divide-ink/8 rounded-3xl border border-ink/8 bg-white p-2">
             {[
               { icon: <IconLeaf className="h-5 w-5" />, title: "What's inside", body: product.ingredients },
               { icon: <IconCup className="h-5 w-5" />, title: "How to brew", body: product.brewGuide },
@@ -162,22 +162,27 @@ export default function ProductDetail({ product }: { product: Product }) {
         </div>
       </div>
 
-      {/* Story band */}
-      <section className="relative overflow-hidden py-14 sm:py-20" style={{ backgroundColor: product.accent }}>
-        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
+      {/* Story band — compact, accent-bordered */}
+      <section className="bg-cream pb-12 pt-4 sm:pb-16">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
           <Reveal>
-            <h2 className="font-display text-3xl font-black tracking-tight text-white sm:text-5xl">
-              Why you&rsquo;ll love it
-            </h2>
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-white/90 sm:text-lg">
-              {product.description}
-            </p>
-            <Link
-              href="/#shop"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-extrabold text-ink transition-transform hover:scale-[1.04]"
+            <div
+              className="rounded-[1.75rem] border border-ink/8 bg-cream-light p-6 text-center sm:p-8"
+              style={{ borderTop: `4px solid ${product.accent}` }}
             >
-              Shop more teas <IconArrowRight className="h-4 w-4" />
-            </Link>
+              <h2 className="font-display text-2xl font-extrabold text-tea-ink sm:text-3xl">
+                Why you&rsquo;ll love it
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-relaxed text-ink-soft">
+                {product.description}
+              </p>
+              <Link
+                href="/#shop"
+                className="mt-5 inline-flex items-center gap-2 rounded-full bg-tea-ink px-6 py-3 text-sm font-extrabold text-cream transition-transform duration-200 hover:scale-[1.03] active:scale-[0.97]"
+              >
+                Shop more teas <IconArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </Reveal>
         </div>
       </section>

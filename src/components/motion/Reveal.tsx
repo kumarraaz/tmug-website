@@ -6,12 +6,12 @@ import type { ReactNode } from "react";
 type RevealKind = "fade-up" | "fade-in" | "slide-left" | "slide-right" | "scale" | "blur";
 
 const VARIANTS: Record<RevealKind, Variants> = {
-  "fade-up": { hidden: { opacity: 0, y: 32 }, visible: { opacity: 1, y: 0 } },
+  "fade-up": { hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } },
   "fade-in": { hidden: { opacity: 0 }, visible: { opacity: 1 } },
-  "slide-left": { hidden: { opacity: 0, x: 48 }, visible: { opacity: 1, x: 0 } },
-  "slide-right": { hidden: { opacity: 0, x: -48 }, visible: { opacity: 1, x: 0 } },
-  "scale": { hidden: { opacity: 0, scale: 0.92 }, visible: { opacity: 1, scale: 1 } },
-  "blur": { hidden: { opacity: 0, y: 24, filter: "blur(8px)" }, visible: { opacity: 1, y: 0, filter: "blur(0px)" } },
+  "slide-left": { hidden: { opacity: 0, x: 32 }, visible: { opacity: 1, x: 0 } },
+  "slide-right": { hidden: { opacity: 0, x: -32 }, visible: { opacity: 1, x: 0 } },
+  "scale": { hidden: { opacity: 0, scale: 0.96 }, visible: { opacity: 1, scale: 1 } },
+  "blur": { hidden: { opacity: 0, y: 16, filter: "blur(6px)" }, visible: { opacity: 1, y: 0, filter: "blur(0px)" } },
 };
 
 interface RevealProps {
@@ -32,7 +32,7 @@ export default function Reveal({
   children,
   kind = "fade-up",
   delay = 0,
-  duration = 0.7,
+  duration = 0.55,
   className,
   once = true,
 }: RevealProps) {

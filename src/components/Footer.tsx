@@ -11,21 +11,21 @@ export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-tea-ink text-cream/80">
       <FloatingLogo opacity={0.04} size="90%" className="opacity-100" />
-      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6">
-        <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
+      <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12">
+        <div className="grid gap-8 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <Image
               src="/logo/tmug-logo.png"
               alt="TMUG logo"
               width={220}
               height={112}
-              className="h-auto w-44"
+              className="h-auto w-36"
               loading="lazy"
             />
-            <p className="mt-5 max-w-xs font-display text-xl font-bold leading-snug text-cream">
+            <p className="mt-4 max-w-xs font-display text-lg font-bold leading-snug text-cream">
               Tea, but make it <span className="text-gold">TMUG.</span>
             </p>
-            <p className="mt-2 max-w-xs text-sm leading-relaxed text-cream/60">
+            <p className="mt-2 max-w-xs text-[13px] leading-relaxed text-cream/60">
               Whole-flower herbals, Darjeeling green and kadak CTC chai — packed fresh, shipped
               across India.
             </p>
@@ -33,7 +33,7 @@ export default function Footer() {
               href={whatsappLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-extrabold text-white transition-transform hover:scale-[1.04]"
+              className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4.5 py-2.5 text-[13px] font-extrabold text-white transition-transform duration-200 hover:scale-[1.03] active:scale-[0.97]"
             >
               <IconWhatsApp className="h-4 w-4" /> {siteConfig.whatsapp.display}
             </a>

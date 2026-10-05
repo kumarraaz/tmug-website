@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Outfit, DM_Sans } from "next/font/google";
+import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import { seoStore } from "@/lib/seo-store";
 import { siteConfig } from "@/config/site";
 import { ShopProvider } from "@/lib/store";
 import "./globals.css";
 
-const display = Outfit({
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--font-display",
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 

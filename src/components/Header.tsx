@@ -17,21 +17,36 @@ const NAV = [
   { label: "Contact", href: "/contact" },
 ];
 
-/** Slim promo strip above the header. */
+/** Slim promo ticker above the header — gentle continuous marquee. */
 export function AnnouncementBar() {
   const { promo } = siteConfig;
   if (!promo.enabled) return null;
+  const items = [
+    `Festive offer — ${promo.discountPercent}% off with code ${promo.code}`,
+    "Whole flowers & leaves, never dust",
+    "Ships across India",
+    "Order easily on WhatsApp",
+  ];
+  const row = [...items, ...items, ...items, ...items]; // 4 copies; -50% loop stays seamless
   return (
-    <div className="relative z-50 bg-tea-ink text-cream">
-      <p className="mx-auto flex max-w-7xl items-center justify-center gap-2 px-4 py-2 text-center text-[13px] font-semibold tracking-wide">
-        <span className="inline-block rounded-full bg-gold px-2 py-0.5 text-[11px] font-extrabold text-tea-ink">
-          {promo.discountPercent}% OFF
-        </span>
-        <span>
-          Festive offer — apply code <span className="font-extrabold text-gold-soft">{promo.code}</span> in
-          your cart
-        </span>
-      </p>
+    <div className="relative z-50 overflow-hidden bg-tea-ink py-1.5 text-cream" aria-label="Announcements">
+      <div className="flex w-max animate-marquee items-center gap-8 pr-8 motion-reduce:animate-none">
+        {row.map((t, i) => (
+          <span key={i} className="flex items-center gap-8 whitespace-nowrap text-[12px] font-semibold tracking-wide" aria-hidden={i >= items.length}>
+            <span>
+              {t.includes(promo.code) ? (
+                <>
+                  Festive offer — {promo.discountPercent}% off with code{" "}
+                  <span className="font-extrabold text-gold-soft">{promo.code}</span>
+                </>
+              ) : (
+                t
+              )}
+            </span>
+            <span className="h-1 w-1 rounded-full bg-gold" aria-hidden="true" />
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
@@ -138,8 +153,20 @@ export default function Header() {
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onDesktop = (e: MediaQueryListEvent) => {
+      if (e.matches) setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    mq.addEventListener("change", onDesktop);
     return () => {
       document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+      mq.removeEventListener("change", onDesktop);
     };
   }, [menuOpen]);
 
@@ -152,7 +179,7 @@ export default function Header() {
       >
         <div
           className={`mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 transition-all duration-300 sm:px-6 ${
-            scrolled ? "py-1.5" : "py-3"
+            scrolled ? "py-1" : "py-2"
           }`}
         >
           <Link href="/" aria-label="TMUG — home" className="shrink-0">
@@ -162,7 +189,7 @@ export default function Header() {
               width={300}
               height={153}
               priority
-              className={`h-auto w-auto transition-all duration-300 ${scrolled ? "max-h-8" : "max-h-11"}`}
+              className={`h-auto w-auto transition-all duration-300 ${scrolled ? "max-h-7" : "max-h-9"}`}
             />
           </Link>
 
@@ -260,7 +287,7 @@ export default function Header() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 32 }}
-              className="fixed right-0 top-0 z-50 flex h-full w-[85%] max-w-sm flex-col bg-tea-deep text-cream shadow-2xl lg:hidden"
+              className="fixed right-0 top-0 z-50 flex h-dvh w-[85%] max-w-sm flex-col bg-tea-deep text-cream shadow-2xl lg:hidden"
             >
               <div className="flex items-center justify-between px-5 py-4">
                 <Image src="/logo/tmug-logo.png" alt="TMUG logo" width={140} height={72} className="h-9 w-auto" />

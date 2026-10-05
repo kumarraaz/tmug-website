@@ -26,11 +26,11 @@ export default function SectionHeading({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className={`flex max-w-2xl flex-col gap-3 ${alignCls}`}
+      className={`flex max-w-2xl flex-col gap-2.5 ${alignCls}`}
     >
       {eyebrow && (
         <span
-          className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] ${
+          className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] ${
             dark ? "bg-white/10 text-gold-soft" : "bg-tea-green/10 text-tea-green"
           }`}
         >
@@ -39,14 +39,14 @@ export default function SectionHeading({
         </span>
       )}
       <h2
-        className={`font-display text-3xl font-extrabold leading-[1.05] tracking-tight text-balance sm:text-4xl lg:text-5xl ${
+        className={`text-section font-display font-extrabold text-balance ${
           dark ? "text-cream" : "text-ink"
         }`}
       >
         {title}
       </h2>
       {description && (
-        <p className={`text-base leading-relaxed sm:text-lg ${dark ? "text-cream/70" : "text-ink-soft"}`}>
+        <p className={`text-[15px] leading-relaxed ${dark ? "text-cream/70" : "text-ink-soft"}`}>
           {description}
         </p>
       )}
