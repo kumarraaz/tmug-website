@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import type { Product } from "@/types";
 import { frontImage, getVariant } from "@/data/products";
 import { useShop } from "@/lib/store";
@@ -114,6 +114,45 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
   const front = frontImage(variant);
   const back = variant.images.find((i) => i.kind === "back");
 
+  /**
+   * Playful wavy interaction: the product leans toward the cursor with
+   * spring-smoothed motion (translate ±6px, rotate ±2.5°, scale 1.03),
+   * easing back to neutral on leave. Idle 3px bob underneath via CSS.
+   * Disabled under prefers-reduced-motion; touch uses a tap lift instead.
+   */
+  const reduceWavy = useReducedMotion();
+  const [wavyHover, setWavyHover] = useState(false);
+  const wtx = useMotionValue(0);
+  const wty = useMotionValue(0);
+  const wrt = useMotionValue(0);
+  const wavySpring = { stiffness: 200, damping: 20, mass: 0.6 };
+  const wsx = useSpring(wtx, wavySpring);
+  const wsy = useSpring(wty, wavySpring);
+  const wsr = useSpring(wrt, wavySpring);
+
+  const handleWavyMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (reduceWavy) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    // normalized cursor position: -0.5 … 0.5 on each axis
+    const nx = (e.clientX - r.left) / r.width - 0.5;
+    const ny = (e.clientY - r.top) / r.height - 0.5;
+    // lean with the cursor: right → lean right, up → rise, etc.
+    wtx.set(nx * 12);
+    wty.set(ny * 12);
+    wrt.set(nx * 5);
+  };
+  const handleWavyEnter = (e: React.MouseEvent<HTMLElement>) => {
+    setWavyHover(true);
+    e.currentTarget.style.borderColor = product.accent;
+  };
+  const handleWavyLeave = (e: React.MouseEvent<HTMLElement>) => {
+    setWavyHover(false);
+    wtx.set(0);
+    wty.set(0);
+    wrt.set(0);
+    e.currentTarget.style.borderColor = "";
+  };
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 16 }}
@@ -121,37 +160,52 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay: (index % 4) * 0.06, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ y: -6 }}
-      whileTap={{ scale: 0.98 }}
-      onMouseEnter={(e) => (e.currentTarget.style.borderColor = product.accent)}
-      onMouseLeave={(e) => (e.currentTarget.style.borderColor = "")}
+      whileTap={{ y: -4 }}
+      onMouseMove={handleWavyMove}
+      onMouseEnter={handleWavyEnter}
+      onMouseLeave={handleWavyLeave}
       className="group relative flex h-full flex-col overflow-hidden rounded-[1.25rem] border border-ink/8 bg-white shadow-[0_10px_28px_-16px_rgba(11,61,46,0.22)] transition-shadow duration-300 hover:shadow-[0_22px_45px_-18px_rgba(11,61,46,0.35)]"
     >
-      {/* Image — full pack always visible, never cropped */}
+      {/* Image — full pack always visible, never cropped.
+          Wavy layer: pointer springs on the outer wrapper, gentle idle bob
+          inside, so the two motions never fight. pointer-events-none keeps
+          the card link + quick-view button clickable. */}
       <div className="relative aspect-[4/5] w-full overflow-hidden" style={{ backgroundColor: product.accentSoft }}>
+        <motion.div
+          aria-hidden="true"
+          style={{ x: wsx, y: wsy, rotate: wsr }}
+          animate={{ scale: wavyHover && !reduceWavy ? 1.03 : 1 }}
+          whileTap={{ scale: 1.02 }}
+          transition={{ type: "spring", stiffness: 260, damping: 22 }}
+          className="pointer-events-none absolute inset-0"
+        >
+          <div className={reduceWavy ? "h-full w-full" : "h-full w-full animate-bob"}>
+            <Image
+              src={front.src}
+              alt={front.alt}
+              fill
+              sizes="(max-width: 640px) 60vw, (max-width: 1024px) 30vw, 22vw"
+              loading="lazy"
+              className={`object-contain p-4 transition-opacity duration-300 ${
+                back ? "group-hover:opacity-0" : ""
+              }`}
+            />
+            {back && (
+              <Image
+                src={back.src}
+                alt=""
+                aria-hidden="true"
+                fill
+                sizes="(max-width: 640px) 60vw, (max-width: 1024px) 30vw, 22vw"
+                loading="lazy"
+                className="object-contain p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              />
+            )}
+          </div>
+        </motion.div>
         <Link href={`/products/${product.slug}`} aria-label={`View ${product.name}`} className="absolute inset-0 z-10">
           <span className="sr-only">View {product.name}</span>
         </Link>
-        <Image
-          src={front.src}
-          alt={front.alt}
-          fill
-          sizes="(max-width: 640px) 60vw, (max-width: 1024px) 30vw, 22vw"
-          loading="lazy"
-          className={`object-contain p-4 transition-all duration-300 ease-out group-hover:scale-[1.05] ${
-            back ? "group-hover:opacity-0" : ""
-          }`}
-        />
-        {back && (
-          <Image
-            src={back.src}
-            alt=""
-            aria-hidden="true"
-            fill
-            sizes="(max-width: 640px) 60vw, (max-width: 1024px) 30vw, 22vw"
-            loading="lazy"
-            className="object-contain p-4 opacity-0 transition-all duration-300 ease-out group-hover:scale-[1.05] group-hover:opacity-100"
-          />
-        )}
         {product.featured && (
           <span
             className="absolute left-2.5 top-2.5 z-20 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-white"
@@ -199,7 +253,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
           href={`/products/${product.slug}`}
           className="inline-flex items-center gap-1 text-[11px] font-bold text-ink-soft transition-colors hover:text-tea-green"
         >
-          View details <IconArrowRight className="h-3 w-3" />
+          View details <IconArrowRight className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-1" />
         </Link>
       </div>
     </motion.article>

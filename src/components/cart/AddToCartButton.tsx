@@ -75,10 +75,15 @@ export default function AddToCartButton({
           ? `${product.name} added to cart`
           : `Add ${product.name} (${variant.label}) to cart`
       }
-      className={`group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-extrabold transition-all duration-200 hover:shadow-[0_10px_24px_-10px_rgba(11,61,46,0.5)] active:scale-[0.97] ${
+      className={`group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-extrabold transition-all duration-200 hover:scale-[1.03] hover:shadow-[0_10px_24px_-10px_rgba(11,61,46,0.5)] active:scale-[0.97] ${
         phase === "added" ? "bg-tea-green text-cream" : "bg-ink text-cream hover:bg-tea-green"
       } ${className}`}
     >
+      {/* subtle shine sweep on hover */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -translate-x-[180%] bg-gradient-to-r from-transparent via-white/35 to-transparent transition-transform duration-500 ease-out group-hover/btn:translate-x-[380%]"
+      />
       {/* shine sweep on added */}
       <AnimatePresence>
         {phase === "added" && (
@@ -102,7 +107,7 @@ export default function AddToCartButton({
             transition={{ duration: 0.18 }}
             className="inline-flex items-center gap-2"
           >
-            <IconPlus className="h-4 w-4 transition-transform duration-200 group-hover/btn:rotate-90" /> Add to Cart
+            <IconPlus className="h-4 w-4 transition-transform duration-200 group-hover/btn:translate-x-1" /> Add to Cart
           </motion.span>
         )}
         {phase === "adding" && (

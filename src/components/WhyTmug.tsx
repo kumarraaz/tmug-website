@@ -1,6 +1,9 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
+import { PRODUCTS, frontImage } from "@/data/products";
 import SectionHeading from "./SectionHeading";
 import { IconCup, IconLeaf, IconShield, IconTruck } from "./icons";
 
@@ -27,17 +30,79 @@ const PILLARS = [
   },
 ];
 
-/** Product philosophy section. */
+/** The 5-pack lineup for the showcase composition. */
+const LINEUP = PRODUCTS.slice(0, 5).map((p) => ({
+  product: p,
+  img: frontImage(p.variants[0]),
+}));
+
+/**
+ * Editorial arc offsets for the lineup — outer packs sit lower and tilt
+ * outward, the middle pack rises. Only on sm+; mobile stays a straight row.
+ */
+const ARC = [
+  "sm:translate-y-7 sm:-rotate-3",
+  "sm:translate-y-3 sm:-rotate-1",
+  "sm:-translate-y-2",
+  "sm:translate-y-3 sm:rotate-1",
+  "sm:translate-y-7 sm:rotate-3",
+];
+
+/**
+ * Why TMUG — brand section with a grouped 5-image product lineup.
+ * All five packs visible together in one composition; none half-cut,
+ * none dominating. Concise copy, no text walls.
+ */
 export default function WhyTmug() {
   return (
-    <section id="why" className="scroll-mt-24 bg-cream py-10 sm:py-14">
+    <section id="why" className="scroll-mt-24 overflow-hidden bg-cream py-10 sm:py-14">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading
-          eyebrow="Why TMUG"
-          title="Tea with nothing to hide"
-          description="No miracle claims, no 47-ingredient “wellness blends”. Just good tea, packed honestly."
+          eyebrow="Good tea, honestly"
+          title="Why TMUG?"
+          description="Simple leaves. Proper tea. Nothing unnecessary."
         />
-        <div className="mt-8 grid gap-3.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+
+        {/* ── 5-image lineup: one grouped composition ── */}
+        <div className="mx-auto mt-9 max-w-4xl sm:mt-11">
+          <div className="flex items-end justify-center gap-2 sm:gap-0">
+            {LINEUP.map((item, i) => (
+              <motion.div
+                key={item.product.id}
+                initial={{ opacity: 0, y: 26 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.55, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ y: -10, rotate: 0 }}
+                style={{ zIndex: 5 - Math.abs(2 - i) }}
+                className={`w-[19%] shrink-0 sm:w-auto sm:flex-1 ${i > 0 ? "sm:-ml-7" : ""} ${ARC[i]}`}
+              >
+                <Link
+                  href={`/products/${item.product.slug}`}
+                  aria-label={`View ${item.product.name}`}
+                  className="block overflow-hidden rounded-2xl border border-ink/8 bg-white shadow-[0_16px_36px_-20px_rgba(11,61,46,0.4)] transition-shadow duration-300 hover:shadow-[0_24px_44px_-20px_rgba(11,61,46,0.5)]"
+                >
+                  <span className="relative block aspect-[3/4]">
+                    <Image
+                      src={item.img.src}
+                      alt={item.img.alt}
+                      fill
+                      sizes="(max-width: 640px) 18vw, 200px"
+                      loading="lazy"
+                      className="object-contain p-1.5 sm:p-2.5"
+                    />
+                  </span>
+                </Link>
+                <p className="mt-1.5 truncate text-center text-[10px] font-bold text-ink-soft sm:text-[11px]">
+                  {item.product.name}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── pillars ── */}
+        <div className="mt-10 grid gap-3.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
           {PILLARS.map((p, i) => (
             <motion.div
               key={p.title}
