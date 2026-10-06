@@ -23,7 +23,7 @@ function HeroVisual() {
 
   return (
     <div
-      className="relative mx-auto w-[52vw] max-w-[300px] sm:max-w-[340px] lg:w-full lg:max-w-[400px]"
+      className="relative mx-auto w-[50vw] max-w-[280px] sm:max-w-[340px] lg:w-full lg:max-w-[400px]"
       aria-hidden="true"
     >
       {/* ambient glow behind the cup */}
@@ -221,7 +221,7 @@ export default function Hero() {
       <FloatingLogo opacity={0.04} size="95%" />
 
       {/* compact editorial hero: text + visual side-by-side on desktop */}
-      <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pb-10 pt-8 sm:px-6 lg:grid-cols-[1.02fr_0.78fr] lg:gap-6 lg:pb-14 lg:pt-12">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-6 px-4 pb-8 pt-8 sm:px-6 lg:grid-cols-[1.02fr_0.78fr] lg:gap-6 lg:pb-14 lg:pt-12">
         <motion.div style={reduce ? undefined : { y: textY }} className="text-center lg:text-left">
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}>
             <span className="inline-flex items-center gap-2 rounded-full border border-tea-green/20 bg-white/70 px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.16em] text-tea-green">
@@ -255,13 +255,17 @@ export default function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+            className="mt-5 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
           >
             <a
               href="#shop"
-              className="inline-flex items-center gap-2 rounded-full bg-tea-green px-7 py-3.5 text-[15px] font-extrabold text-cream shadow-[0_14px_30px_-12px_rgba(23,107,77,0.6)] transition-transform duration-200 hover:scale-[1.03] active:scale-[0.97]"
+              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-tea-green px-7 py-3.5 text-[15px] font-extrabold text-cream shadow-[0_14px_30px_-12px_rgba(23,107,77,0.6)] transition-transform duration-200 hover:scale-[1.03] active:scale-[0.97]"
             >
-              Shop Tea <IconArrowRight className="h-4 w-4" />
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -translate-x-[180%] bg-gradient-to-r from-transparent via-white/35 to-transparent transition-transform duration-500 ease-out group-hover:translate-x-[380%]"
+              />
+              Shop Tea <IconArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </a>
             <a
               href="/collections"

@@ -14,6 +14,7 @@ import WhyTmug from "./WhyTmug";
 import FeaturedProduct from "./FeaturedProduct";
 import ProductGrid from "./ProductGrid";
 import TrustBand from "./TrustBand";
+import CustomerLove from "./CustomerLove";
 import FinalCta from "./FinalCta";
 import { PRODUCTS } from "@/data/products";
 
@@ -45,6 +46,7 @@ export default function HomeClient() {
         <FeaturedProduct />
         <ProductGrid />
         <TrustBand />
+        <CustomerLove />
         <FinalCta />
       </main>
       <Footer />

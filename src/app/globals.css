@@ -93,9 +93,9 @@ body {
   line-height: 0.98;
   letter-spacing: -0.02em;
 }
-/* Homepage hero — deliberately larger, centered, high-impact */
+/* Homepage hero — bold but capped: 42px mobile → 72px desktop max */
 .text-hero-xl {
-  font-size: clamp(3rem, 11vw, 5.75rem);
+  font-size: clamp(2.625rem, 9vw, 4.5rem);
   line-height: 0.96;
   letter-spacing: -0.025em;
 }
