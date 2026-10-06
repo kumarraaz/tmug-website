@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <circle cx="50" cy="50" r="46" fill="#176B4D" stroke="#D8A62A" stroke-width="3" stroke-dasharray="6 3"/>
+  <circle cx="50" cy="50" r="38" fill="#FFFDF7"/>
+  <text x="50" y="44" text-anchor="middle" font-family="'DM Sans', sans-serif" font-weight="900" font-size="11" fill="#0E513B" letter-spacing="1">100% WHOLE</text>
+  <text x="50" y="60" text-anchor="middle" font-family="'DM Sans', sans-serif" font-weight="900" font-size="11" fill="#176B4D" letter-spacing="1">FLOWERS</text>
+  <text x="50" y="72" text-anchor="middle" font-family="'DM Sans', sans-serif" font-weight="700" font-size="8" fill="#D8A62A" letter-spacing="1.5">★ TMUG ★</text>
+</svg>

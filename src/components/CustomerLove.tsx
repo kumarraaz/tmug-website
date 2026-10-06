@@ -20,26 +20,11 @@ export default function CustomerLove() {
         <div className="absolute -left-20 top-10 h-64 w-64 rounded-[45%_55%_50%_50%] bg-cream opacity-[0.05]" />
         <div className="absolute -bottom-24 -right-16 h-72 w-72 rounded-full bg-gold opacity-10 blur-3xl" />
         <div className="absolute right-[12%] top-[8%] h-40 w-40 rounded-[60%_40%_55%_45%] bg-[#d84f6d] opacity-[0.07]" />
-        {/* twinkling stars */}
-        <span className="absolute left-[10%] top-[22%] text-xl text-gold-soft animate-dot-pulse">★</span>
-        <span className="absolute right-[14%] top-[30%] text-sm text-cream opacity-70 animate-dot-pulse" style={{ animationDelay: "1.4s" }}>★</span>
-        <span className="absolute bottom-[24%] left-[16%] text-base text-gold opacity-80 animate-dot-pulse" style={{ animationDelay: "2.6s" }}>✦</span>
-        <span className="absolute bottom-[18%] right-[20%] text-lg text-gold-soft opacity-60">★</span>
-        {/* tiny accent dots */}
-        <span className="absolute left-[30%] top-[12%] h-2 w-2 rounded-full bg-[#4a6fd4] opacity-60" />
-        <span className="absolute right-[30%] bottom-[12%] h-2 w-2 rounded-full bg-[#e8a93d] opacity-70" />
-        <span className="absolute left-[48%] bottom-[8%] h-1.5 w-1.5 rounded-full bg-cream opacity-40" />
-        {/* tea-cup doodle */}
-        <svg viewBox="0 0 64 48" className="absolute right-[8%] top-[14%] h-12 w-16 text-cream opacity-25 animate-float-slow" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-          <path d="M10 14 h34 v10 c0 10 -8 16 -17 16 s-17 -6 -17 -16 Z" />
-          <path d="M44 18 h6 c5 0 5 8 0 8 h-7" />
-          <path d="M22 8 c -2 -3 2 -4 0 -7 M30 8 c -2 -3 2 -4 0 -7" opacity="0.8" />
-        </svg>
-        {/* botanical leaves */}
-        <svg viewBox="0 0 60 90" className="absolute bottom-[10%] left-[6%] h-20 w-14 text-cream opacity-20 animate-float" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-          <path d="M30 85 C 28 60, 30 40, 34 18" />
-          <path d="M30 62 C 20 58, 14 50, 12 40 C 22 42, 28 50, 30 62 Z" fill="currentColor" stroke="none" opacity="0.7" />
-        </svg>
+        {/* stickers and sparkles */}
+        <img src="/assets/stickers/sparkle.svg" alt="" className="absolute left-[10%] top-[22%] h-6 w-6 opacity-60 animate-dot-pulse" />
+        <img src="/assets/stickers/sparkle.svg" alt="" className="absolute right-[14%] top-[30%] h-5 w-5 opacity-50 animate-dot-pulse" style={{ animationDelay: "1.4s" }} />
+        <img src="/assets/stickers/tea-leaf.svg" alt="" className="absolute bottom-[20%] left-[8%] h-10 w-10 opacity-30 rotate-12 animate-float" />
+        <img src="/assets/stickers/tea-cup.svg" alt="" className="absolute right-[8%] top-[14%] h-12 w-14 opacity-25 animate-float-slow" />
       </div>
 
       <div className="relative mx-auto max-w-[75rem] px-4 sm:px-6">

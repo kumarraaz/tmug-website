@@ -61,6 +61,16 @@ export default function Footer() {
             <h3 className="text-xs font-extrabold uppercase tracking-[0.2em] text-gold">Shop</h3>
             <ul className="mt-4 space-y-2.5 text-sm">
               <li><Link href="/#shop" className="transition-colors hover:text-gold-soft">All teas</Link></li>
+              <li>
+                <a
+                  href={siteConfig.amazonStore}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-gold transition-colors hover:text-gold-soft"
+                >
+                  Amazon Store <span className="text-xs">↗</span>
+                </a>
+              </li>
               {PRODUCTS.map((p) => (
                 <li key={p.id}>
                   <Link href={`/products/${p.slug}`} className="transition-colors hover:text-gold-soft">

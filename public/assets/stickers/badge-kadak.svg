@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <path d="M50 4 L59 18 L76 13 L80 30 L96 35 L90 52 L99 67 L86 77 L85 94 L68 93 L59 105 L44 98 L30 105 L26 90 L10 88 L14 71 L3 59 L13 46 L8 29 L25 28 L28 12 L45 18 Z" fill="#D8A62A" stroke="#0E513B" stroke-width="3"/>
+  <circle cx="50" cy="50" r="34" fill="#0E513B" stroke="#D8A62A" stroke-width="2"/>
+  <text x="50" y="46" text-anchor="middle" font-family="'DM Sans', sans-serif" font-weight="900" font-size="14" fill="#FFFDF7" letter-spacing="1">PROPER</text>
+  <text x="50" y="62" text-anchor="middle" font-family="'DM Sans', sans-serif" font-weight="900" font-size="14" fill="#D8A62A" letter-spacing="1">KADAK!</text>
+</svg>

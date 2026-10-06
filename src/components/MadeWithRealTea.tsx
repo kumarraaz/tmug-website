@@ -1,0 +1,180 @@
+"use client";
+
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import Reveal from "./motion/Reveal";
+import { IconArrowRight } from "./icons";
+
+const INGREDIENTS = [
+  {
+    name: "Aparajita (Butterfly Pea)",
+    role: "Natural Blue to Violet Brew",
+    tea: "Whole dried Aparajita flowers that brew bright royal blue and turn violet with lemon.",
+    color: "#4A6FD4",
+  },
+  {
+    name: "Whole Chamomile Flowers",
+    role: "Gentle Evening Calm",
+    tea: "Babune ke phool with sweet apple-blossom notes for winding down without caffeine.",
+    color: "#E8A93D",
+  },
+  {
+    name: "Ruby Hibiscus Petals",
+    role: "Tart & Berry-Bright",
+    tea: "Whole sun-dried hibiscus calyces brewing brilliant crimson — exceptional hot or iced.",
+    color: "#D84F6D",
+  },
+  {
+    name: "Darjeeling Long Leaf",
+    role: "Single-Estate Green Tea",
+    tea: "Delicate spring harvest leaves giving a clean, floral, antioxidant-rich amber cup.",
+    color: "#2E7D4F",
+  },
+];
+
+export default function MadeWithRealTea() {
+  return (
+    <section
+      aria-label="Made with real tea"
+      className="relative overflow-hidden bg-cream py-16 sm:py-24"
+    >
+      {/* Background radial aura & stickers */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="absolute right-[5%] top-[18%] w-14 sm:w-16 opacity-75 animate-float-slow">
+          <Image
+            src="/assets/stickers/badge-natural.svg"
+            alt=""
+            width={64}
+            height={64}
+            className="object-contain"
+          />
+        </div>
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+          {/* Left Column: Editorial Copy & Ingredients Pills */}
+          <div>
+            <Reveal>
+              <span className="inline-flex items-center gap-2 rounded-full border border-tea-green/20 bg-white/80 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-tea-green shadow-xs">
+                <span className="h-2 w-2 rounded-full bg-gold" />
+                Pure Botanicals
+              </span>
+              <h2 className="text-section mt-4 font-display font-extrabold text-tea-ink">
+                Made with <span className="text-tea-green">real tea.</span>
+              </h2>
+              <p className="mt-4 text-base sm:text-lg leading-relaxed text-ink-soft">
+                From vibrant butterfly pea flowers to fragrant hibiscus and carefully selected
+                long leaves, TMUG brings distinctive Indian botanical experiences to your everyday cup.
+              </p>
+            </Reveal>
+
+            {/* Ingredients Stack */}
+            <div className="mt-8 space-y-3.5">
+              {INGREDIENTS.map((item, i) => (
+                <motion.div
+                  key={item.name}
+                  initial={{ opacity: 0, x: -16 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.45, delay: i * 0.08 }}
+                  className="rounded-2xl border border-ink/8 bg-white/90 p-4 shadow-xs transition-all duration-300 hover:border-tea-green/30 hover:shadow-md"
+                >
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="h-3 w-3 shrink-0 rounded-full"
+                      style={{ backgroundColor: item.color }}
+                    />
+                    <div className="min-w-0">
+                      <p className="font-display text-[15px] font-bold text-tea-ink">
+                        {item.name}
+                      </p>
+                      <p className="text-xs text-ink-soft mt-0.5 leading-relaxed">
+                        {item.tea}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="mt-8">
+              <Link
+                href="#shop"
+                className="inline-flex items-center gap-2 rounded-full bg-tea-green px-8 py-3.5 text-sm font-extrabold text-cream shadow-[0_14px_30px_-10px_rgba(23,107,77,0.5)] transition-all duration-200 hover:bg-tea-deep hover:scale-105 active:scale-95"
+              >
+                Taste the Difference <IconArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Column: Organic Layered Botanical & Product Composition */}
+          <div className="relative mx-auto w-full max-w-[460px] sm:max-w-[520px] aspect-square flex items-center justify-center">
+            {/* Background Organic Sunburst & Circular Waves */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#EAD9BA]/50 via-[#F3E8CF]/80 to-[#FFF8EA] shadow-xl border border-gold/25" />
+            
+            {/* Radial decorative rings */}
+            <div className="absolute inset-6 rounded-full border border-dashed border-[#D8A62A]/40 animate-[spin_60s_linear_infinite]" />
+            <div className="absolute inset-16 rounded-full border border-[#176B4D]/15" />
+
+            {/* Central Featured Product Composition */}
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="relative z-10 w-[68%] aspect-[4/5] drop-shadow-[0_24px_45px_rgba(8,42,32,0.3)]"
+            >
+              <Image
+                src="/hero/butterfly-pea-100g-pouch-front.png"
+                alt="TMUG Butterfly Pea Pouch Botanical Packaging"
+                fill
+                sizes="(max-width: 768px) 60vw, 380px"
+                className="object-contain"
+                priority
+              />
+            </motion.div>
+
+            {/* Floating Hibiscus Jar Flank (Bottom Left) */}
+            <motion.div
+              animate={{ y: [0, 8, 0], rotate: [-6, -2, -6] }}
+              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+              className="absolute left-[2%] bottom-[8%] z-20 w-[34%] aspect-square drop-shadow-[0_16px_28px_rgba(8,42,32,0.25)]"
+            >
+              <Image
+                src="/hero/hibiscus-50g-jar-front.png"
+                alt="TMUG Hibiscus Jar"
+                fill
+                sizes="(max-width: 768px) 30vw, 180px"
+                className="object-contain"
+              />
+            </motion.div>
+
+            {/* Floating Chamomile Jar Flank (Top Right) */}
+            <motion.div
+              animate={{ y: [0, -6, 0], rotate: [6, 10, 6] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              className="absolute right-[2%] top-[10%] z-20 w-[32%] aspect-square drop-shadow-[0_16px_28px_rgba(8,42,32,0.25)]"
+            >
+              <Image
+                src="/hero/chamomile-50g-jar-front.png"
+                alt="TMUG Chamomile Jar"
+                fill
+                sizes="(max-width: 768px) 30vw, 170px"
+                className="object-contain"
+              />
+            </motion.div>
+
+            {/* Stamp Badge Overlay */}
+            <div className="absolute right-[6%] bottom-[12%] z-30">
+              <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full border-2 border-[#D8A62A] bg-gradient-to-br from-[#0B3D2E] to-[#051F17] p-2 flex flex-col items-center justify-center text-center shadow-lg">
+                <span className="text-[7px] font-black uppercase tracking-widest text-[#EFC65E]">100%</span>
+                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-tight text-white leading-none">PURE</span>
+                <span className="text-[6px] font-bold text-cream/75">BOTANICALS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

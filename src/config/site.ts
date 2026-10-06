@@ -62,6 +62,49 @@ export const siteConfig = {
     youtube: "https://youtube.com/",
   },
 
+  /** Official TMUG Amazon Brand Store URL (Confirmed). */
+  amazonStore:
+    "https://www.amazon.in/stores/Tmug/page/4EF8CF60-EB4F-4438-B735-748BE0ED8162?lp_asin=B0H25XRHC5&ref_=ast_bln",
+
+  /**
+   * Verified retail channels & marketplaces. Only confirmed active channels
+   * are marked active: true. Other marketplaces can be enabled when live.
+   */
+  marketplaces: [
+    {
+      id: "amazon",
+      name: "Amazon",
+      url: "https://www.amazon.in/stores/Tmug/page/4EF8CF60-EB4F-4438-B735-748BE0ED8162?lp_asin=B0H25XRHC5&ref_=ast_bln",
+      badge: "Official Store",
+      description: "Prime Fast Delivery across India",
+      active: true,
+    },
+    {
+      id: "whatsapp",
+      name: "WhatsApp Store",
+      url: "https://wa.me/918130707344?text=Hi%20TMUG!%20I%20want%20to%20order%20tea.",
+      badge: "Direct from Brand",
+      description: "Order directly with real tea humans",
+      active: true,
+    },
+    {
+      id: "blinkit",
+      name: "Blinkit",
+      url: "#",
+      badge: "Coming Soon",
+      description: "10-minute quick delivery",
+      active: false,
+    },
+    {
+      id: "zepto",
+      name: "Zepto",
+      url: "#",
+      badge: "Coming Soon",
+      description: "Instant delivery in select cities",
+      active: false,
+    },
+  ],
+
   /** Contact email shown in footer (replace with the real one). */
   email: "hello@tmug.in",
 } as const;
