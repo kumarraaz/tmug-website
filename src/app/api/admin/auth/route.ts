@@ -4,13 +4,17 @@ import { cookies } from "next/headers";
 const COOKIE = "tmug-admin";
 const SESSION_VALUE = "ok";
 
+function getExpectedEmail(): string | undefined {
+  return process.env.ADMIN_EMAIL;
+}
+
 function getExpectedPassword(): string | undefined {
-  return process.env.ADMIN_PASSWORD || (process.env.NODE_ENV !== "production" ? "tmug-admin-preview" : undefined);
+  return process.env.ADMIN_PASSWORD;
 }
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as
-    | { action: "login"; password?: string }
+    | { action: "login"; email?: string; password?: string }
     | { action: "logout" }
     | { action: "status" }
     | null;
@@ -32,16 +36,26 @@ export async function POST(req: Request) {
   }
 
   if (body.action === "login") {
-    const expected = getExpectedPassword();
-    if (!expected) {
+    const expectedEmail = getExpectedEmail();
+    const expectedPassword = getExpectedPassword();
+
+    if (!expectedEmail || !expectedPassword) {
       return NextResponse.json(
-        { error: "ADMIN_PASSWORD is not configured in server environment." },
+        { error: "ADMIN_EMAIL or ADMIN_PASSWORD is not configured in server environment." },
         { status: 500 }
       );
     }
 
-    if (!body.password || body.password !== expected) {
-      return NextResponse.json({ error: "Incorrect admin password." }, { status: 401 });
+    const providedEmail = body.email?.trim().toLowerCase();
+    const providedPassword = body.password;
+
+    if (
+      !providedEmail ||
+      !providedPassword ||
+      providedEmail !== expectedEmail.trim().toLowerCase() ||
+      providedPassword !== expectedPassword
+    ) {
+      return NextResponse.json({ error: "Incorrect admin email or password." }, { status: 401 });
     }
 
     store.set(COOKIE, SESSION_VALUE, {

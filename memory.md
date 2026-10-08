@@ -178,4 +178,11 @@ Under no circumstances should any developer or automated agent fabricate:
 - Action controls: Replace, Remove, Choose Another, Save & Use Image.
 - Multi-slot support for Front Cutout, Back/Alternate, Thumbnail, and Lifestyle assets.
 
+### Admin Authentication & Security Architecture
+- **Environment-Variable Based**: Admin authentication at `/admin/login` and `/api/admin/auth` is strictly driven by server environment variables `ADMIN_EMAIL` and `ADMIN_PASSWORD`.
+- **Zero Hardcoded Secrets**: Plaintext passwords or emails are NEVER hardcoded into client JavaScript bundles, React components, or committed to Git.
+- **Local & Production Configuration**: Configured locally via `.env.local` (kept git-ignored by `.gitignore`) and in production via Vercel Project Environment Variables.
+- **Session Protection**: Server issues an HTTP-only, SameSite=lax cookie (`tmug-admin`) with 12-hour expiration, safeguarding `/admin`, `/admin/seo`, `/api/admin/site-controls`, and `/api/admin/upload`.
+
+
 

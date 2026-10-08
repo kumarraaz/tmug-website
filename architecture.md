@@ -292,20 +292,27 @@ All static assets reside under `/public/`:
 ## Phase 2 Admin & Control Architecture
 
 ### 1. Routes & Control Dashboard
-- `/admin/login` (`src/app/admin/login/page.tsx`): Authenticated gate using cookie-backed session (`tmug-admin`).
+- `/admin/login` (`src/app/admin/login/page.tsx`): Authenticated gate using email and password, verified against server environment variables. Sets secure HTTP-only session cookie (`tmug-admin`).
 - `/admin` (`src/app/admin/page.tsx`): Dashboard with 4 tabs:
-  - **Hero Banners**: Live headline/subheading edits, CTA links, image paths, visibility toggles, reordering.
-  - **Products & Prices**: Live price editing in INR, compare-at pricing, image path adjustments, Best Seller/Popular Pick flags.
+  - **Hero Banners**: Live headline/subheading edits, CTA links, image paths, visibility toggles, reordering, and native file uploads.
+  - **Products & Prices**: Live price editing in INR, compare-at pricing, image path adjustments, Best Seller/Popular Pick flags, and native media management.
   - **Collections**: Category names, descriptions, display toggles, reordering.
   - **Homepage Sections**: Section visibility, headings, subheadings, CTAs, order manipulation.
 - `/admin/seo` (`src/app/admin/seo/page.tsx`): Dedicated metadata, open graph, canonical URL, and index controls.
 
-### 2. API Endpoints
-- `/api/admin/auth`: Handles login (`POST`), logout, and authentication status verification.
+### 2. Authentication Architecture & Security
+- **Environment-Variable Based Authentication**: Server authentication in `/api/admin/auth` is strictly driven by server environment variables (`ADMIN_EMAIL` and `ADMIN_PASSWORD`).
+- **Zero Plaintext Credentials in Source**: No credentials are ever hardcoded in application source code, client JavaScript bundles, or React components.
+- **Session Management**: Successful authentication issues an HTTP-only, SameSite=lax session cookie (`tmug-admin`) with 12-hour expiration that guards `/admin`, `/admin/seo`, `/api/admin/site-controls`, and `/api/admin/upload`.
+- **Environment Configuration**: Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in `.env.local` for local development, and in Vercel Project Environment Variables for production deployments.
+
+### 3. API Endpoints
+- `/api/admin/auth`: Handles login (`POST`), logout, and authentication status verification against `process.env`.
+- `/api/admin/upload`: Multi-part image upload endpoint saving verified assets to `/public/uploads/`.
 - `/api/admin/site-controls`: Returns current configuration (`GET`) and persists updates (`POST`).
 - `/api/admin/seo`: Handles SEO settings management and validation.
 
-### 3. Data Storage & Defaults
+### 4. Data Storage & Defaults
 - Defaults configuration: `src/config/site-controls.ts`.
 - File-based persistence engine: `src/lib/site-control-store.ts` targeting `data/site-controls.json` with safe server-side fallback.
 

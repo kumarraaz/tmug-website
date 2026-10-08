@@ -17,6 +17,8 @@ npm run dev
 
 Environment variables are defined in `.env.example`:
 - `NEXT_PUBLIC_SITE_URL`: Base canonical URL (defaults to `https://tmug.in` in production).
+- `ADMIN_EMAIL`: TMUG Admin login email (server-side secret, e.g., configured in `.env.local` / Vercel).
+- `ADMIN_PASSWORD`: TMUG Admin login password (server-side secret, e.g., configured in `.env.local` / Vercel).
 
 ---
 
@@ -86,7 +88,10 @@ graph LR
 
 1. **Trigger**: Pushes to `main` automatically initiate a Vercel production deployment.
 2. **Framework Detection**: Vercel detects Next.js automatically and executes `npm run build`.
-3. **Environment Injection**: Set production environment variables (e.g., `NEXT_PUBLIC_SITE_URL`) in the Vercel project dashboard.
+3. **Environment Injection**: Set production environment variables in Vercel Project Settings > Environment Variables:
+   - `NEXT_PUBLIC_SITE_URL` (e.g. `https://tmug.in`)
+   - `ADMIN_EMAIL` (server-side secret for `/admin/login`)
+   - `ADMIN_PASSWORD` (server-side secret for `/admin/login`)
 4. **Instant Invalidation**: Static pages and Edge cached assets refresh across the global Vercel Edge network.
 
 ---
@@ -127,17 +132,22 @@ Before accepting any production deployment, execute the following audit checklis
 
 ## 6. Security & Credential Hygiene
 
-- **Zero Secret Commits**: Never commit `.env.local`, API tokens, private SSH keys, or administrative passwords.
-- **Admin Authentication**: Configure `ADMIN_PASSWORD` in production environment variables (e.g. Vercel Project Settings) for `/admin/login` access.
-- **Client-Side Safety**: Ensure only variables prefixed with `NEXT_PUBLIC_` are referenced in client components.
+- **Zero Secret Commits**: Never commit `.env.local`, `.env`, API tokens, private SSH keys, or administrative passwords. `.env*` remains ignored by Git.
+- **Environment-Variable Admin Authentication**: Server-side admin authentication (`/api/admin/auth`) is strictly governed by `ADMIN_EMAIL` and `ADMIN_PASSWORD`. Neither credential is ever exposed to client bundles or React components.
+- **Client-Side Safety**: Ensure only variables prefixed with `NEXT_PUBLIC_` are referenced in client components. Never prefix admin auth variables with `NEXT_PUBLIC_`.
+- **Session Security**: Session authentication relies on an HTTP-only, SameSite=lax cookie (`tmug-admin`).
 - **Dependencies**: Periodically run `npm audit` to identify and patch vulnerable packages.
 
 ---
 
 ## 7. Phase 2 Admin Control Panel QA
 
-- [x] `/admin/login` renders branded login interface and validates secret password.
-- [x] Unauthorized access to `/admin` or `/api/admin/site-controls` correctly redirects or returns 401.
+- [x] `/admin/login` renders branded login interface with Admin Email and Password fields.
+- [x] Correct credentials (configured via server environment variables) successfully authenticate and issue session cookie.
+- [x] Invalid password or missing credentials return 401 Unauthorized with user-friendly error message.
+- [x] Protected routes (`/admin`, `/api/admin/site-controls`, `/api/admin/upload`) enforce authenticated session.
+- [x] Logout terminates session and redirects back to `/admin/login`.
+- [x] Session persists seamlessly across navigation.
 - [x] `/admin` displays all 4 tabs: Hero Banners, Products & Prices, Collections, Homepage Sections.
 - [x] Modifying product prices, banner titles, or section visibility updates the live state.
 - [x] Reset to Defaults restores default system state with confirmation.

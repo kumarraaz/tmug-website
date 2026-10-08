@@ -8,14 +8,15 @@ import { IconArrowRight, IconSparkle } from "@/components/icons";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!password.trim()) {
-      setError("Please enter your admin password.");
+    if (!email.trim() || !password.trim()) {
+      setError("Please enter both your admin email and password.");
       return;
     }
 
@@ -26,7 +27,7 @@ export default function AdminLoginPage() {
       const res = await fetch("/api/admin/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "login", password }),
+        body: JSON.stringify({ action: "login", email: email.trim(), password }),
       });
 
       const data = await res.json();
@@ -84,20 +85,39 @@ export default function AdminLoginPage() {
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <div>
               <label
-                htmlFor="admin-password"
-                className="block text-xs font-black uppercase tracking-wider text-charcoal/80"
+                htmlFor="admin-email"
+                className="block text-xs font-black uppercase tracking-wider text-[#33243A]"
               >
-                Admin Secret Password
+                Admin Email
+              </label>
+              <input
+                id="admin-email"
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter admin email"
+                autoComplete="username"
+                required
+                className="mt-1.5 w-full rounded-xl border border-[#3A3438]/15 bg-[#FFF7EF]/50 px-4 py-3 text-sm text-[#33243A] outline-none transition-all placeholder:text-[#3A3438]/40 focus:border-[#FAA4B5] focus:bg-white focus:ring-2 focus:ring-[#FAA4B5]/20"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="admin-password"
+                className="block text-xs font-black uppercase tracking-wider text-[#33243A]"
+              >
+                Admin Password
               </label>
               <input
                 id="admin-password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
+                placeholder="Enter admin password"
                 autoComplete="current-password"
                 required
-                className="mt-1.5 w-full rounded-xl border border-charcoal/15 bg-warm-ivory/50 px-4 py-3 text-sm text-charcoal outline-none transition-all placeholder:text-charcoal/40 focus:border-coral focus:bg-white focus:ring-2 focus:ring-coral/20"
+                className="mt-1.5 w-full rounded-xl border border-[#3A3438]/15 bg-[#FFF7EF]/50 px-4 py-3 text-sm text-[#33243A] outline-none transition-all placeholder:text-[#3A3438]/40 focus:border-[#FAA4B5] focus:bg-white focus:ring-2 focus:ring-[#FAA4B5]/20"
               />
             </div>
 

@@ -139,6 +139,9 @@ TMUG’s personality must remain distinctly Indian, botanically authentic, edito
 - **Open / Reveal Section**: Placed mid-page between Best Sellers and Why TMUG. Features 3D box unboxing, subtle non-blocking flower petal shower, thank-you emoji feedback, and add-to-cart action.
 - **Phase 2 Admin Control Panel Directives**:
   - Storefront admin operations reside at `/admin/login` and `/admin`.
-  - Authentication must be secure; passwords and secrets must never be hardcoded into frontend bundles.
+  - Authentication is strictly environment-variable based (`ADMIN_EMAIL` and `ADMIN_PASSWORD`).
+  - Passwords, emails, and secrets must NEVER be hardcoded into frontend bundles, client-side React components, or committed to Git.
+  - Local credentials are configured via `.env.local` (kept strictly Git-ignored); production credentials are configured via Vercel Project Environment Variables.
   - Controls must cover Hero banners, Products, Prices, Images, Collections, Best Seller / Popular Pick flags, and Section visibility/ordering.
+
 
