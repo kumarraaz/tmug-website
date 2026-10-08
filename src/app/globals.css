@@ -1,44 +1,58 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── TMUG V2 Master Palette (Zero Green UI) ─────────────────
-     Warm Ivory, Gold, Saffron, Coral, Light Pink, Berry, Violet,
-     Indigo, Deep Plum, Warm Charcoal, White */
-  --color-warm-ivory: #fff8ee;
-  --color-warm-surface: #f7ebdd;
-  --color-tea-gold: #d9a441;
-  --color-gold: #d9a441;
+  /* ── NEW TMUG REBUILD PALETTE (Zero Green UI) ─────────────────
+     Primary Canvas: Warm Ivory #FFF7EF
+     Secondary Canvas: Soft Peach Cream #FBE7DC
+     Primary Vibrant: Coral Pink #F36F6F
+     Secondary Vibrant: Berry Pink #D94F7D
+     Soft Gen-Z: Blush Pink #F6B6C8
+     Accent: Warm Gold #D8A33E
+     Optional Accent: Violet #7251B5
+     Primary Text: Deep Plum #33243A
+     Secondary Text: Warm Charcoal #3A3438
+     White: #FFFFFF */
+  --color-warm-ivory: #fff7ef;
+  --color-warm-surface: #fbe7dc;
+  --color-peach-cream: #fbe7dc;
+  --color-coral: #f36f6f;
+  --color-coral-pink: #f36f6f;
+  --color-berry: #d94f7d;
+  --color-berry-pink: #d94f7d;
+  --color-pink-accent: #f6b6c8;
+  --color-blush-pink: #f6b6c8;
+  --color-tea-gold: #d8a33e;
+  --color-gold: #d8a33e;
   --color-gold-soft: #f4b400;
   --color-saffron: #f4b400;
-  --color-coral: #f26b5e;
-  --color-pink-accent: #f7b6c8;
-  --color-berry: #c94c7c;
-  --color-violet: #6c4ab6;
+  --color-violet: #7251b5;
   --color-indigo: #4056a1;
   --color-plum: #33243a;
-  --color-charcoal: #272329;
+  --color-deep-plum: #33243a;
+  --color-charcoal: #3a3438;
+  --color-warm-charcoal: #3a3438;
 
   /* Zero-Green mapping for legacy tokens across site */
-  --color-tea-green: #d9a441; /* Tea Gold */
+  --color-tea-green: #d8a33e; /* Warm Gold */
   --color-tea-deep: #33243a;  /* Deep Plum */
-  --color-tea-dark: #272329;  /* Warm Charcoal */
-  --color-tea-ink: #272329;   /* Warm Charcoal */
-  --color-cream: #fff8ee;     /* Warm Ivory */
+  --color-tea-dark: #3a3438;  /* Warm Charcoal */
+  --color-tea-ink: #33243a;   /* Deep Plum */
+  --color-cream: #fff7ef;     /* Warm Ivory */
   --color-cream-light: #ffffff; /* Crisp White */
-  --color-cream-dark: #f7ebdd;  /* Soft Warm Surface */
-  --color-ink: #272329;       /* Warm Charcoal */
+  --color-cream-dark: #fbe7dc;  /* Soft Peach Cream */
+  --color-ink: #33243a;       /* Deep Plum */
   --color-ink-soft: #5c5560;  /* Muted Charcoal/Plum */
 
   /* Per-tea accent colors */
-  --color-pea: #4a6fd4;
-  --color-pea-soft: #dbe4ff;
-  --color-blossom: #c94c7c;
+  --color-pea: #7251b5;
+  --color-pea-soft: #f6b6c8;
+  --color-blossom: #d94f7d;
   --color-blossom-soft: #ffdde6;
-  --color-limepop: #f4b400;
+  --color-limepop: #d8a33e;
   --color-limepop-soft: #fff3d1;
-  --color-honey: #d9a441;
+  --color-honey: #d8a33e;
   --color-honey-soft: #fff2d6;
-  --color-darjeeling: #6c4ab6;
+  --color-darjeeling: #7251b5;
   --color-darjeeling-soft: #ede7f6;
 
   --font-display: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif;
@@ -53,6 +67,8 @@
   --animate-bob: bob 5s ease-in-out infinite;
   --animate-glow-pulse: glow-pulse 3s ease-in-out infinite;
   --animate-petal-fall: petal-fall 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  --animate-tmug-wave: tmugWave 3.5s ease-in-out infinite;
+
 
   @keyframes marquee {
     from { transform: translateX(0); }
@@ -89,7 +105,49 @@
     80% { opacity: 0.9; }
     100% { transform: translateY(120px) rotate(160deg) scale(1); opacity: 0; }
   }
+  @keyframes tmugWave {
+    0% {
+      clip-path: polygon(
+        0% 60%,
+        15% 64%,
+        32% 62%,
+        50% 58%,
+        67% 61%,
+        84% 64%,
+        100% 58%,
+        100% 100%,
+        0% 100%
+      );
+    }
+    50% {
+      clip-path: polygon(
+        0% 48%,
+        16% 44%,
+        33% 50%,
+        52% 58%,
+        69% 60%,
+        85% 54%,
+        100% 48%,
+        100% 100%,
+        0% 100%
+      );
+    }
+    100% {
+      clip-path: polygon(
+        0% 55%,
+        16% 58%,
+        33% 61%,
+        50% 55%,
+        67% 47%,
+        84% 45%,
+        100% 50%,
+        100% 100%,
+        0% 100%
+      );
+    }
+  }
 }
+
 
 html {
   scroll-behavior: smooth;

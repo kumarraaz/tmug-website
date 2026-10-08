@@ -87,7 +87,7 @@ export default function TeaStory() {
     <section
       id="about"
       aria-label="The TMUG Tea Story"
-      className="relative overflow-hidden bg-warm-surface/40 py-16 sm:py-24"
+      className="relative overflow-hidden bg-warm-surface/40 py-8 sm:py-12"
     >
       {/* Decorative botanical backdrop elements */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -116,17 +116,17 @@ export default function TeaStory() {
             <span className="h-1.5 w-1.5 rounded-full bg-coral" />
             The TMUG Ritual
           </span>
-          <h2 className="mt-3 font-display text-3xl font-black tracking-tight text-charcoal sm:text-4xl md:text-5xl">
+          <h2 className="mt-2 font-display text-2xl font-black tracking-tight text-charcoal sm:text-3xl md:text-4xl">
             More than just a cup of tea.
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-charcoal/70 sm:text-lg">
+          <p className="mt-2 text-xs sm:text-sm leading-relaxed text-charcoal/70">
             From your first morning sip to late-night conversations, TMUG brings a little more
             colour, craft, and joy to your everyday tea.
           </p>
         </div>
 
         {/* Ritual Selector Tabs */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+        <div className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
           {RITUAL_MOMENTS.map((m) => {
             const isActive = m.id === activeMoment;
             return (
@@ -134,17 +134,17 @@ export default function TeaStory() {
                 key={m.id}
                 type="button"
                 onClick={() => setActiveMoment(m.id)}
-                className={`relative rounded-full px-4 py-2.5 text-xs font-extrabold transition-all duration-300 sm:px-6 sm:py-3 sm:text-sm ${
+                className={`relative rounded-full px-4 py-2 text-xs font-extrabold transition-all duration-300 sm:px-5 sm:py-2.5 sm:text-xs cursor-pointer ${
                   isActive
-                    ? "bg-tea-ink text-white shadow-md scale-105"
-                    : "bg-white text-ink-soft hover:bg-white/80 hover:text-tea-ink border border-ink/8"
+                    ? "bg-charcoal text-white shadow-md scale-105"
+                    : "bg-white text-charcoal/80 hover:bg-white/80 hover:text-charcoal border border-charcoal/10"
                 }`}
               >
                 <span>{m.title}</span>
                 {isActive && (
                   <motion.span
                     layoutId="activeRitualPill"
-                    className="absolute inset-0 rounded-full border-2 border-gold -z-10"
+                    className="absolute inset-0 rounded-full border-2 border-tea-gold -z-10"
                     transition={{ type: "spring", stiffness: 350, damping: 30 }}
                   />
                 )}
@@ -154,7 +154,7 @@ export default function TeaStory() {
         </div>
 
         {/* Interactive Story Display Stage */}
-        <div className="mt-10">
+        <div className="mt-6 sm:mt-8">
           <AnimatePresence mode="wait">
             <motion.div
               key={current.id}
@@ -162,7 +162,7 @@ export default function TeaStory() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="relative overflow-hidden rounded-[2.5rem] border border-ink/8 bg-white p-6 shadow-xl sm:p-10 md:p-12"
+              className="relative overflow-hidden rounded-[2rem] border border-charcoal/10 bg-white p-5 shadow-xl sm:p-8 md:p-10"
               style={{
                 boxShadow: `0 24px 48px -20px ${current.accentColor}25, 0 10px 24px -10px rgba(11,61,46,0.06)`,
               }}

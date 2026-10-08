@@ -35,7 +35,7 @@ export default function TrustStrip() {
   return (
     <section
       aria-label="TMUG Quality Highlights"
-      className="relative z-10 border-y border-[#D8A62A]/20 bg-gradient-to-r from-[#FFF8EA] via-[#FFFDF7] to-[#FFF8EA] py-4 sm:py-5 shadow-xs"
+      className="relative z-10 border-y border-tea-gold/20 bg-gradient-to-r from-warm-ivory via-peach-cream/40 to-warm-ivory py-3 sm:py-4 shadow-xs"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Desktop / Tablet Grid */}

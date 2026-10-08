@@ -144,3 +144,25 @@ https://www.amazon.in/stores/Tmug/page/4EF8CF60-EB4F-4438-B735-748BE0ED8162?lp_a
 - **Customer Reviews**: Use only verified quotes from actual purchasers (documented in `src/data/reviews.ts`).
 - **Rating Integrity**: Never invent arbitrary review counters or fake star counts.
 - **Press Coverage**: Feature press quotes only when formal editorial coverage is verified and approved.
+
+---
+
+## 6. Community Rituals & Creative Recipes Copy
+
+### Verified Campaign Artwork Headlines & Subtitles:
+1. **Blue Blooms, Beautiful Moments**:
+   - Asset: `public/rituals/butterfly-pea-blooms-moments.jpg`
+   - Verified Text: *"Blue Blooms, Beautiful Moments — Butterfly Pea Flower Tea. 100% Natural • Caffeine Free • No Added Color • No Preservatives."*
+2. **More Ways to Enjoy Butterfly Pea**:
+   - Asset: `public/recipes/butterfly-pea-ways-to-enjoy.jpg`
+   - Verified Text: *"More Ways to Enjoy Butterfly Pea: Brew, sip and create colourful dishes — Hot Butterfly Pea Tea, Butterfly Pea Lemonade, Butterfly Pea Rice, Butterfly Pea Jelly."*
+3. **Chamomile Evening Ritual & Cafe Creations**:
+   - Assets: `public/rituals/chamomile-daily-ritual.png` & `public/recipes/chamomile-latte-panna-cotta.png`
+   - Verified Creations: *Honey Chamomile Latte, Vanilla Panna Cotta, Evening Wind Down.*
+4. **Ruby Hibiscus Afternoon Glow & Chilled Treats**:
+   - Assets: `public/rituals/ruby-hibiscus-daily-ritual.png` & `public/recipes/hibiscus-sorbet-ice-pops.png`
+   - Verified Creations: *Hibiscus Lime Sorbet, Ruby Ice Pops, Afternoon Refresh.*
+5. **Lemongrass Invigorating Infusions**:
+   - Asset: `public/recipes/lemongrass-ginger-chai-soup.png`
+   - Verified Creations: *Lemongrass Ginger Chai, Coconut Soup.*
+

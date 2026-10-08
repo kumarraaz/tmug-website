@@ -14,11 +14,12 @@ import OpenRevealSection from "./OpenRevealSection"; // 07. Open / Reveal Experi
 import WhyTmug from "./WhyTmug"; // 08. Why TMUG (Redesigned, large packaging, flower watermark)
 import MadeWithRealTea from "./MadeWithRealTea"; // 09. Made With Real Tea / Ingredients Transparency
 import TeaStory from "./TeaStory"; // 10. Tea Story / Daily Rituals
-import LifestyleGallery from "./LifestyleGallery"; // 11. Lifestyle Gallery ("Made for moments that linger")
-import BrandProof from "./BrandProof"; // 12. Honest Quality & Community Proof
-import CustomerLove from "./CustomerLove"; // 13. Customer Love / Reviews
-import AvailableInStores from "./AvailableInStores"; // 14. Available Where You Shop (Amazon & WhatsApp)
-import FinalCta from "./FinalCta"; // 15. Final Conversion CTA
+import TeaRitualsAndRecipes from "./TeaRitualsAndRecipes"; // 11. Rituals & Creative Recipes
+import LifestyleGallery from "./LifestyleGallery"; // 12. Lifestyle Gallery ("Made for moments that linger")
+import BrandProof from "./BrandProof"; // 13. Honest Quality & Community Proof
+import CustomerLove from "./CustomerLove"; // 14. Customer Love / Reviews
+import AvailableInStores from "./AvailableInStores"; // 15. Available Where You Shop (Amazon & WhatsApp)
+import FinalCta from "./FinalCta"; // 16. Final Conversion CTA
 
 export default function HomeClient() {
   return (
@@ -54,7 +55,10 @@ export default function HomeClient() {
         {/* 10. Product / Tea story rituals */}
         <TeaStory />
 
-        {/* 11. Lifestyle Gallery ("Made for moments that linger") */}
+        {/* 11. Community rituals & creative recipe showcase */}
+        <TeaRitualsAndRecipes />
+
+        {/* 12. Lifestyle Gallery ("Made for moments that linger") */}
         <LifestyleGallery />
 
         {/* 12. Honest Quality / Social proof */}

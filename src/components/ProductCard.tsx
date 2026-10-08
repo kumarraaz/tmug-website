@@ -244,10 +244,10 @@ export default function ProductCard({
           transition={{ type: "spring", stiffness: 260, damping: 22 }}
           className="pointer-events-none absolute inset-0 flex items-center justify-center p-3 sm:p-4"
         >
-          {/* Packaging Container — Always full pack, object-contain, never cropped */}
-          <div className="relative h-full w-full">
-            {/* Front Image */}
-            <Image
+        {/* Packaging Container — Always full pack, object-contain, never cropped */}
+        <div className="relative h-full w-full">
+          {/* Front Image */}
+          <Image
               src={front.src}
               alt={front.alt}
               fill
@@ -260,23 +260,39 @@ export default function ProductCard({
               }`}
             />
 
-            {/* Back-Side Image with Wavy Reveal Transition */}
+            {/* Back-Side Image with Organic Liquid Water-Wave Reveal */}
             {back && (
-              <Image
-                src={back.src}
-                alt={`Back view of ${product.name} packaging`}
-                fill
-                sizes="(max-width: 640px) 70vw, (max-width: 1024px) 33vw, 24vw"
-                loading="lazy"
-                className={`object-contain transition-all duration-500 ease-out ${
-                  showBack
-                    ? "opacity-100 scale-100 blur-0"
-                    : "opacity-0 scale-95 blur-[1px]"
+              <div
+                className={`absolute inset-0 transition-opacity duration-500 ease-out ${
+                  showBack ? "opacity-100" : "opacity-0 pointer-events-none"
                 }`}
-              />
+              >
+                <div
+                  className={`relative h-full w-full ${
+                    showBack && !reduceMotion
+                      ? "animate-[tmugWave_3.5s_ease-in-out_infinite]"
+                      : ""
+                  }`}
+                >
+                  <Image
+                    src={back.src}
+                    alt={`Back view of ${product.name} packaging`}
+                    fill
+                    sizes="(max-width: 640px) 70vw, (max-width: 1024px) 33vw, 24vw"
+                    loading="lazy"
+                    className="object-contain"
+                  />
+                  {/* Subtle Blush Pink (#F6B6C8) & Coral (#F36F6F) liquid glow highlight */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-pink-accent/25 via-coral/15 to-transparent mix-blend-soft-light"
+                  />
+                </div>
+              </div>
             )}
           </div>
         </motion.div>
+
 
         {/* Subtle Badge Tags */}
         <div className="absolute left-3 top-3 z-20 flex flex-col gap-1.5">

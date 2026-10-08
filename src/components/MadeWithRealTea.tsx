@@ -37,7 +37,7 @@ export default function MadeWithRealTea() {
   return (
     <section
       aria-label="Made with real tea"
-      className="relative overflow-hidden bg-warm-ivory py-16 sm:py-24"
+      className="relative overflow-hidden bg-warm-ivory py-8 sm:py-12"
     >
       {/* Background radial aura & stickers */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -53,25 +53,25 @@ export default function MadeWithRealTea() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+        <div className="grid items-center gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-12">
           {/* Left Column: Editorial Copy & Ingredients Pills */}
           <div>
             <Reveal>
-              <span className="inline-flex items-center gap-2 rounded-full border border-tea-gold/30 bg-warm-surface px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-charcoal shadow-xs">
+              <span className="inline-flex items-center gap-2 rounded-full border border-tea-gold/30 bg-warm-surface px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-charcoal shadow-xs">
                 <span className="h-2 w-2 rounded-full bg-coral" />
                 Pure Botanicals
               </span>
-              <h2 className="text-section mt-4 font-display font-black text-charcoal">
+              <h2 className="text-section mt-2 font-display font-black text-charcoal">
                 Made with <span className="text-coral">real tea.</span>
               </h2>
-              <p className="mt-4 text-base sm:text-lg leading-relaxed text-charcoal/75">
+              <p className="mt-2 text-sm sm:text-base leading-relaxed text-charcoal/75">
                 From vibrant butterfly pea flowers to fragrant hibiscus and carefully selected
                 long leaves, TMUG brings distinctive Indian botanical experiences to your everyday cup.
               </p>
             </Reveal>
 
             {/* Ingredients Stack */}
-            <div className="mt-8 space-y-3.5">
+            <div className="mt-5 space-y-2.5">
               {INGREDIENTS.map((item, i) => (
                 <motion.div
                   key={item.name}

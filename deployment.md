@@ -121,5 +121,17 @@ Before accepting any production deployment, execute the following audit checklis
 ## 6. Security & Credential Hygiene
 
 - **Zero Secret Commits**: Never commit `.env.local`, API tokens, private SSH keys, or administrative passwords.
+- **Admin Authentication**: Configure `ADMIN_PASSWORD` in production environment variables (e.g. Vercel Project Settings) for `/admin/login` access.
 - **Client-Side Safety**: Ensure only variables prefixed with `NEXT_PUBLIC_` are referenced in client components.
 - **Dependencies**: Periodically run `npm audit` to identify and patch vulnerable packages.
+
+---
+
+## 7. Phase 2 Admin Control Panel QA
+
+- [x] `/admin/login` renders branded login interface and validates secret password.
+- [x] Unauthorized access to `/admin` or `/api/admin/site-controls` correctly redirects or returns 401.
+- [x] `/admin` displays all 4 tabs: Hero Banners, Products & Prices, Collections, Homepage Sections.
+- [x] Modifying product prices, banner titles, or section visibility updates the live state.
+- [x] Reset to Defaults restores default system state with confirmation.
+

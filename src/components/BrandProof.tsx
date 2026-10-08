@@ -35,7 +35,7 @@ export default function BrandProof() {
   return (
     <section
       aria-label="Tea worth talking about"
-      className="relative overflow-hidden bg-plum py-16 sm:py-24 text-warm-ivory"
+      className="relative overflow-hidden bg-plum py-8 sm:py-12 text-warm-ivory"
     >
       {/* Background radial glow & floating decorative stickers */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -54,21 +54,21 @@ export default function BrandProof() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         {/* Section Header */}
         <Reveal className="text-center max-w-2xl mx-auto">
-          <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-[#EFC65E]">
-            <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+          <span className="inline-flex items-center gap-2 rounded-full border border-tea-gold/40 bg-white/10 px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-[#EFC65E]">
+            <span className="h-1.5 w-1.5 rounded-full bg-tea-gold" />
             Honest Quality
           </span>
-          <h2 className="text-section mt-3 font-display font-extrabold text-cream">
-            Tea worth <span className="text-gold">talking about.</span>
+          <h2 className="text-section mt-2 font-display font-extrabold text-cream">
+            Tea worth <span className="text-tea-gold">talking about.</span>
           </h2>
-          <p className="mt-3 text-[15px] sm:text-base leading-relaxed text-cream/75">
+          <p className="mt-2 text-xs sm:text-sm leading-relaxed text-cream/75">
             No corporate jargon. No artificial colours. Just proper Indian tea crafted with vibrant
             whole botanicals and heritage teas made for your daily ritual.
           </p>
         </Reveal>
 
         {/* Honest Trust Metrics Grid */}
-        <div className="mt-12 sm:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="mt-8 sm:mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {TRUST_METRICS.map((item, i) => (
             <motion.div
               key={item.title}
@@ -77,7 +77,7 @@ export default function BrandProof() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className="group relative rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xs transition-all duration-300 hover:border-gold/50 hover:bg-white/10"
+              className="group relative rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-xs transition-all duration-300 hover:border-tea-gold/50 hover:bg-white/10"
             >
               <div className="flex items-center justify-between mb-4">
                 <span className="font-display text-2xl sm:text-3xl font-extrabold text-gold">

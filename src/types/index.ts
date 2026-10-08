@@ -83,3 +83,56 @@ export interface SeoSettings {
   ogImage: string;
   topics: string;
 }
+
+export interface HeroBannerControl {
+  id: string;
+  title: string;
+  subtitle: string;
+  ctaText: string;
+  ctaLink: string;
+  desktopSrc: string;
+  mobileSrc: string;
+  enabled: boolean;
+  order: number;
+}
+
+export interface ProductControl {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  compareAtPrice?: number;
+  frontImage: string;
+  backImage?: string;
+  isBestSeller: boolean;
+  isPopularPick: boolean;
+  enabled: boolean;
+  order: number;
+}
+
+export interface CollectionControl {
+  id: string;
+  name: string;
+  description: string;
+  enabled: boolean;
+  order: number;
+}
+
+export interface SectionControl {
+  id: string;
+  label: string;
+  heading: string;
+  subheading: string;
+  ctaText?: string;
+  ctaLink?: string;
+  enabled: boolean;
+  order: number;
+}
+
+export interface SiteControls {
+  banners: HeroBannerControl[];
+  products: ProductControl[];
+  collections: CollectionControl[];
+  sections: SectionControl[];
+}
+

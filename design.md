@@ -38,26 +38,36 @@ TMUG merges contemporary beverage culture with timeless Indian tea traditions. T
 
 All primary UI colors are configured in `@theme` inside `src/app/globals.css`:
 
-### Approved 12-Color Master UI Palette
+### Approved Master UI Palette
 | Token | Hex Value | Role / Usage |
 | :--- | :--- | :--- |
-| `Warm Ivory` / `--color-warm-ivory` | `#FFF8EE` | Primary page & hero background; warm, breathable, tactile |
-| `Soft Warm Surface` / `--color-cream-warm` | `#F7EBDD` | Cards, secondary section backgrounds, modal containers |
-| `Tea Gold` / `--color-tea-gold` | `#D9A441` | Signature brand gold, badge outlines, rating stars, accents |
-| `Bright Saffron` / `--color-saffron` | `#F4B400` | High-energy accent, pill highlights, hover accents |
-| `Light Pink` / `--color-pink-accent` | `#F7B6C8` | Gen-Z reveal accent, halo glows, playful botanical highlights |
-| `Coral` / `--color-coral` | `#F26B5E` | Primary high-conversion CTA buttons, alert badges, cart remove |
-| `Berry` / `--color-berry` | `#C94C7C` | Rich berry accent, floral badges, taglines |
-| `Violet` / `--color-violet` | `#6C4AB6` | Butterfly pea ritual accents, evening tea tags |
-| `Indigo` / `--color-indigo` | `#4056A1` | Deep blue flower tea accents, contrast chips |
-| `Deep Plum` / `--color-deep-plum` | `#33243A` | Rich header typography, high-contrast dark sections, footer |
-| `Warm Charcoal` / `--color-charcoal` | `#272329` | Editorial text, primary dark buttons, navigation text |
+| `Warm Ivory` / `--color-warm-ivory` | `#FFF7EF` | Primary page & hero canvas; warm, breathable, tactile |
+| `Soft Peach Cream` / `--color-peach-cream` | `#FBE7DC` | Cards, secondary section backgrounds, subtle container tints |
+| `Coral Pink` / `--color-coral` | `#F36F6F` | Primary vibrant CTA buttons, high-energy accents, remove action |
+| `Berry Pink` / `--color-berry` | `#D94F7D` | Secondary vibrant punch, floral badges, taglines |
+| `Blush Pink` / `--color-pink-accent` | `#F6B6C8` | Soft Gen-Z reveal accent, liquid glows, halo backdrops |
+| `Tea Gold` / `--color-tea-gold` | `#D8A33E` | Signature heritage warm gold, rating stars, badge borders |
+| `Violet` / `--color-violet` | `#7251B5` | Butterfly pea ritual accents, evening tea tags |
+| `Deep Plum` / `--color-plum` | `#33243A` | Rich typography, high-contrast dark sections, footer canvas |
+| `Warm Charcoal` / `--color-charcoal` | `#3A3438` | Editorial secondary text, dark buttons, navigation links |
 | `White` / `--color-white` | `#FFFFFF` | Product stage card surfaces, contrast badges, clean cards |
 
-### Product Card Reveal & Gen-Z Interaction System
+### Product Card Water-Wave Reveal & Gen-Z Interaction System
 - **Default State**: Clear authentic front packaging view with full label visibility.
 - **Hover State (Desktop)**:
-  - Organic wavy liquid transition using spring physics (`stiffness: 300, damping: 25`).
+  - Organic liquid water-wave animation powered by CSS `@keyframes tmugWave` using alternating polygon clip paths:
+    ```css
+    @keyframes tmugWave {
+      0%, 100% { clip-path: polygon(0% 12%, 18% 4%, 38% 14%, 58% 6%, 78% 16%, 100% 8%, 100% 100%, 0% 100%); }
+      25% { clip-path: polygon(0% 6%, 22% 16%, 42% 6%, 62% 14%, 82% 4%, 100% 12%, 100% 100%, 0% 100%); }
+      50% { clip-path: polygon(0% 14%, 20% 6%, 40% 16%, 60% 8%, 80% 18%, 100% 6%, 100% 100%, 0% 100%); }
+      75% { clip-path: polygon(0% 8%, 24% 14%, 44% 8%, 64% 16%, 84% 6%, 100% 14%, 100% 100%, 0% 100%); }
+    }
+    ```
+  - Back packshot smoothly surfaces with a luminous Blush Pink (`#F6B6C8`) & Coral (`#F36F6F`) liquid halo glow.
+- **Mobile Tap Reveal**: Tapping card toggles front/back packshot on touch screens without blocking links/buttons.
+- **In-Place Cart Controls**: Prominent Add to Cart button transitions immediately to an In Cart quantity stepper (`−` qty `+`) and a direct Remove button calling `removeLine(variantId)`.
+
   - Soft light pink (`#F7B6C8`) and coral (`#F26B5E`) halo glow wrapping the card perimeter (`glow-pulse` animation).
   - Authentic back packshot reveals smoothly from verified `back` image asset.
   - Duration: ~400–700ms smooth organic motion.

@@ -163,4 +163,32 @@ Under no circumstances should any developer or automated agent fabricate:
 ### Why TMUG Redesign
 - Redesigned in warm ivory, gold, and coral tones with prominent authentic packaging packshots, botanical watermark, and zero green UI.
 
+---
+
+## 9. V2 Rebuild & Phase 2 Admin Implementation (Current)
+
+### Source of Truth Resolution
+- The HTML email file was not available and was explicitly eliminated as a dependency.
+- Single source of truth: Repository product data, 9 documentation files, and authentic local and uploaded image assets.
+
+### Asset Organization
+- Organized new campaign assets into `public/banners/`, `public/recipes/`, and `public/rituals/`.
+- Preserved campaign visuals as authentic artwork without artificial HTML overlay text.
+
+### Visual System & Compact Spacing
+- Visual tokens: Warm Ivory (`#FFF7EF`), Peach Cream (`#FBE7DC`), Coral (`#F36F6F`), Berry (`#D94F7D`), Blush Pink (`#F6B6C8`), Gold (`#D8A33E`), Plum (`#33243A`), Charcoal (`#3A3438`).
+- Strict Zero Green UI enforced on all UI containers and elements.
+- Excessive whitespace eliminated sitewide by compacting vertical padding to `py-8 sm:py-12` and reducing card and rail margins.
+- Liquid water-wave clip path reveal (`@keyframes tmugWave`) activated on card hover and back view toggle.
+- Added `TeaRitualsAndRecipes.tsx` displaying daily rituals and creative community recipes.
+
+### Phase 2 Admin Control Panel
+- Route `/admin/login`: Secure password-based entry point with `tmug-admin` cookie auth.
+- Route `/admin`: Comprehensive control dashboard featuring 4 tabs:
+  1. **Hero Banners**: Headlines, subheadings, CTA buttons, links, image paths, visibility, reordering.
+  2. **Products & Prices**: Live INR prices, compare-at prices, front/back image paths, Best Seller / Popular Pick flags, visibility.
+  3. **Collections**: Category names, descriptions, active toggles, reordering.
+  4. **Homepage Sections**: Section visibility toggles, section headings, subheadings, CTAs, reordering.
+- Persistent file storage via `data/site-controls.json` with safe server-side fallback (`src/lib/site-control-store.ts`).
+
 

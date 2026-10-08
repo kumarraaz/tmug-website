@@ -9,7 +9,7 @@ import { IconArrowRight, IconWhatsApp } from "./icons";
 /** Section 14 — Final Conversion CTA band */
 export default function FinalCta() {
   return (
-    <section className="relative overflow-hidden bg-plum py-16 text-warm-ivory sm:py-24">
+    <section className="relative overflow-hidden bg-plum py-8 text-warm-ivory sm:py-12">
       {/* Decorative background glows & botanical shapes */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="absolute -left-28 top-0 h-96 w-96 rounded-full bg-coral/20 blur-3xl" />

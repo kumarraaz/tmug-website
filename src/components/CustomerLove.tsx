@@ -11,7 +11,7 @@ import { IconArrowRight, IconWhatsApp } from "./icons";
  */
 export default function CustomerLove() {
   return (
-    <section aria-label="Customer love" className="relative overflow-hidden bg-plum py-16 sm:py-24 text-warm-ivory">
+    <section aria-label="Customer love" className="relative overflow-hidden bg-plum py-8 sm:py-12 text-warm-ivory">
       {/* Background decorations */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="absolute -left-20 top-10 h-64 w-64 rounded-full bg-tea-gold/10 blur-3xl" />
@@ -29,7 +29,7 @@ export default function CustomerLove() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto flex max-w-2xl flex-col items-center gap-2.5 text-center"
+          className="mx-auto flex max-w-2xl flex-col items-center gap-2 text-center"
         >
           <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-tea-gold">
             <span className="h-1.5 w-1.5 rounded-full bg-tea-gold" aria-hidden="true" />
@@ -38,13 +38,13 @@ export default function CustomerLove() {
           <h2 className="text-section font-display font-black text-balance text-warm-ivory">
             Good tea deserves good company.
           </h2>
-          <p className="text-[15px] leading-relaxed text-warm-ivory/70">
+          <p className="text-xs sm:text-sm leading-relaxed text-warm-ivory/70">
             Your next favourite cup starts here.
           </p>
         </motion.div>
 
         {/* Review cards: 3-col desktop, swipeable on mobile */}
-        <div className="no-scrollbar mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-1 pb-2 sm:mt-12 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0">
+        <div className="no-scrollbar mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-1 pb-2 sm:mt-8 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0">
           {DEMO_REVIEWS.map((r, i) => (
             <motion.figure
               key={r.name}

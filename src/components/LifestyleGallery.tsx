@@ -17,7 +17,7 @@ export default function LifestyleGallery() {
   return (
     <section
       aria-label="Made for moments that linger"
-      className="relative overflow-hidden bg-warm-ivory py-16 sm:py-20 md:py-24"
+      className="relative overflow-hidden bg-warm-ivory py-8 sm:py-12 md:py-14"
     >
       {/* Background organic gradients & decorative lines */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">

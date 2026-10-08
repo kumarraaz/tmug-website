@@ -71,7 +71,7 @@ export default function BestSellers() {
     <section
       id="best-sellers"
       aria-label="TMUG Best Sellers"
-      className="relative overflow-hidden bg-warm-surface/60 py-16 sm:py-24"
+      className="relative overflow-hidden bg-warm-surface/60 py-8 sm:py-12"
     >
       {/* Background Decorative Botantical Accents */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -92,21 +92,21 @@ export default function BestSellers() {
         {/* Section Header */}
         <div className="mx-auto max-w-3xl text-center">
           <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-full border border-tea-gold/40 bg-white/80 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-charcoal shadow-xs">
+            <span className="inline-flex items-center gap-2 rounded-full border border-tea-gold/40 bg-white/80 px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-charcoal shadow-xs">
               <IconStar className="h-3 w-3 fill-tea-gold text-tea-gold" />
               Customer Favourites
             </span>
-            <h2 className="text-section mt-3 font-display font-black text-charcoal">
+            <h2 className="text-section mt-2 font-display font-black text-charcoal">
               Best <span className="text-coral">Sellers</span>
             </h2>
-            <p className="mt-2 text-[15px] sm:text-base text-charcoal/70">
+            <p className="mt-1 text-xs sm:text-sm text-charcoal/70">
               The teas everyone keeps reordering. Discover why these signature blends define the TMUG experience.
             </p>
           </Reveal>
         </div>
 
         {/* ── HALF-SCREEN PRODUCT EXPERIENCE (50/50 Split Showcase) ── */}
-        <div className="mt-12 overflow-hidden rounded-[2rem] border border-charcoal/10 bg-white shadow-[0_20px_50px_-20px_rgba(39,35,41,0.18)]">
+        <div className="mt-6 sm:mt-8 overflow-hidden rounded-[1.75rem] border border-charcoal/10 bg-white shadow-[0_20px_50px_-20px_rgba(39,35,41,0.18)]">
           {/* Product Switcher Navigation Tabs */}
           <div className="border-b border-charcoal/8 bg-warm-ivory/60 px-4 py-3 sm:px-6">
             <div className="no-scrollbar flex items-center justify-between gap-2 overflow-x-auto">
@@ -159,11 +159,11 @@ export default function BestSellers() {
           {/* 50/50 Split Content */}
           <div className="grid lg:grid-cols-2">
             {/* LEFT 50%: Large Product Visual Stage */}
-            <div className="relative flex min-h-[380px] sm:min-h-[460px] items-center justify-center overflow-hidden bg-gradient-to-br from-warm-ivory via-warm-surface to-warm-ivory p-6 sm:p-10">
+            <div className="relative flex min-h-[300px] sm:min-h-[380px] items-center justify-center overflow-hidden bg-gradient-to-br from-warm-ivory via-warm-surface to-warm-ivory p-4 sm:p-6">
               {/* Luminous Gen-Z Pink / Coral Glow Backdrop */}
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute h-[320px] w-[320px] rounded-full blur-3xl opacity-70"
+                className="pointer-events-none absolute h-[260px] w-[260px] rounded-full blur-3xl opacity-70"
                 style={{
                   background:
                     "radial-gradient(circle, rgba(247,182,200,0.6) 0%, rgba(242,107,94,0.3) 50%, transparent 75%)",
@@ -178,7 +178,9 @@ export default function BestSellers() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: reduceMotion ? 1 : 1.04 }}
                   transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  className="relative z-10 h-[300px] w-[300px] sm:h-[380px] sm:w-[380px]"
+                  className={`relative z-10 h-[250px] w-[250px] sm:h-[320px] sm:w-[320px] ${
+                    !isFrontView ? "animate-[tmugWave_3.5s_ease-in-out_infinite]" : ""
+                  }`}
                 >
                   <Image
                     src={isFrontView || !backImg ? frontImg.src : backImg.src}
@@ -193,7 +195,7 @@ export default function BestSellers() {
 
               {/* View Flip Switcher (Front / Back Packshot) */}
               {backImg && (
-                <div className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2">
+                <div className="absolute bottom-3 left-1/2 z-20 -translate-x-1/2">
                   <div className="flex items-center gap-1 rounded-full border border-charcoal/15 bg-white/95 p-1 shadow-md backdrop-blur-md">
                     <button
                       type="button"
@@ -215,7 +217,7 @@ export default function BestSellers() {
                           : "text-charcoal/70 hover:text-charcoal"
                       }`}
                     >
-                      Back Info
+                      Back Info (Wave)
                     </button>
                   </div>
                 </div>
@@ -223,7 +225,7 @@ export default function BestSellers() {
             </div>
 
             {/* RIGHT 50%: Product Information & Cart Action */}
-            <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-12">
+            <div className="flex flex-col justify-center p-5 sm:p-7 lg:p-8">
               <div>
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-tea-gold/25 px-3 py-1 text-xs font-black uppercase tracking-wider text-charcoal">
                   <span className="h-1.5 w-1.5 rounded-full bg-coral" />
@@ -362,8 +364,8 @@ export default function BestSellers() {
         </div>
 
         {/* ── Best Seller Product Cards Rail ── */}
-        <div className="mt-14">
-          <div className="mb-6 flex items-center justify-between">
+        <div className="mt-8 sm:mt-10">
+          <div className="mb-4 flex items-center justify-between">
             <h3 className="font-display text-xl font-black text-charcoal">
               Browse Best Seller Lineup
             </h3>

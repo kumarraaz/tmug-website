@@ -38,7 +38,7 @@ export default function WhyTmug() {
     <section
       id="why"
       aria-label="Why TMUG — Our Tea Philosophy"
-      className="relative scroll-mt-24 overflow-hidden bg-warm-ivory py-16 sm:py-24"
+      className="relative scroll-mt-24 overflow-hidden bg-warm-ivory py-8 sm:py-12"
     >
       {/* Botanical Flower Watermarks & Warm Golden Ambient Auras */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -79,21 +79,21 @@ export default function WhyTmug() {
         {/* Section Header */}
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-full border border-tea-gold/40 bg-warm-surface px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-charcoal shadow-xs">
+            <span className="inline-flex items-center gap-2 rounded-full border border-tea-gold/40 bg-warm-surface px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-charcoal shadow-xs">
               <span className="h-2 w-2 rounded-full bg-coral" />
               The TMUG Difference
             </span>
-            <h2 className="text-section mt-3 font-display font-black text-charcoal">
+            <h2 className="text-section mt-2 font-display font-black text-charcoal">
               Tea should feel <span className="text-coral">exciting</span>, not ordinary.
             </h2>
-            <p className="mt-3 text-[15px] sm:text-base leading-relaxed text-charcoal/75">
+            <p className="mt-2 text-xs sm:text-sm leading-relaxed text-charcoal/75">
               Most supermarket tea is dusty CTC sweepings or artificial flavor sprays. We set out to craft honest cups celebrating authentic botanical petals and bold garden-fresh leaves.
             </p>
           </Reveal>
         </div>
 
         {/* ── Large Campaign Packshot Showcase ── */}
-        <div className="relative mx-auto mt-12 max-w-5xl overflow-hidden rounded-[2.5rem] border border-charcoal/10 bg-gradient-to-br from-warm-surface via-white to-warm-surface p-6 sm:p-12 shadow-[0_20px_50px_-20px_rgba(39,35,41,0.18)]">
+        <div className="relative mx-auto mt-6 sm:mt-8 max-w-5xl overflow-hidden rounded-[2rem] border border-charcoal/10 bg-gradient-to-br from-warm-surface via-white to-warm-surface p-5 sm:p-8 shadow-[0_20px_50px_-20px_rgba(39,35,41,0.18)]">
           <div className="grid items-center gap-8 lg:grid-cols-12">
             {/* Left Column: Editorial Manifesto */}
             <div className="lg:col-span-6 text-center lg:text-left">
@@ -189,7 +189,7 @@ export default function WhyTmug() {
         </div>
 
         {/* ── 4 Pillars Grid (Crisp cards, zero green UI) ── */}
-        <div className="mt-12 sm:mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 sm:mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {PILLARS.map((p, i) => (
             <motion.div
               key={p.title}
@@ -198,7 +198,7 @@ export default function WhyTmug() {
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.5, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -6 }}
-              className="group rounded-3xl border border-charcoal/10 bg-white p-6 shadow-[0_10px_28px_-16px_rgba(39,35,41,0.12)] transition-all duration-300 hover:shadow-[0_20px_40px_-18px_rgba(39,35,41,0.2)] hover:border-tea-gold/50"
+              className="group rounded-3xl border border-charcoal/10 bg-white p-5 shadow-[0_10px_28px_-16px_rgba(39,35,41,0.12)] transition-all duration-300 hover:shadow-[0_20px_40px_-18px_rgba(39,35,41,0.2)] hover:border-tea-gold/50"
             >
               <div className="flex items-center justify-between">
                 <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-warm-surface text-charcoal transition-colors duration-300 group-hover:bg-tea-gold group-hover:text-charcoal shadow-xs">

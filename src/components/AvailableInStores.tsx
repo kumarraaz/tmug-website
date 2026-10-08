@@ -9,7 +9,7 @@ export default function AvailableInStores() {
   return (
     <section
       aria-label="Available where you shop"
-      className="relative overflow-hidden bg-cream-light py-16 sm:py-24"
+      className="relative overflow-hidden bg-warm-surface/50 py-8 sm:py-12"
     >
       {/* Background radial gradients */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -37,17 +37,17 @@ export default function AvailableInStores() {
             <span className="h-1.5 w-1.5 rounded-full bg-coral" />
             Everywhere You Need Us
           </span>
-          <h2 className="mt-3 font-display text-3xl font-black tracking-tight text-charcoal sm:text-4xl md:text-5xl">
+          <h2 className="mt-2 font-display text-2xl font-black tracking-tight text-charcoal sm:text-3xl md:text-4xl">
             Available where you shop.
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-charcoal/70 sm:text-lg">
+          <p className="mt-2 text-xs sm:text-sm leading-relaxed text-charcoal/70">
             Pick your favourite way to experience TMUG — from our official Amazon brand store to
             instant WhatsApp concierge and nationwide express shipping.
           </p>
         </div>
 
         {/* Channels Grid */}
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:gap-8">
+        <div className="mt-6 sm:mt-8 grid gap-6 md:grid-cols-2 lg:gap-8">
           {/* Channel 1: Official Amazon Store (PRIMARY VERIFIED) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}

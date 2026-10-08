@@ -285,3 +285,26 @@ All static assets reside under `/public/`:
 3. **Structured Data (Schema.org)**:
    - `Organization` and `WebSite` JSON-LD in `layout.tsx`.
    - `ItemList` with product offers in `page.tsx`.
+
+---
+
+## Phase 2 Admin & Control Architecture
+
+### 1. Routes & Control Dashboard
+- `/admin/login` (`src/app/admin/login/page.tsx`): Authenticated gate using cookie-backed session (`tmug-admin`).
+- `/admin` (`src/app/admin/page.tsx`): Dashboard with 4 tabs:
+  - **Hero Banners**: Live headline/subheading edits, CTA links, image paths, visibility toggles, reordering.
+  - **Products & Prices**: Live price editing in INR, compare-at pricing, image path adjustments, Best Seller/Popular Pick flags.
+  - **Collections**: Category names, descriptions, display toggles, reordering.
+  - **Homepage Sections**: Section visibility, headings, subheadings, CTAs, order manipulation.
+- `/admin/seo` (`src/app/admin/seo/page.tsx`): Dedicated metadata, open graph, canonical URL, and index controls.
+
+### 2. API Endpoints
+- `/api/admin/auth`: Handles login (`POST`), logout, and authentication status verification.
+- `/api/admin/site-controls`: Returns current configuration (`GET`) and persists updates (`POST`).
+- `/api/admin/seo`: Handles SEO settings management and validation.
+
+### 3. Data Storage & Defaults
+- Defaults configuration: `src/config/site-controls.ts`.
+- File-based persistence engine: `src/lib/site-control-store.ts` targeting `data/site-controls.json` with safe server-side fallback.
+

@@ -109,24 +109,32 @@ TMUG’s personality must remain distinctly Indian, botanically authentic, edito
 ## 9. Homepage V2 & Zero Green UI Directives
 
 - **STRICT ZERO GREEN UI RULE**: Green is NOT an approved active homepage UI color. Never use green for navbars, buttons, CTA controls, section backgrounds, cards, borders, active states, hover states, navigation links, badges, gradients, or UI containers. Avoid dark green, forest green, bottle green, emerald, sage, olive, or mint green as UI styling. Authentic photographic greens inside verified packaging packshots, tea leaves, flowers, and natural estate photos are strictly preserved.
-- **Approved 12-Color Master UI Palette**:
-  - Warm Ivory: `#FFF8EE`
-  - Soft Warm Surface: `#F7EBDD`
-  - Tea Gold: `#D9A441`
-  - Bright Saffron: `#F4B400`
-  - Coral: `#F26B5E`
-  - Light Pink / Gen-Z Accent: `#F7B6C8`
-  - Berry: `#C94C7C`
-  - Violet: `#6C4AB6`
-  - Indigo: `#4056A1`
+- **Approved Master UI Palette**:
+  - Warm Ivory: `#FFF7EF`
+  - Peach Cream / Surface: `#FBE7DC`
+  - Coral Pink: `#F36F6F`
+  - Berry Pink: `#D94F7D`
+  - Blush Pink: `#F6B6C8`
+  - Tea Gold: `#D8A33E`
+  - Violet: `#7251B5`
   - Deep Plum: `#33243A`
-  - Warm Charcoal: `#272329`
+  - Warm Charcoal: `#3A3438`
   - White: `#FFFFFF`
+- **Compact Spacing Rule**:
+  - Excessive whitespace is strictly eliminated across all homepage sections.
+  - Section vertical padding is standardized to `py-8 sm:py-12` (avoiding excessive `py-16` to `py-24` empty spaces).
+  - Component gaps and margins are compact, visually cohesive, and content-rich.
 - **Hero Banner Slider**: Storefront campaign window using authentic supplied artwork from `public/banners/`. Do not redraw banners in HTML. Maintain correct aspect ratio and image-fit strategy.
-- **Product Reveal & Cart In-Place Controls**:
-  - Card hover triggers organic wavy motion and soft light pink (`#F7B6C8`) / coral (`#F26B5E`) Gen-Z glow.
+- **Water-Wave Reveal Animation**:
+  - Card hover triggers organic liquid water wave reveal utilizing CSS `clip-path: polygon(...)` (`@keyframes tmugWave`).
+  - Accompanied by Blush Pink (`#F6B6C8`) and Coral (`#F36F6F`) subtle liquid glow.
   - Back-side reveal must use real `back` image assets from `variant.images`. Never fabricate unverified back labels.
   - Mobile tap provides touch-friendly flip toggle.
   - Must provide Add to Cart, In Cart quantity stepper, and direct Remove option calling `removeLine(variantId)`.
   - "Delete/Remove" strictly modifies the customer's cart selection. Never delete catalog data.
 - **Open / Reveal Section**: Placed mid-page between Best Sellers and Why TMUG. Features 3D box unboxing, subtle non-blocking flower petal shower, thank-you emoji feedback, and add-to-cart action.
+- **Phase 2 Admin Control Panel Directives**:
+  - Storefront admin operations reside at `/admin/login` and `/admin`.
+  - Authentication must be secure; passwords and secrets must never be hardcoded into frontend bundles.
+  - Controls must cover Hero banners, Products, Prices, Images, Collections, Best Seller / Popular Pick flags, and Section visibility/ordering.
+

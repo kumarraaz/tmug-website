@@ -97,7 +97,30 @@ This file tracks project tasks, component audits, homepage iterations, quality a
 ## Deployment & Verification
 
 - [x] Production build (`npm run build`) succeeded with exit code 0
-- [x] All 22 static pages and SSG product routes compiled and optimized
-- [ ] Git commit (`"Redesign TMUG homepage with banners, product sliders and interactive reveals"`)
+- [x] All 26 static pages, admin routes, and SSG product routes compiled and optimized
+- [x] Browser subagent tour completed with WebP video recording (`tmug_homepage_v2_tour`)
+- [ ] Git commit (`"Redesign TMUG homepage with new assets and product experience"`)
 - [ ] Git push to current configured branch
+
+---
+
+## Phase 4 — V2 Rebuild & Phase 2 Admin Control Panel
+
+- [x] Full Asset Audit: Ingested and verified banners (`public/banners/`), recipes (`public/recipes/`), and daily rituals (`public/rituals/`)
+- [x] Strict Zero Green UI enforcement across all UI components and styling
+- [x] Palette tokens updated to Warm Ivory, Peach Cream, Coral Pink, Berry Pink, Blush Pink, Gold, Plum, and Charcoal
+- [x] Compact spacing sitewide: Standardized vertical section padding to `py-8 sm:py-12`, reduced card gaps and rail margins
+- [x] Water-wave product reveal: Organic CSS `clip-path: polygon(...)` animation with Blush Pink & Coral glow on card hover and mobile tap
+- [x] In-place Cart Stepper (`−` qty `+`) and Remove button calling `removeLine(variantId)`
+- [x] Compact 50/50 Best Sellers Showcase and Product rail
+- [x] Interactive Open/Reveal section repositioned in mid-page sequence
+- [x] New component `TeaRitualsAndRecipes.tsx` displaying community rituals and creative recipes
+- [x] Phase 2 Admin Control Panel implemented:
+  - [x] `/admin/login`: Secure password gate
+  - [x] `/admin`: Tabbed dashboard for Hero Banners, Products & Prices, Collections, and Homepage Sections
+  - [x] `/api/admin/auth`: Authentication and session endpoint
+  - [x] `/api/admin/site-controls`: Data retrieval and persistence endpoint
+  - [x] `src/config/site-controls.ts`: Default site controls
+  - [x] `src/lib/site-control-store.ts`: JSON-backed persistence store
+
 

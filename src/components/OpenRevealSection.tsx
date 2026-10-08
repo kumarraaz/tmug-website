@@ -179,7 +179,7 @@ export default function OpenRevealSection() {
     <section
       id="open-reveal"
       aria-label="TMUG Interactive Box Reveal"
-      className="relative overflow-hidden bg-warm-ivory py-16 sm:py-24"
+      className="relative overflow-hidden bg-warm-ivory py-8 sm:py-12"
     >
       {/* Background Botanical Pattern & Subtle Glow */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -208,21 +208,21 @@ export default function OpenRevealSection() {
         {/* Section Header */}
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-full border border-tea-gold/40 bg-white/90 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-charcoal shadow-xs">
+            <span className="inline-flex items-center gap-2 rounded-full border border-tea-gold/40 bg-white/90 px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-charcoal shadow-xs">
               <span className="h-2 w-2 rounded-full bg-coral animate-ping" />
               The TMUG Reveal Experience
             </span>
-            <h2 className="text-section mt-3 font-display font-black text-charcoal">
+            <h2 className="text-section mt-2 font-display font-black text-charcoal">
               Open Your <span className="text-coral">Tea Ritual</span>
             </h2>
-            <p className="mt-2 text-[15px] sm:text-base text-charcoal/70">
+            <p className="mt-1 text-xs sm:text-sm text-charcoal/70">
               Tap to open the TMUG collector’s box and reveal whole botanical flowers and single-origin leaves blooming fresh for your cup.
             </p>
           </Reveal>
         </div>
 
         {/* Tea Selection Pills */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+        <div className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-2">
           {RITUAL_TEAS.map((tea) => {
             const isSelected = tea.id === selectedTeaId;
             return (
@@ -230,7 +230,7 @@ export default function OpenRevealSection() {
                 key={tea.id}
                 type="button"
                 onClick={() => handleSelectTea(tea.id)}
-                className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs sm:text-sm font-extrabold transition-all duration-200 cursor-pointer ${
+                className={`flex items-center gap-2 rounded-full px-4 py-1.5 text-xs sm:text-sm font-extrabold transition-all duration-200 cursor-pointer ${
                   isSelected
                     ? "bg-charcoal text-white shadow-md ring-2 ring-tea-gold scale-105"
                     : "border border-charcoal/15 bg-white text-charcoal hover:border-tea-gold hover:text-coral"
@@ -244,7 +244,7 @@ export default function OpenRevealSection() {
         </div>
 
         {/* ── 3D TMUG Collector's Box Stage ── */}
-        <div className="relative mx-auto mt-12 max-w-3xl overflow-hidden rounded-[2.5rem] border border-charcoal/10 bg-gradient-to-b from-white via-warm-surface/50 to-warm-ivory p-6 sm:p-12 shadow-[0_25px_60px_-20px_rgba(39,35,41,0.18)]">
+        <div className="relative mx-auto mt-6 sm:mt-8 max-w-3xl overflow-hidden rounded-[2rem] border border-charcoal/10 bg-gradient-to-b from-white via-warm-surface/50 to-warm-ivory p-5 sm:p-8 shadow-[0_25px_60px_-20px_rgba(39,35,41,0.18)]">
           {/* Subtle Short Flower Shower (tasteful, non-blocking) */}
           <AnimatePresence>
             {showShower && !reduceMotion && (

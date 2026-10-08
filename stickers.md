@@ -169,3 +169,26 @@ When a user selects or unboxes a tea ritual in the Open / Reveal section, a cele
 ### Background Floral Watermarks (`WhyTmug.tsx`)
 - Subtle high-resolution botanical vector outlines placed as ambient watermarks in section backgrounds.
 - Rendered in delicate translucent gold tones (`text-tea-gold/10`) to provide texture without cluttering product packshots.
+
+---
+
+## 8. Verified Campaign Creative Artworks (`public/banners`, `public/recipes`, `public/rituals`)
+
+In addition to vector stickers, verified brand creative assets are preserved as artwork:
+- **Campaign Banners** (`public/banners/`):
+  - `the-tea-lineup-pick-your-sip.png`
+  - `sip-happens-pick-your-mood.png`
+  - `butterfly-pea-bloom-in-every-sip.png`
+  - `hibiscus-make-time-for-beautiful.png`
+  - `lemongrass-less-scroll-more-sip.png`
+- **Creative Recipes** (`public/recipes/`):
+  - `butterfly-pea-ways-to-enjoy.jpg` (Tea, Lemonade, Rice, Jelly)
+  - `chamomile-latte-panna-cotta.png` (Latte & Panna Cotta)
+  - `hibiscus-sorbet-ice-pops.png` (Sorbet & Ice Pops)
+  - `lemongrass-ginger-chai-soup.png` (Ginger Chai & Soup)
+- **Daily Rituals** (`public/rituals/`):
+  - `butterfly-pea-blooms-moments.jpg`
+  - `butterfly-pea-lifestyle-flatlay.jpg`
+  - `chamomile-daily-ritual.png`
+  - `ruby-hibiscus-daily-ritual.png`
+
