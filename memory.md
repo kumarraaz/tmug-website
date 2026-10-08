@@ -130,65 +130,52 @@ Under no circumstances should any developer or automated agent fabricate:
 
 ---
 
-## 10. Homepage V2 Architectural & Design Decisions
+## 10. Complete Homepage Visual Rebuild & Product System (Current Truth)
 
-### Hero Banner Slider Architecture
-- Transformed the hero from an isolated 3D stage into a storefront campaign promotional banner slider.
-- Consumes 6 high-resolution brand campaign artworks stored in `/public/banners/` via centralized configuration `src/config/banners.ts`.
-- Features crossfade transitions, autoplay with pause on hover/interaction, previous/next buttons, pagination pills, `01 / 06` counter, and touch swipe gestures.
-- Direct links route users to verified product (`/products/butterfly-pea-flower-tea`) and collection (`/#collections`) pages.
+### Master 5-Color Reference Palette
+- **Cherry Blossom Pink**: `#FAA4B5` (Primary vibrant Gen-Z accent, playful CTAs, badge accents, hover glows)
+- **Fawn**: `#F8B77C` (Warm supporting tone, tea highlights, border glows)
+- **Maize**: `#FFF183` (Radiant light gold, bestseller chips, active pills, selection highlights)
+- **Sky Blue**: `#70C1E1` (Aparajita blue accents, cool botanical contrast, ambient aura)
+- **Olivine**: `#82BA88` (**Light supporting accent ONLY**; subtle botanical badges)
+- **Deep Plum**: `#33243A` (Primary typography, high-contrast badges, dark accents)
+- **Warm Charcoal**: `#3A3438` (Secondary text, dark buttons, navigation links)
+- **Warm Ivory / Cream**: `#FFF7EF` / `#FBE7DC` (Primary and secondary canvas)
 
-### Strict Zero Green UI Rule
-- Green is strictly prohibited as an active UI color across navbar, buttons, CTA controls, section backgrounds, cards, borders, active states, hover states, navigation links, badges, gradients, or UI containers.
-- Natural photographic green appearing inside supplied banner artwork, tea packaging packshots, tea leaves, and garden photos is preserved.
+### Strict Zero Dark Green UI Rule
+- Dark green is STRICTLY FORBIDDEN as a homepage UI color.
+- No dark green navbar, buttons, primary CTAs, main section backgrounds, product cards, borders, or navigation controls.
+- Olivine `#82BA88` is a light supporting accent only.
+- Authentic natural green appearing in authentic tea packshots, packaging artwork, botanical photographs, and leaves is preserved and must not be altered.
 
-### Master 12-Color Palette
-- Warm Ivory (`#FFF8EE`), Soft Warm Surface (`#F7EBDD`), Tea Gold (`#D9A441`), Bright Saffron (`#F4B400`), Light Pink (`#F7B6C8`), Coral (`#F26B5E`), Berry (`#C94C7C`), Violet (`#6C4AB6`), Indigo (`#4056A1`), Deep Plum (`#33243A`), Warm Charcoal (`#272329`), White (`#FFFFFF`).
+### Water-Wave Animation Removed
+- All legacy water-wave keyframes (`@keyframes tmugWave`), clip-path liquid waves, wavy pink overlays, animated water surfaces, and white reveal shapes have been permanently removed.
+- Replaced by clean, smooth Gen-Z micro-interactions: subtle card lift, subtle image scaling (`1.05`), soft colored aura behind products, and 100% sharp packshots.
 
-### Product Reveal & In-Place Cart Experience
-- **Wavy Hover Reveal**: Organic liquid transition with spring physics and soft light pink (`#F7B6C8`) Gen-Z glow.
-- **Authentic Back Packaging**: Back packshot renders from verified `back` images in `src/data/products.ts`.
-- **Mobile Tap Reveal**: Tapping card toggles front/back packshot on touch screens without blocking links/buttons.
-- **In-Place Cart Controls**: Prominent Add to Cart button transitions immediately to an In Cart quantity stepper (`−` qty `+`) and a direct Remove button calling `removeLine(variantId)`.
+### Pop-Up Product Reveal ("Open Your TMUG Box")
+- Opener modal pops forward dramatically: background dims while keeping existing page visible behind.
+- Product occupies **45–65% of viewport height** on desktop, **45–60%** on mobile without cropping (`object-fit: contain`).
+- Clean Framer Motion sequence: scale `0.82 → 1.0`, `translateY(24px) → translateY(0)`, opacity `0 → 1` over ~550ms.
+- Random dynamic product selection from eligible verified products (`butterfly-pea`, `hibiscus`, `chamomile`, `lemongrass`, `gold-tea`, `darjeeling-green`) with a "Surprise Blend" shuffle button and selectable tea chips.
+- Verified product details, live price and compare-at MRP, variant toggle (Jar/Pouch), working Add to Cart, active in-cart quantity stepper, and close button.
 
-### Best Sellers 50/50 Split Showcase
-- Split composition: 50% large packaging visual with front/back toggle + 50% product details, pricing, variant selector, Add to Cart, and Remove controls.
-- Interactive product switcher between 4 verified best sellers: Butterfly Pea Flower Tea, Hibiscus Flower Tea, Darjeeling Green Tea, and TMUG Gold Tea.
-- Accompanied by a responsive product card rail.
+### Collections Rail & Flank Controls
+- Full available width utilization from left edge across the screen (displays 4–6 products on desktop, 1–2 on mobile).
+- Navigation arrow controls are placed on the **outside flanks** of the carousel track, never overlapping or covering product packaging.
+- Subtle Gen-Z hover glow with transparent PNG cutouts that remain 100% sharp.
 
-### Open / Reveal Section Repositioning
-- Moved into the middle of the homepage between Best Sellers and Why TMUG.
-- Interactive 3D box unboxing, ritual switcher, non-blocking botanical flower petal shower, thank-you emoji badge feedback (`🍵`, `✨`, `🙏`), and direct add-to-cart action.
+### Best Sellers Redesign
+- Sleek, compact D2C 4-card grid featuring verified transparent PNG cutouts, tasting profile tags, variant selectors, live INR prices, and in-cart quantity steppers.
+- Zero water-wave animation.
 
-### Why TMUG Redesign
-- Redesigned in warm ivory, gold, and coral tones with prominent authentic packaging packshots, botanical watermark, and zero green UI.
-
----
-
-## 9. V2 Rebuild & Phase 2 Admin Implementation (Current)
-
-### Source of Truth Resolution
-- The HTML email file was not available and was explicitly eliminated as a dependency.
-- Single source of truth: Repository product data, 9 documentation files, and authentic local and uploaded image assets.
-
-### Asset Organization
-- Organized new campaign assets into `public/banners/`, `public/recipes/`, and `public/rituals/`.
-- Preserved campaign visuals as authentic artwork without artificial HTML overlay text.
-
-### Visual System & Compact Spacing
-- Visual tokens: Warm Ivory (`#FFF7EF`), Peach Cream (`#FBE7DC`), Coral (`#F36F6F`), Berry (`#D94F7D`), Blush Pink (`#F6B6C8`), Gold (`#D8A33E`), Plum (`#33243A`), Charcoal (`#3A3438`).
-- Strict Zero Green UI enforced on all UI containers and elements.
-- Excessive whitespace eliminated sitewide by compacting vertical padding to `py-8 sm:py-12` and reducing card and rail margins.
-- Liquid water-wave clip path reveal (`@keyframes tmugWave`) activated on card hover and back view toggle.
-- Added `TeaRitualsAndRecipes.tsx` displaying daily rituals and creative community recipes.
-
-### Phase 2 Admin Control Panel
-- Route `/admin/login`: Secure password-based entry point with `tmug-admin` cookie auth.
-- Route `/admin`: Comprehensive control dashboard featuring 4 tabs:
-  1. **Hero Banners**: Headlines, subheadings, CTA buttons, links, image paths, visibility, reordering.
-  2. **Products & Prices**: Live INR prices, compare-at prices, front/back image paths, Best Seller / Popular Pick flags, visibility.
-  3. **Collections**: Category names, descriptions, active toggles, reordering.
-  4. **Homepage Sections**: Section visibility toggles, section headings, subheadings, CTAs, reordering.
-- Persistent file storage via `data/site-controls.json` with safe server-side fallback (`src/lib/site-control-store.ts`).
+### Admin Real File Upload & Media Control Panel
+- Native system file upload via `/api/admin/upload` saving directly to `/public/uploads/`.
+- Slot-specific requirement boxes:
+  - Product Cutout: 1:1, Recommended 1200 × 1200 px or higher, PNG with transparency preferred.
+  - Hero Banner: 3:1, Recommended 2172 × 724 px, PNG / WEBP / JPG.
+  - Lifestyle / Creative: Source aspect ratio (4:5 / 16:9), 1200 × 1500 px.
+- Real-time image inspection modal showing preview, filename, dimensions (`width × height px`), format, file size (`KB`), and transparency status ("Transparent PNG Cutout ✓" or "Opaque Background").
+- Action controls: Replace, Remove, Choose Another, Save & Use Image.
+- Multi-slot support for Front Cutout, Back/Alternate, Thumbnail, and Lifestyle assets.
 
 

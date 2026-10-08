@@ -73,21 +73,20 @@ The hero slider runs full storefront campaign banners using authenticated brand 
   - `Herbal & Fresh` — Pure citrus lemongrass leaves.
   - `Bestsellers` — Verified customer favorite blends.
 
-### Best Sellers 50/50 Showcase
-- **Section Heading**: *"Best Sellers"*
-- **Subtitle**: *"The teas our community brews on repeat — from colour-changing blue blooms to properly kadak morning chai."*
-- **Split Layout**: 50% high-impact visual packaging view with front/back toggle + 50% editorial product details, verified pricing, variant selector, Add to Cart, and Remove controls.
-- **Featured Teas**:
-  - Butterfly Pea Flower Tea (₹249)
-  - Hibiscus Flower Tea (₹249)
-  - Darjeeling Green Tea (₹299)
-  - TMUG Gold Tea (₹149)
+### Best Sellers
+- **Section Heading**: *"Top Rated Best Sellers"*
+- **Subtitle**: *"The everyday teas our community keeps reordering. Whole flowers and mountain estate leaves with zero additives."*
+- **Layout**: Sleek, compact 4-product D2C card deck with transparent cutouts, verified INR prices, pack selectors, and live in-cart quantity steppers.
+- **Featured Teas & Verified Catalog Prices**:
+  - Butterfly Pea Flower Tea (₹99 for 50g jar, ₹189 for 100g pouch)
+  - Hibiscus Flower Tea (₹119 for 50g jar, ₹199 for 100g pouch)
+  - Darjeeling Green Tea (₹149 for 100g jar)
+  - TMUG Gold Tea (₹399 for 250g pouch, ₹749 for 500g pouch)
 
-### Open / Reveal Experience (Mid-Page)
-- **Section Heading**: *"The TMUG Unboxing Experience"*
-- **Subtitle**: *"Tap to explore our signature tea rituals. Whole flowers, fresh aroma, zero artificial dust."*
-- **Interactive Rituals**: Morning Kadak Chai, Afternoon Blue Bloom, Evening Reset, Calming Drift.
-- **Feedback Celebrations**: Non-blocking botanical petal shower (blue pea, hibiscus, chamomile, tea leaves) and thank-you badge (`🍵 Order Ready`, `✨ Added to Cart`, `🙏 Dhanyawad!`).
+### Open / Reveal Experience ("Open Your TMUG Box")
+- **Section Heading**: *"Open Your TMUG Box"*
+- **Subtitle**: *"Tap the collector’s box to pop open whole botanicals and single-origin leaves sealed at origin for your daily ritual."*
+- **Experience**: Full-screen/prominent pop-up product reveal occupying 45–65% vh on desktop and 45–60% vh on mobile with smooth Framer Motion scaling, dynamic random tea selection, "🎲 Surprise Blend" shuffle button, and live Add to Cart.
 
 
 > [!NOTE]

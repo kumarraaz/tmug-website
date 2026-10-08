@@ -29,52 +29,66 @@ TMUG merges contemporary beverage culture with timeless Indian tea traditions. T
 
 ---
 
-## 3. Color System (Homepage V2 Master Palette)
+## 3. Color System (TMUG Vibrant 5-Color Reference Palette)
 
 > [!IMPORTANT]
-> **STRICT ZERO GREEN UI RULE**: Green is NOT an approved active homepage UI color.
-> Do NOT use green for navbar, buttons, CTA buttons, section backgrounds, cards, borders, active states, hover states, navigation links, badges, gradients, or UI containers.
-> Authentic photographic green appearing naturally inside supplied banner photography, authentic packaging, tea leaves, flowers, and natural estate photos is strictly preserved and must not be artificially altered.
+> **STRICT ZERO DARK GREEN UI RULE**:
+> Dark green is STRICTLY FORBIDDEN as a homepage UI color.
+> Do NOT use dark green for navbar background, buttons, primary CTAs, main section backgrounds, product card backgrounds, primary UI colors, borders, or navigation controls.
+> The uploaded Olivine `#82BA88` may only be used as a LIGHT SUPPORTING ACCENT where appropriate.
+> Natural green appearing inside authentic TMUG product photography, packaging, tea leaves, or botanical imagery must NOT be altered or removed.
+> The overall UI must NOT visually become a green-themed website.
 
 All primary UI colors are configured in `@theme` inside `src/app/globals.css`:
 
 ### Approved Master UI Palette
 | Token | Hex Value | Role / Usage |
 | :--- | :--- | :--- |
-| `Warm Ivory` / `--color-warm-ivory` | `#FFF7EF` | Primary page & hero canvas; warm, breathable, tactile |
-| `Soft Peach Cream` / `--color-peach-cream` | `#FBE7DC` | Cards, secondary section backgrounds, subtle container tints |
-| `Coral Pink` / `--color-coral` | `#F36F6F` | Primary vibrant CTA buttons, high-energy accents, remove action |
-| `Berry Pink` / `--color-berry` | `#D94F7D` | Secondary vibrant punch, floral badges, taglines |
-| `Blush Pink` / `--color-pink-accent` | `#F6B6C8` | Soft Gen-Z reveal accent, liquid glows, halo backdrops |
-| `Tea Gold` / `--color-tea-gold` | `#D8A33E` | Signature heritage warm gold, rating stars, badge borders |
-| `Violet` / `--color-violet` | `#7251B5` | Butterfly pea ritual accents, evening tea tags |
+| `Cherry Blossom Pink` / `--color-cherry-blossom` | `#FAA4B5` | Primary vibrant Gen-Z accent, playful CTAs, badge accents, hover glows |
+| `Fawn` / `--color-fawn` | `#F8B77C` | Warm supporting accent, tea highlights, border glows |
+| `Maize` / `--color-maize` | `#FFF183` | Radiant light gold, bestseller chips, active pills, selection highlights |
+| `Sky Blue` / `--color-sky-blue` | `--color-sky-blue` / `#70C1E1` | Butterfly pea accents, cool botanical contrast, ambient aura |
+| `Olivine` / `--color-olivine` | `#82BA88` | **Light supporting accent ONLY**; subtle botanical badges |
+| `Warm Ivory` / `--color-warm-ivory` | `#FFF7EF` | Primary canvas; warm, breathable, tactile |
+| `Soft Peach Cream` / `--color-warm-surface` | `#FBE7DC` | Cards, secondary section backgrounds, subtle container tints |
 | `Deep Plum` / `--color-plum` | `#33243A` | Rich typography, high-contrast dark sections, footer canvas |
 | `Warm Charcoal` / `--color-charcoal` | `#3A3438` | Editorial secondary text, dark buttons, navigation links |
 | `White` / `--color-white` | `#FFFFFF` | Product stage card surfaces, contrast badges, clean cards |
 
-### Product Card Water-Wave Reveal & Gen-Z Interaction System
-- **Default State**: Clear authentic front packaging view with full label visibility.
-- **Hover State (Desktop)**:
-  - Organic liquid water-wave animation powered by CSS `@keyframes tmugWave` using alternating polygon clip paths:
-    ```css
-    @keyframes tmugWave {
-      0%, 100% { clip-path: polygon(0% 12%, 18% 4%, 38% 14%, 58% 6%, 78% 16%, 100% 8%, 100% 100%, 0% 100%); }
-      25% { clip-path: polygon(0% 6%, 22% 16%, 42% 6%, 62% 14%, 82% 4%, 100% 12%, 100% 100%, 0% 100%); }
-      50% { clip-path: polygon(0% 14%, 20% 6%, 40% 16%, 60% 8%, 80% 18%, 100% 6%, 100% 100%, 0% 100%); }
-      75% { clip-path: polygon(0% 8%, 24% 14%, 44% 8%, 64% 16%, 84% 6%, 100% 14%, 100% 100%, 0% 100%); }
-    }
-    ```
-  - Back packshot smoothly surfaces with a luminous Blush Pink (`#F6B6C8`) & Coral (`#F36F6F`) liquid halo glow.
-- **Mobile Tap Reveal**: Tapping card toggles front/back packshot on touch screens without blocking links/buttons.
+### Product Card Hover & Interaction System
+- **WATER-WAVE ANIMATION REMOVED**: All legacy water-wave keyframes, clip-path liquid waves, wavy pink overlays, animated water surfaces, and white reveal shapes have been completely removed.
+- **Default State**: Clean authentic front packaging with 100% transparent PNG cutout (`object-fit: contain;`, sharp foreground).
+- **Subtle Gen-Z Hover State (Desktop)**:
+  - Card lifts slightly (`translateY(-4px)`).
+  - Product image scales very subtly (`scale-105`).
+  - Subtle radial glow behind the product using Cherry Blossom Pink (`#FAA4B5`) and Maize (`#FFF183`).
+  - The foreground product remains **100% sharp** (never blurred).
+  - Back packshot smoothly cross-fades without wave distortion.
+- **Mobile Tap Reveal**: Touch-friendly flip toggle on card tap for packages with alternate back views.
 - **In-Place Cart Controls**: Prominent Add to Cart button transitions immediately to an In Cart quantity stepper (`−` qty `+`) and a direct Remove button calling `removeLine(variantId)`.
 
-  - Soft light pink (`#F7B6C8`) and coral (`#F26B5E`) halo glow wrapping the card perimeter (`glow-pulse` animation).
-  - Authentic back packshot reveals smoothly from verified `back` image asset.
-  - Duration: ~400–700ms smooth organic motion.
-- **Mobile Tap Reveal**:
-  - Touch-friendly toggle on card tap (without blocking CTA buttons or links).
-  - Tapping reveals the back packshot; tapping again returns to front.
-  - Important pricing and Add to Cart controls remain visible and accessible in both states.
+### Open Your TMUG Box Opener System
+- **Pop-Up Product Reveal**: Background dims slightly (existing page remains visible behind), opener box scales down, and the product pops forward dramatically.
+- **Product Sizing**:
+  - Desktop: Product occupies **45–65% of viewport height** (`object-fit: contain`).
+  - Mobile: Product occupies **45–60% of viewport height** without cropping.
+- **Animation Sequence (Framer Motion)**:
+  - Product scales smoothly `0.82 → 1.0`
+  - Moves upward `translateY(24px) → translateY(0)`
+  - Opacity `0 → 1` with soft shadow settling over 450–700ms.
+- **Random Product Selection**: Controlled dynamic selection from eligible verified products (`butterfly-pea`, `hibiscus`, `chamomile`, `lemongrass`, `gold-tea`, `darjeeling-green`) with a shuffle button.
+- **Live Cart Integration**: Displays verified product name, tagline, description, price, compare-at price, variant toggles, and live working Add to Cart / quantity stepper.
+
+### Collections Rail & Navigation
+- Rail spans the full available width from LEFT edge to RIGHT edge (4–6 products on desktop, 1–2 on mobile).
+- Navigation arrow controls are placed **outside the product visual area on the left and right flanks**, preventing occlusion of product packaging.
+- Arrows use the vibrant palette (no dark green controls).
+
+### Admin Media Control Panel
+- Native system file upload (`<input type="file">` -> `/api/admin/upload` -> `/public/uploads/`).
+- Slot-specific requirements (Product Cutout: 1:1, 1200×1200 px, transparent PNG; Hero Banner: 3:1, 2172×724 px; Collection/Lifestyle: source ratio).
+- Real preview modal displaying dimensions, format, file size, transparency status, with Replace, Remove, Upload New, and Save options.
+- Multi-slot support for Front Cutout, Back/Alternate, Thumbnail, Hero, and Lifestyle assets.
 
 ---
 

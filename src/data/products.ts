@@ -10,7 +10,8 @@ import type { Product, ProductVariant } from "@/types";
  * ========================================================================== */
 
 const img = (slug: string, kind: "front" | "back" | "fssai", alt: string) => ({
-  src: `/products/${slug}.jpg`,
+  // Front packshots are 100% transparent PNG cutouts; back & fssai remain authentic JPGs
+  src: `/products/${slug}.${kind === "front" ? "png" : "jpg"}`,
   alt,
   kind,
 });

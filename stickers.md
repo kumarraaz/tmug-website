@@ -150,25 +150,19 @@ Stickers must never overlap critical product packshots, price tags, or conversio
 
 ---
 
-## 7. Botanical Flower Petal Shower & Floral Watermark System (Homepage V2)
+## 7. Botanical Visual Accents & Palette Harmony
 
-### Product-Specific Botanical Petal Shower (`OpenRevealSection.tsx`)
-When a user selects or unboxes a tea ritual in the Open / Reveal section, a celebratory botanical shower triggers using lightweight vector petals:
+Stickers and botanical vector accents must adhere strictly to the **Vibrant 5-Color Reference Palette**:
+- **Cherry Blossom Pink**: `#FAA4B5` (Playful accents, floral badges, hover glows)
+- **Fawn**: `#F8B77C` (Warm supporting accents, tea ribbons)
+- **Maize**: `#FFF183` (Radiant light gold, stars, bestseller stamps)
+- **Sky Blue**: `#70C1E1` (Aparajita blue flourishes, cool botanical accents)
+- **Olivine**: `#82BA88` (**Light supporting accent ONLY**; delicate botanical leaf outlines)
 
-- **Blue Pea Petal (`blue-pea`)**: Sculpted Clitoria ternatea flower petal rendered in royal indigo/violet (`fill-[#4056A1]`, `opacity-80`).
-- **Hibiscus Petal (`hibiscus`)**: Flared Hibiscus sabdariffa petal rendered in deep ruby/berry (`fill-[#C94C7C]`).
-- **Chamomile Petal (`chamomile`)**: Delicate Matricaria chamomilla ray floret in soft warm ivory with a golden center (`fill-[#FFF8EE]` with amber accent).
-- **Golden Tea Leaf (`tea-leaf`)**: Single-origin Assam/Darjeeling tea leaf silhouette rendered in warm tea-gold (`fill-[#D9A441]`).
-
-### Animation & Accessibility Guidelines
-- **Duration**: Brief (1.8s–2.5s) organic drift using `keyframes petal-fall`.
-- **Non-Blocking**: Floated in an absolute container with `pointer-events: none` and `z-20` so no CTA buttons or navigation links are obstructed.
-- **Micro-Celebration Pill**: Accompanying floating badge displays immediate celebratory feedback (`🍵 Order Ready`, `✨ Added to Cart`, `🙏 Dhanyawad!`).
-- **Reduced Motion**: When `prefers-reduced-motion` is active, particle drifting is completely disabled; only static status feedback is displayed.
-
-### Background Floral Watermarks (`WhyTmug.tsx`)
-- Subtle high-resolution botanical vector outlines placed as ambient watermarks in section backgrounds.
-- Rendered in delicate translucent gold tones (`text-tea-gold/10`) to provide texture without cluttering product packshots.
+> [!IMPORTANT]
+> **STRICT ZERO DARK GREEN UI RULE**:
+> Stickers, badges, ribbons, and decorative outlines must never use dark green fills or strokes. Natural greens inside authentic tea packshots and leaves remain untouched.
+> Water-wave animations and liquid overlays have been permanently eliminated from all components.
 
 ---
 

@@ -14,6 +14,7 @@ import type {
 import { DEFAULT_SITE_CONTROLS } from "@/config/site-controls";
 import { formatINR } from "@/lib/format";
 import { IconCheck, IconTrash, IconArrowRight, IconSparkle } from "@/components/icons";
+import MediaUploadField from "./MediaUploadField";
 
 type AdminTab = "banners" | "products" | "collections" | "sections";
 
@@ -297,7 +298,7 @@ export default function AdminDashboardPage() {
                         </div>
                       </div>
 
-                      <div className="grid gap-3 sm:grid-cols-3">
+                      <div className="grid gap-3 sm:grid-cols-2">
                         <div>
                           <label className="block text-[11px] font-black uppercase text-charcoal/60">
                             CTA Button Text
@@ -328,21 +329,36 @@ export default function AdminDashboardPage() {
                             className="mt-1 w-full rounded-lg border border-charcoal/15 bg-white px-3 py-1.5 text-xs font-mono text-charcoal outline-none focus:border-coral"
                           />
                         </div>
-                        <div>
-                          <label className="block text-[11px] font-black uppercase text-charcoal/60">
-                            Image Path
-                          </label>
-                          <input
-                            type="text"
-                            value={banner.desktopSrc}
-                            onChange={(e) => {
-                              const updated = [...controls.banners];
-                              updated[idx].desktopSrc = e.target.value;
-                              setControls({ ...controls, banners: updated });
-                            }}
-                            className="mt-1 w-full rounded-lg border border-charcoal/15 bg-white px-3 py-1.5 text-xs font-mono text-charcoal outline-none focus:border-coral"
-                          />
-                        </div>
+                      </div>
+
+                      {/* Real Image Upload with Slot Requirements */}
+                      <div className="grid gap-3 pt-1 sm:grid-cols-2">
+                        <MediaUploadField
+                          label="Desktop Banner (3:1)"
+                          value={banner.desktopSrc}
+                          onChange={(url) => {
+                            const updated = [...controls.banners];
+                            updated[idx].desktopSrc = url;
+                            setControls({ ...controls, banners: updated });
+                          }}
+                          slotType="hero-banner"
+                          aspectRatio="3:1"
+                          recommendedDimensions="2172 × 724 px"
+                          recommendedFormat="PNG / WEBP / JPG"
+                        />
+                        <MediaUploadField
+                          label="Mobile Banner (1:1 / 4:3)"
+                          value={banner.mobileSrc}
+                          onChange={(url) => {
+                            const updated = [...controls.banners];
+                            updated[idx].mobileSrc = url;
+                            setControls({ ...controls, banners: updated });
+                          }}
+                          slotType="hero-banner"
+                          aspectRatio="1:1 or 4:3"
+                          recommendedDimensions="1080 × 1080 px"
+                          recommendedFormat="PNG / WEBP"
+                        />
                       </div>
                     </div>
 
@@ -475,35 +491,64 @@ export default function AdminDashboardPage() {
                         </div>
                       </div>
 
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        <div>
-                          <label className="block text-[11px] font-black uppercase text-charcoal/60">
-                            Front Packshot Path
-                          </label>
-                          <input
-                            type="text"
+                      {/* Product Media Management */}
+                      <div className="space-y-3 pt-2">
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          <MediaUploadField
+                            label="Front Packshot Cutout (1:1)"
                             value={prod.frontImage}
-                            onChange={(e) => {
+                            onChange={(url) => {
                               const updated = [...controls.products];
-                              updated[idx].frontImage = e.target.value;
+                              updated[idx].frontImage = url;
                               setControls({ ...controls, products: updated });
                             }}
-                            className="mt-1 w-full rounded-lg border border-charcoal/15 bg-white px-3 py-1.5 text-xs font-mono text-charcoal outline-none focus:border-coral"
+                            slotType="product-cutout"
+                            aspectRatio="1:1"
+                            recommendedDimensions="1200 × 1200 px"
+                            recommendedFormat="PNG"
+                            transparencyPreferred={true}
+                          />
+                          <MediaUploadField
+                            label="Back / Alternate Image"
+                            value={prod.backImage || ""}
+                            onChange={(url) => {
+                              const updated = [...controls.products];
+                              updated[idx].backImage = url;
+                              setControls({ ...controls, products: updated });
+                            }}
+                            slotType="product-back"
+                            aspectRatio="1:1 or 4:5"
+                            recommendedDimensions="1200 × 1200 px"
+                            recommendedFormat="JPG / PNG"
                           />
                         </div>
-                        <div>
-                          <label className="block text-[11px] font-black uppercase text-charcoal/60">
-                            Alternate / Back Image Path
-                          </label>
-                          <input
-                            type="text"
-                            value={prod.backImage || ""}
-                            onChange={(e) => {
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          <MediaUploadField
+                            label="Lifestyle / Campaign Asset"
+                            value={prod.lifestyleImage || ""}
+                            onChange={(url) => {
                               const updated = [...controls.products];
-                              updated[idx].backImage = e.target.value;
+                              updated[idx].lifestyleImage = url;
                               setControls({ ...controls, products: updated });
                             }}
-                            className="mt-1 w-full rounded-lg border border-charcoal/15 bg-white px-3 py-1.5 text-xs font-mono text-charcoal outline-none focus:border-coral"
+                            slotType="lifestyle"
+                            aspectRatio="Source Ratio"
+                            recommendedDimensions="1200 × 1500 px"
+                            recommendedFormat="JPG / WEBP"
+                          />
+                          <MediaUploadField
+                            label="Thumbnail (Square)"
+                            value={prod.thumbnail || ""}
+                            onChange={(url) => {
+                              const updated = [...controls.products];
+                              updated[idx].thumbnail = url;
+                              setControls({ ...controls, products: updated });
+                            }}
+                            slotType="thumbnail"
+                            aspectRatio="1:1"
+                            recommendedDimensions="400 × 400 px"
+                            recommendedFormat="PNG / WEBP"
+                            transparencyPreferred={true}
                           />
                         </div>
                       </div>

@@ -34,6 +34,10 @@ Under no circumstance should any change intentionally break or degrade:
 - **Never redraw packaging**: Do not replace authentic photographs with graphic approximations or flat 2D vector representations of packs.
 - **Never distort packaging**: Maintain exact aspect ratios. Never squish or stretch jar or pouch images.
 - **Never crop important packaging**: Packaging images must remain completely visible. Never crop product titles, weight markings (50g, 100g, 250g, 500g), brewing descriptions, or FSSAI certifications. Always apply `object-contain` or generous card paddings.
+- **NO ZOOM / NO PIXELATION RULE**: Never unnecessarily upscale a source image. Never force an image to `width: 100%; height: 100%; object-fit: cover` when that causes cropping, pixelation, or packaging distortion. Always prefer `object-fit: contain` and preserve native source aspect ratio.
+- **PRODUCT TRANSPARENT CUTOUT RULE**: Product images must visually appear as clean product cutouts with transparent backgrounds (PNG). Never render product cutouts inside unwanted white or grey rectangular bounding blocks. Authentic TMUG packaging artwork, logos, and certifications must remain untouched.
+- **STRICT ZERO DARK GREEN UI RULE**: Dark green is strictly forbidden for navbar backgrounds, buttons, primary CTAs, main section backgrounds, product card backgrounds, primary UI colors, borders, or navigation controls. The uploaded Olivine `#82BA88` is a light supporting accent only.
+- **NO WATER-WAVE ANIMATION RULE**: Water-wave clip-path animations, liquid waves, and wavy overlays are permanently removed. All reveals use smooth Framer Motion pop-up scaling.
 - **Never replace real TMUG product images with generic stock imagery**: Stock tea leaves or generic mug photos must never stand in for authentic TMUG inventory.
 
 ---

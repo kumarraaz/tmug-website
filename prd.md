@@ -107,8 +107,9 @@ The TMUG website homepage and documentation are accepted only when:
 9. **No broken links**: All anchor links (`#shop`, `#collections`, `#why`, `#about`) and sub-routes (`/products/*`, `/collections`, `/contact`, `/faq`, `/privacy`, `/terms`) resolve cleanly.
 10. **No horizontal overflow**: 0px horizontal scroll on any mobile viewport.
 11. **No fake data**: All displayed prices, ingredients, and store references match official TMUG business records.
-12. **V2 Visual System**: Warm Ivory, Peach Cream, Coral, Berry, and Gold visual tokens with strict Zero Green UI enforcement across all UI elements.
-13. **Water-Wave Reveal**: Liquid organic clip-path transition reveals alternate/back packshots on card hover and mobile tap.
-14. **Compact Layout**: Vertical section padding reduced to `py-8 sm:py-12`, eliminating excessive whitespace while keeping content breathable and premium.
-15. **Rituals & Recipes**: Community ritual and creative recipe showcases integrate authentic TMUG artwork directly linked to products.
-16. **Phase 2 Admin Control Panel**: `/admin/login` and `/admin` routes provide password-protected control over banners, products, prices, collections, and homepage section order/visibility.
+12. **Vibrant 5-Color Reference Palette**: Cherry Blossom Pink (`#FAA4B5`), Fawn (`#F8B77C`), Maize (`#FFF183`), Sky Blue (`#70C1E1`), and Olivine (`#82BA88` as light supporting accent ONLY) with strict ZERO DARK GREEN UI enforcement.
+13. **Water-Wave Animation Removed**: All legacy water-wave clip-paths, wavy pink overlays, and animated surfaces removed; replaced by smooth Gen-Z micro-interactions with 100% sharp packshots.
+14. **Pop-Up Opener Reveal**: Product pop-up occupies 45–65% vh on desktop, 45–60% on mobile without cropping; dynamic random product selection from verified blends; real Add to Cart and quantity stepper.
+15. **Full-Width Collections Rail**: Carousel rail spans from left to right showing 4–6 products on desktop; navigation arrows placed on outer flanks outside product visual packaging.
+16. **Compact Best Sellers Grid**: Sleek 4-product D2C card deck with transparent cutouts, live INR pricing, and direct cart steppers.
+17. **Admin Real Media File Upload**: Native file picker integration via `/api/admin/upload`, slot requirements boxes (1:1 for product cutouts, 3:1 for hero banners), and real-time image preview inspection modal (filename, dimensions, format, size, transparency detection).

@@ -1,30 +1,35 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── NEW TMUG REBUILD PALETTE (Zero Green UI) ─────────────────
-     Primary Canvas: Warm Ivory #FFF7EF
-     Secondary Canvas: Soft Peach Cream #FBE7DC
-     Primary Vibrant: Coral Pink #F36F6F
-     Secondary Vibrant: Berry Pink #D94F7D
-     Soft Gen-Z: Blush Pink #F6B6C8
-     Accent: Warm Gold #D8A33E
-     Optional Accent: Violet #7251B5
-     Primary Text: Deep Plum #33243A
-     Secondary Text: Warm Charcoal #3A3438
-     White: #FFFFFF */
+  /* ── TMUG VIBRANT 5-COLOR SYSTEM (Strict Zero Dark Green UI Rule) ──
+     Cherry Blossom Pink: #FAA4B5
+     Fawn: #F8B77C
+     Maize: #FFF183
+     Sky Blue: #70C1E1
+     Olivine: #82BA88 (Light supporting accent ONLY)
+     Text Primary: Deep Plum #33243A
+     Text Secondary: Warm Charcoal #3A3438
+     Canvas: Warm Ivory #FFF7EF / Soft Cream #FBE7DC
+  ─────────────────────────────────────────────────────────────────── */
+  --color-cherry-blossom: #faa4b5;
+  --color-fawn: #f8b77c;
+  --color-maize: #fff183;
+  --color-sky-blue: #70c1e1;
+  --color-olivine: #82ba88;
+
   --color-warm-ivory: #fff7ef;
   --color-warm-surface: #fbe7dc;
-  --color-peach-cream: #fbe7dc;
-  --color-coral: #f36f6f;
-  --color-coral-pink: #f36f6f;
+  --color-peach-cream: #f8b77c;
+  --color-coral: #faa4b5;
+  --color-coral-pink: #faa4b5;
   --color-berry: #d94f7d;
   --color-berry-pink: #d94f7d;
-  --color-pink-accent: #f6b6c8;
-  --color-blush-pink: #f6b6c8;
-  --color-tea-gold: #d8a33e;
-  --color-gold: #d8a33e;
-  --color-gold-soft: #f4b400;
-  --color-saffron: #f4b400;
+  --color-pink-accent: #faa4b5;
+  --color-blush-pink: #faa4b5;
+  --color-tea-gold: #fff183;
+  --color-gold: #f8b77c;
+  --color-gold-soft: #fff183;
+  --color-saffron: #f8b77c;
   --color-violet: #7251b5;
   --color-indigo: #4056a1;
   --color-plum: #33243a;
@@ -33,7 +38,7 @@
   --color-warm-charcoal: #3a3438;
 
   /* Zero-Green mapping for legacy tokens across site */
-  --color-tea-green: #d8a33e; /* Warm Gold */
+  --color-tea-green: #fff183; /* Maize / Light Gold */
   --color-tea-deep: #33243a;  /* Deep Plum */
   --color-tea-dark: #3a3438;  /* Warm Charcoal */
   --color-tea-ink: #33243a;   /* Deep Plum */
@@ -44,16 +49,16 @@
   --color-ink-soft: #5c5560;  /* Muted Charcoal/Plum */
 
   /* Per-tea accent colors */
-  --color-pea: #7251b5;
-  --color-pea-soft: #f6b6c8;
-  --color-blossom: #d94f7d;
-  --color-blossom-soft: #ffdde6;
-  --color-limepop: #d8a33e;
-  --color-limepop-soft: #fff3d1;
-  --color-honey: #d8a33e;
-  --color-honey-soft: #fff2d6;
-  --color-darjeeling: #7251b5;
-  --color-darjeeling-soft: #ede7f6;
+  --color-pea: #70c1e1;
+  --color-pea-soft: #e2f4fb;
+  --color-blossom: #faa4b5;
+  --color-blossom-soft: #ffeaf0;
+  --color-limepop: #fff183;
+  --color-limepop-soft: #fffde0;
+  --color-honey: #f8b77c;
+  --color-honey-soft: #fef1e4;
+  --color-darjeeling: #70c1e1;
+  --color-darjeeling-soft: #edf8fd;
 
   --font-display: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif;
   --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
@@ -67,8 +72,6 @@
   --animate-bob: bob 5s ease-in-out infinite;
   --animate-glow-pulse: glow-pulse 3s ease-in-out infinite;
   --animate-petal-fall: petal-fall 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  --animate-tmug-wave: tmugWave 3.5s ease-in-out infinite;
-
 
   @keyframes marquee {
     from { transform: translateX(0); }
@@ -105,47 +108,6 @@
     80% { opacity: 0.9; }
     100% { transform: translateY(120px) rotate(160deg) scale(1); opacity: 0; }
   }
-  @keyframes tmugWave {
-    0% {
-      clip-path: polygon(
-        0% 60%,
-        15% 64%,
-        32% 62%,
-        50% 58%,
-        67% 61%,
-        84% 64%,
-        100% 58%,
-        100% 100%,
-        0% 100%
-      );
-    }
-    50% {
-      clip-path: polygon(
-        0% 48%,
-        16% 44%,
-        33% 50%,
-        52% 58%,
-        69% 60%,
-        85% 54%,
-        100% 48%,
-        100% 100%,
-        0% 100%
-      );
-    }
-    100% {
-      clip-path: polygon(
-        0% 55%,
-        16% 58%,
-        33% 61%,
-        50% 55%,
-        67% 47%,
-        84% 45%,
-        100% 50%,
-        100% 100%,
-        0% 100%
-      );
-    }
-  }
 }
 
 
@@ -160,8 +122,8 @@ body {
 }
 
 ::selection {
-  background: #d8a62a;
-  color: #0b3d2e;
+  background: #f8b77c;
+  color: #33243a;
 }
 
 :focus-visible {
@@ -201,7 +163,7 @@ body {
 
 /* Soft grain-free paper texture via radial dots (very subtle) */
 .dot-grid {
-  background-image: radial-gradient(rgba(11, 61, 46, 0.07) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(51, 36, 58, 0.07) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 

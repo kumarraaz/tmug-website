@@ -65,7 +65,7 @@ export default function PromoModal() {
             transition={{ type: "spring", stiffness: 260, damping: 24 }}
             onClick={(e) => e.stopPropagation()}
             className="relative w-full max-w-sm overflow-hidden rounded-[2rem] shadow-[0_40px_90px_-20px_rgba(0,0,0,0.6)]"
-            style={{ background: "linear-gradient(140deg, #0E513B 0%, #176B4D 55%, #0B3D2E 100%)" }}
+            style={{ background: "linear-gradient(140deg, #33243a 0%, #d94f7d 55%, #faa4b5 100%)" }}
           >
             {/* floating decorative blobs */}
             <div aria-hidden="true" className="pointer-events-none absolute inset-0">

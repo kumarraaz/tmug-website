@@ -104,6 +104,9 @@ export interface ProductControl {
   compareAtPrice?: number;
   frontImage: string;
   backImage?: string;
+  thumbnail?: string;
+  heroImage?: string;
+  lifestyleImage?: string;
   isBestSeller: boolean;
   isPopularPick: boolean;
   enabled: boolean;

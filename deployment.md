@@ -91,13 +91,20 @@ graph LR
 
 ---
 
-## 5. Production QA Protocol (Homepage V2)
+## 5. Production QA Protocol (Master Homepage Rebuild)
 
 Before accepting any production deployment, execute the following audit checklist:
 
-- [ ] **Hero Banner Slider**: All 6 supplied storefront campaign banners render cleanly with crossfade, autoplay, swipe, arrows, pagination pills, and `01 / 06` counter.
-- [ ] **Zero Green Active UI**: Verify that green is NOT used as an active UI color on navbar, buttons, cards, borders, badges, or section backgrounds.
-- [ ] **Product Card Wavy Reveal**: Hover triggers organic wavy liquid motion with soft light pink (`#F7B6C8`) and coral (`#F26B5E`) Gen-Z glow.
+- [ ] **Vibrant 5-Color Palette**: Cherry Blossom Pink (`#FAA4B5`), Fawn (`#F8B77C`), Maize (`#FFF183`), Sky Blue (`#70C1E1`), and Olivine (`#82BA88` as light supporting accent ONLY) active sitewide.
+- [ ] **Strict Zero Dark Green UI**: Verify that dark green is NOT used as an active UI color on navbar, buttons, primary CTAs, cards, borders, navigation controls, or main section backgrounds.
+- [ ] **No Water-Wave Animation**: Verify all wave animations, liquid wave paths, and wavy overlays are removed.
+- [ ] **Pop-Up Opener Reveal**: "OPEN TMUG BOX" modal opens smoothly; product occupies 45–65% vh on desktop and 45–60% on mobile without cropping; dynamic random selection works; working Add to Cart and close button.
+- [ ] **Full-Width Collections Rail**: Product rail spans from left edge across the screen (4–6 items visible on desktop); navigation arrows live on outer flanks outside product visual area.
+- [ ] **Compact Best Sellers Grid**: Sleek 4-product D2C card deck with transparent cutouts, live INR pricing, and in-cart steppers.
+- [ ] **Admin Real Media File Upload**: Native file picker button (`UPLOAD IMAGE`), slot requirements boxes, dimensions inspection modal, and `/api/admin/upload` functional.
+- [ ] **Packaging Visibility**: Zero cropped product silhouettes, zero pixelation, zero unwanted rectangular bounding boxes.
+- [ ] **Cart & Order Flow**: Line item updates, promo codes, direct Add to Cart, quantity steppers, and WhatsApp checkout functional.
+- [ ] **Mobile Responsiveness**: 0px horizontal scroll on 360px–430px devices.
 - [ ] **Back-Side Packaging Reveal**: Alternate/back packshot renders cleanly from authentic `back` image assets.
 - [ ] **Mobile Tap Flip**: Tapping a product card flips between front and back packaging views without blocking Add to Cart or links.
 - [ ] **In-Place Cart & Remove Controls**: Add to Cart immediately shows In Cart state, quantity stepper, and a working Remove button calling `removeLine(variantId)`.

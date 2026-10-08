@@ -128,16 +128,17 @@ graph TD
 ```
 
 ### Component Boundaries & Real Paths:
-1. **AnnouncementBar**: `src/components/Header.tsx` (promotional strip in warm ivory/tea-gold, zero green UI)
+1. **AnnouncementBar**: `src/components/Header.tsx` (promotional strip in warm ivory/tea-gold, zero dark green UI)
 2. **Header**: `src/components/Header.tsx` (sticky navigation in warm ivory/white, charcoal typography, gold accents)
 3. **Hero**: `src/components/Hero.tsx` (storefront campaign banner slider consuming `src/config/banners.ts` and `public/banners/*`)
 4. **TrustStrip**: `src/components/TrustStrip.tsx` (4-pillar marquee strip in soft warm surface)
-5. **ShopCollections**: `src/components/ShopCollections.tsx` ("Shop by Product" horizontal slider with wavy reveal ProductCards)
-6. **BestSellers**: `src/components/BestSellers.tsx` (50/50 split half-screen showcase with front/back toggle + card rail)
-7. **OpenRevealSection**: `src/components/OpenRevealSection.tsx` (repositioned mid-page unboxing, flower petal shower, thank-you emoji badge)
+5. **ShopCollections**: `src/components/ShopCollections.tsx` (full-width product rail with outer flank scroll arrows, 4-6 cards visible on desktop, soft Gen-Z hover glow)
+6. **BestSellers**: `src/components/BestSellers.tsx` (compact, sleek 4-card D2C grid with transparent cutouts, live INR pricing, in-cart steppers)
+7. **OpenRevealSection**: `src/components/OpenRevealSection.tsx` (pop-up product reveal occupying 45-65% vh, Framer Motion popup scale, controlled random product selection, live cart addition)
 8. **WhyTMUG**: `src/components/WhyTmug.tsx` (brand differentiators with prominent packshot, flower watermark, zero green UI)
 9. **MadeWithRealTea**: `src/components/MadeWithRealTea.tsx` (botanical ingredients inspection)
 10. **TeaStory**: `src/components/TeaStory.tsx` (daily ritual timeline)
+11. **Admin Media System**: `src/app/admin/MediaUploadField.tsx` & `src/app/api/admin/upload/route.ts` (native file picker, slot specs, dimension/transparency inspection, saves to `public/uploads/`)
 11. **LifestyleGallery**: `src/components/LifestyleGallery.tsx` ("Made for moments that linger" sticker composition)
 12. **BrandProof**: `src/components/BrandProof.tsx` (social proof counters and editorial quotes)
 13. **CustomerLove**: `src/components/CustomerLove.tsx` (customer feedback & verified testimonials)

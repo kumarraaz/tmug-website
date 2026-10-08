@@ -94,10 +94,32 @@ This file tracks project tasks, component audits, homepage iterations, quality a
 
 ---
 
-## Deployment & Verification
+## Phase 4 — Master Homepage Visual Rebuild & Product System (Complete)
 
-- [x] Production build (`npm run build`) succeeded with exit code 0
-- [x] All 26 static pages, admin routes, and SSG product routes compiled and optimized
+- [x] Adopt new 5-color reference palette: Cherry Blossom Pink (`#FAA4B5`), Fawn (`#F8B77C`), Maize (`#FFF183`), Sky Blue (`#70C1E1`), and Olivine (`#82BA88` as light supporting accent ONLY)
+- [x] Strict Zero Dark Green UI Rule sitewide across navbar, buttons, primary CTAs, cards, borders, navigation controls, and section backgrounds
+- [x] Removal of legacy water-wave keyframes, clip-paths, and wavy SVG overlays
+- [x] Opener / TMUG Box full pop-up reveal modal (`OpenRevealSection.tsx`):
+  - [x] Product occupies 45–65% viewport height on desktop and 45–60% on mobile without cropping
+  - [x] Smooth Framer Motion pop-up reveal sequence (`0.82 → 1.0`, `translateY(24px) → 0`, `opacity: 0 → 1`, 550ms)
+  - [x] Dynamic random selection across verified blends (`butterfly-pea`, `hibiscus`, `chamomile`, `lemongrass`, `gold-tea`, `darjeeling-green`) with shuffle button
+  - [x] Verified prices, variant selector, working Add to Cart, in-cart quantity stepper, and close button
+- [x] Collections Rail rebuild (`ShopCollections.tsx`):
+  - [x] Full available width utilization from left edge to right edge (4–6 products visible on desktop, 1–2 on mobile)
+  - [x] Navigation arrow controls positioned on left/right flanks outside product packaging
+  - [x] Soft Gen-Z hover glow with 100% sharp transparent PNG cutouts
+- [x] Best Sellers redesign (`BestSellers.tsx`):
+  - [x] Compact, product-first 4-card D2C grid
+  - [x] Verified transparent PNG cutouts, taste profiles, live INR prices, and in-cart steppers
+  - [x] Zero water-wave animation
+- [x] Admin Media Control Panel (`admin/page.tsx`, `admin/MediaUploadField.tsx`, `api/admin/upload`):
+  - [x] Real native file picker button (`UPLOAD IMAGE`) saving directly to `public/uploads/`
+  - [x] Slot requirement guidelines (Product Cutout: 1:1, 1200×1200 px, transparent PNG; Hero Banner: 3:1, 2172×724 px; Lifestyle: source ratio)
+  - [x] Real-time image inspection modal showing preview, filename, dimensions, format, file size, transparency detection
+  - [x] Action controls: Replace, Remove, Choose Another, Save & Use Image
+  - [x] Multi-slot support for Front Cutout, Back/Alternate, Thumbnail, and Lifestyle assets
+- [x] Next.js Turbopack build validated (`npm run build` exit code 0, 27 routes)
+- [x] Visual QA verified via browser subagent across desktop and mobile views
 - [x] Browser subagent tour completed with WebP video recording (`tmug_homepage_v2_tour`)
 - [ ] Git commit (`"Redesign TMUG homepage with new assets and product experience"`)
 - [ ] Git push to current configured branch
