@@ -114,3 +114,10 @@ export const IconStar = ({ className = "w-4 h-4" }: P) => (
     <path d="m12 2 2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8Z" />
   </svg>
 );
+
+export const IconSparkle = ({ className = "w-5 h-5" }: P) => (
+  <svg viewBox="0 0 24 24" className={`${base} ${className}`} strokeLinecap="round" strokeLinejoin="round">
+    <path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5Z" />
+  </svg>
+);
+

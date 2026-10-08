@@ -35,11 +35,11 @@ export default function BrandProof() {
   return (
     <section
       aria-label="Tea worth talking about"
-      className="relative overflow-hidden bg-tea-ink py-16 sm:py-24 text-cream"
+      className="relative overflow-hidden bg-plum py-16 sm:py-24 text-warm-ivory"
     >
       {/* Background radial glow & floating decorative stickers */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-1/2 h-[500px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(216,166,42,0.12)_0%,rgba(23,107,77,0.1)_50%,transparent_75%)] blur-3xl" />
+        <div className="absolute left-1/2 top-1/2 h-[500px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(217,164,65,0.15)_0%,rgba(242,107,94,0.08)_50%,transparent_75%)] blur-3xl" />
         <div className="absolute right-[8%] top-[14%] w-10 sm:w-12 opacity-60 animate-float-slow">
           <Image
             src="/assets/stickers/sparkle.svg"

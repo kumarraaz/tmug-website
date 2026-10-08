@@ -106,41 +106,46 @@ graph TD
     B --> C[HomeClient.tsx]
     C --> D1[01. AnnouncementBar - Header.tsx]
     C --> D2[02. Header & Nav - Header.tsx]
-    C --> D3[03. Hero Experience - Hero.tsx]
+    C --> D3[03. Hero Banner Slider - Hero.tsx & banners.ts]
     C --> D4[04. TrustStrip - TrustStrip.tsx]
-    C --> D5[05. ShopCollections Slider - ShopCollections.tsx]
-    C --> D6[06. BrandProof - BrandProof.tsx]
-    C --> D7[07. WhyTmug - WhyTmug.tsx]
-    C --> D8[08. MadeWithRealTea - MadeWithRealTea.tsx]
-    C --> D9[09. TeaStory - TeaStory.tsx]
-    C --> D10[10. LifestyleGallery - LifestyleGallery.tsx]
-    C --> D11[11. AvailableInStores - AvailableInStores.tsx]
-    C --> D12[12. CustomerLove / Reviews - CustomerLove.tsx]
-    C --> D13[13. FinalCta - FinalCta.tsx]
-    C --> D14[14. Footer - Footer.tsx]
-    C --> D15[15. SiteOverlays - SiteOverlays.tsx]
-    D15 --> E1[CartDrawer.tsx]
-    D15 --> E2[SearchOverlay.tsx]
-    D15 --> E3[PromoModal.tsx]
-    D15 --> E4[WhatsAppButton.tsx]
+    C --> D5[05. Shop by Product / Collections - ShopCollections.tsx]
+    C --> D6[06. Best Sellers 50/50 Showcase - BestSellers.tsx]
+    C --> D7[07. Open / Reveal Experience - OpenRevealSection.tsx]
+    C --> D8[08. Why TMUG - WhyTmug.tsx]
+    C --> D9[09. MadeWithRealTea - MadeWithRealTea.tsx]
+    C --> D10[10. TeaStory - TeaStory.tsx]
+    C --> D11[11. LifestyleGallery - LifestyleGallery.tsx]
+    C --> D12[12. BrandProof - BrandProof.tsx]
+    C --> D13[13. CustomerLove / Reviews - CustomerLove.tsx]
+    C --> D14[14. AvailableInStores - AvailableInStores.tsx]
+    C --> D15[15. FinalCta - FinalCta.tsx]
+    C --> D16[16. Footer - Footer.tsx]
+    C --> D17[17. SiteOverlays - SiteOverlays.tsx]
+    D17 --> E1[CartDrawer.tsx]
+    D17 --> E2[SearchOverlay.tsx]
+    D17 --> E3[PromoModal.tsx]
+    D17 --> E4[WhatsAppButton.tsx]
 ```
 
 ### Component Boundaries & Real Paths:
-1. **AnnouncementBar**: `src/components/Header.tsx` (top promotional strip)
-2. **Header**: `src/components/Header.tsx` (sticky navigation, collection mega-menus, search & bag icons)
-3. **Hero**: `src/components/Hero.tsx` (interactive 3D box, steaming kulhad cup, botanical layers)
-4. **TrustStrip**: `src/components/TrustStrip.tsx` (4-pillar marquee strip)
-5. **ShopCollections**: `src/components/ShopCollections.tsx` (category-tabbed horizontal product slider)
-6. **BrandProof**: `src/components/BrandProof.tsx` (social validation & customer numbers)
-7. **WhyTMUG**: `src/components/WhyTmug.tsx` (brand differentiators & whole-leaf arc)
-8. **MadeWithRealTea**: `src/components/MadeWithRealTea.tsx` (real botanical ingredients inspection)
-9. **TeaStory**: `src/components/TeaStory.tsx` (interactive time-of-day tea rituals)
-10. **LifestyleGallery**: `src/components/LifestyleGallery.tsx` ("Made for moments that linger" sticker composition)
-11. **AvailableInStores**: `src/components/AvailableInStores.tsx` (official Amazon store & WhatsApp store)
-12. **Reviews**: `src/components/CustomerLove.tsx` (customer feedback & rating highlights)
-13. **FinalCTA**: `src/components/FinalCta.tsx` (closing newsletter & shop anchor)
-14. **Footer**: `src/components/Footer.tsx` (comprehensive links, copyright & FSSAI info)
-15. **FeaturedSlider** (`src/components/FeaturedSlider.tsx`): Preserved standalone component for standalone featured rails.
+1. **AnnouncementBar**: `src/components/Header.tsx` (promotional strip in warm ivory/tea-gold, zero green UI)
+2. **Header**: `src/components/Header.tsx` (sticky navigation in warm ivory/white, charcoal typography, gold accents)
+3. **Hero**: `src/components/Hero.tsx` (storefront campaign banner slider consuming `src/config/banners.ts` and `public/banners/*`)
+4. **TrustStrip**: `src/components/TrustStrip.tsx` (4-pillar marquee strip in soft warm surface)
+5. **ShopCollections**: `src/components/ShopCollections.tsx` ("Shop by Product" horizontal slider with wavy reveal ProductCards)
+6. **BestSellers**: `src/components/BestSellers.tsx` (50/50 split half-screen showcase with front/back toggle + card rail)
+7. **OpenRevealSection**: `src/components/OpenRevealSection.tsx` (repositioned mid-page unboxing, flower petal shower, thank-you emoji badge)
+8. **WhyTMUG**: `src/components/WhyTmug.tsx` (brand differentiators with prominent packshot, flower watermark, zero green UI)
+9. **MadeWithRealTea**: `src/components/MadeWithRealTea.tsx` (botanical ingredients inspection)
+10. **TeaStory**: `src/components/TeaStory.tsx` (daily ritual timeline)
+11. **LifestyleGallery**: `src/components/LifestyleGallery.tsx` ("Made for moments that linger" sticker composition)
+12. **BrandProof**: `src/components/BrandProof.tsx` (social proof counters and editorial quotes)
+13. **CustomerLove**: `src/components/CustomerLove.tsx` (customer feedback & verified testimonials)
+14. **AvailableInStores**: `src/components/AvailableInStores.tsx` (Amazon Brand Store & WhatsApp Concierge)
+15. **FinalCTA**: `src/components/FinalCta.tsx` (closing newsletter & shop navigation)
+16. **Footer**: `src/components/Footer.tsx` (legal navigation, FSSAI notice, contact information, social links)
+17. **SiteOverlays**: `src/components/SiteOverlays.tsx` (CartDrawer with live quantity stepper + Remove, SearchOverlay, PromoModal)
+
 
 ---
 

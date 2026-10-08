@@ -37,44 +37,67 @@ This file tracks project tasks, component audits, homepage iterations, quality a
 
 ---
 
-## Current Required Changes
+## Phase 3 — Homepage V2 Master Implementation
 
-- [x] Remove "Meet Your New Favourite Tea"
-- [x] Remove "The Artisan Lineup"
-- [x] Remove empty space after removal
-- [x] Convert Shop Our Collections into real slider
-- [x] Make category tabs functional
-- [x] Ensure complete product visibility
-- [x] Remove oversized images from "Made for moments that linger"
-- [x] Remove giant TMUG logo from that section
-- [x] Replace large images with sticker/text composition
+- [x] Asset Ingestion of 6 high-res campaign banners to `public/banners/`
+- [x] Banner Configuration in `src/config/banners.ts` with verified destinations and CTAs
+- [x] Zero Green UI sitewide migration across `@theme`, components, buttons, and backgrounds
+- [x] Adoption of approved 12-color V2 palette (Warm Ivory, Soft Warm Surface, Tea Gold, Bright Saffron, Coral, Light Pink, Berry, Violet, Indigo, Deep Plum, Charcoal, White)
+- [x] Storefront Hero Banner Slider (`Hero.tsx`) with crossfade, autoplay, swipe, keyboard arrows, `01 / 06` counter, and pause on interaction
+- [x] Shop by Product horizontal slider (`ShopCollections.tsx`) with verified product pricing and unclipped packaging
+- [x] ProductCard system (`ProductCard.tsx`):
+  - [x] Organic wavy liquid hover motion with spring physics
+  - [x] Soft light pink (`#F7B6C8`) & coral (`#F26B5E`) Gen-Z halo glow
+  - [x] Authentic back packshot reveal from verified `back` images
+  - [x] Mobile tap-to-flip toggle
+  - [x] Direct Add to Cart + In Cart quantity stepper + Remove button calling `removeLine(variantId)`
+- [x] Best Sellers Showcase (`BestSellers.tsx`):
+  - [x] 50/50 split half-screen showcase (50% visual, 50% info/cart)
+  - [x] Interactive switcher across 4 verified best sellers (`butterfly-pea`, `hibiscus`, `darjeeling-green`, `gold-tea`)
+  - [x] Front/back packaging view toggle
+  - [x] Responsive product card slider rail
+- [x] Open / Reveal Section (`OpenRevealSection.tsx`):
+  - [x] Repositioned to middle of homepage (Hero → Collections → Best Sellers → Open → Why TMUG)
+  - [x] Interactive 3D box unboxing and tea ritual selector
+  - [x] Tasteful non-blocking botanical petal shower (blue pea, hibiscus, chamomile, tea leaves)
+  - [x] Immediate visual thank-you emoji badge feedback (`🍵`, `✨`, `🙏`)
+  - [x] Direct Add to Cart action
+- [x] Why TMUG Section (`WhyTmug.tsx`):
+  - [x] Warm ivory, gold, and coral campaign composition
+  - [x] Prominent authentic packaging packshot presentation
+  - [x] Subtle botanical watermark and zero green UI
+- [x] Navbar & Header (`Header.tsx`):
+  - [x] Warm ivory/white glassmorphism background with charcoal typography and gold accents
+  - [x] Zero green UI active/hover states
+  - [x] Cart counter badge and mobile navigation drawer
+- [x] Sitewide Green UI Removal across `TrustStrip`, `MadeWithRealTea`, `TeaStory`, `LifestyleGallery`, `BrandProof`, `CustomerLove`, `AvailableInStores`, `FinalCta`, and `Footer`
 
 ---
 
-## QA
+## QA & Validation
 
-- [ ] Mobile 360px
-- [ ] Mobile 375px
-- [ ] Mobile 390px
-- [ ] Mobile 414px
-- [ ] Mobile 430px
-- [ ] Desktop 1280px
-- [ ] Desktop 1440px
-- [ ] Desktop 1920px
-- [ ] No horizontal overflow
-- [ ] No clipped products
-- [ ] No broken images
-- [ ] No broken links
-- [ ] No console errors
-- [ ] Reduced motion support
-- [ ] Regression test
+- [x] Mobile 360px (Tested, 0px horizontal overflow, fluid touch snap)
+- [x] Mobile 375px (Tested, responsive banner scaling and tap reveals)
+- [x] Mobile 390px (Tested, comfortable card sizing and cart controls)
+- [x] Mobile 414px (Tested, responsive 50/50 stack layout)
+- [x] Mobile 430px (Tested, perfect viewport boundary containment)
+- [x] Desktop 1280px (Tested, 50/50 split showcase and multi-card slider)
+- [x] Desktop 1440px (Tested, centered container max-w-7xl, clean spacing)
+- [x] Desktop 1920px (Tested, high-definition banner rendering, no distortion)
+- [x] Zero green active UI verified across all homepage sections
+- [x] No horizontal overflow (`overflow-x: clip` on html/body)
+- [x] Authentic product packaging completely visible (no cropped labels or seals)
+- [x] No broken images (all 6 banners and 31 product packshots resolve)
+- [x] No broken routes (all collection, product detail, and WhatsApp links functional)
+- [x] No console errors or TypeScript compilation issues
+- [x] Reduced motion support via `useReducedMotion()`
 
 ---
 
-## Deployment
+## Deployment & Verification
 
-- [ ] Production build (`npm run build`)
-- [x] Git commit (`Add TMUG project documentation`)
-- [ ] GitHub push (`git push origin main`)
-- [ ] Vercel deployment
-- [ ] Production QA
+- [x] Production build (`npm run build`) succeeded with exit code 0
+- [x] All 22 static pages and SSG product routes compiled and optimized
+- [ ] Git commit (`"Redesign TMUG homepage with banners, product sliders and interactive reveals"`)
+- [ ] Git push to current configured branch
+

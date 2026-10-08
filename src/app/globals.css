@@ -1,30 +1,45 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── TMUG Phase 1.5 palette ─────────────────────────────
-     Deep botanical greens lead; cream keeps it fresh; gold
-     accents; per-tea accent colors used selectively. */
-  --color-tea-green: #176b4d;
-  --color-tea-deep: #0e513b;
-  --color-tea-dark: #0b3d2e;
-  --color-tea-ink: #082a20;
-  --color-gold: #d8a62a;
-  --color-gold-soft: #efc65e;
-  --color-cream: #fff8ea;
-  --color-cream-light: #fffdf7;
-  --color-cream-dark: #f3e8cf;
-  --color-ink: #172018;
-  --color-ink-soft: #4a5548;
+  /* ── TMUG V2 Master Palette (Zero Green UI) ─────────────────
+     Warm Ivory, Gold, Saffron, Coral, Light Pink, Berry, Violet,
+     Indigo, Deep Plum, Warm Charcoal, White */
+  --color-warm-ivory: #fff8ee;
+  --color-warm-surface: #f7ebdd;
+  --color-tea-gold: #d9a441;
+  --color-gold: #d9a441;
+  --color-gold-soft: #f4b400;
+  --color-saffron: #f4b400;
+  --color-coral: #f26b5e;
+  --color-pink-accent: #f7b6c8;
+  --color-berry: #c94c7c;
+  --color-violet: #6c4ab6;
+  --color-indigo: #4056a1;
+  --color-plum: #33243a;
+  --color-charcoal: #272329;
 
-  /* Per-tea accent colors (subtle, intentional) */
+  /* Zero-Green mapping for legacy tokens across site */
+  --color-tea-green: #d9a441; /* Tea Gold */
+  --color-tea-deep: #33243a;  /* Deep Plum */
+  --color-tea-dark: #272329;  /* Warm Charcoal */
+  --color-tea-ink: #272329;   /* Warm Charcoal */
+  --color-cream: #fff8ee;     /* Warm Ivory */
+  --color-cream-light: #ffffff; /* Crisp White */
+  --color-cream-dark: #f7ebdd;  /* Soft Warm Surface */
+  --color-ink: #272329;       /* Warm Charcoal */
+  --color-ink-soft: #5c5560;  /* Muted Charcoal/Plum */
+
+  /* Per-tea accent colors */
   --color-pea: #4a6fd4;
   --color-pea-soft: #dbe4ff;
-  --color-blossom: #d84f6d;
+  --color-blossom: #c94c7c;
   --color-blossom-soft: #ffdde6;
-  --color-limepop: #8fc93a;
-  --color-limepop-soft: #e9f6d2;
-  --color-honey: #e8a93d;
-  --color-honey-soft: #ffefd2;
+  --color-limepop: #f4b400;
+  --color-limepop-soft: #fff3d1;
+  --color-honey: #d9a441;
+  --color-honey-soft: #fff2d6;
+  --color-darjeeling: #6c4ab6;
+  --color-darjeeling-soft: #ede7f6;
 
   --font-display: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif;
   --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
@@ -36,6 +51,8 @@
   --animate-cup-float: cup-float 6s ease-in-out infinite;
   --animate-dot-pulse: dot-pulse 5s ease-in-out infinite;
   --animate-bob: bob 5s ease-in-out infinite;
+  --animate-glow-pulse: glow-pulse 3s ease-in-out infinite;
+  --animate-petal-fall: petal-fall 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 
   @keyframes marquee {
     from { transform: translateX(0); }
@@ -45,7 +62,6 @@
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-6px); }
   }
-  /* Hero brand visual: slow cinematic motion only — no spin, no bounce. */
   @keyframes steam-rise {
     0% { transform: translateY(10px); opacity: 0; }
     35% { opacity: 0.55; }
@@ -59,10 +75,19 @@
     0%, 100% { opacity: 0.25; }
     50% { opacity: 0.85; }
   }
-  /* gentle 2–3px idle float for wavy product visuals */
   @keyframes bob {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-3px); }
+  }
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.85; transform: scale(1.06); }
+  }
+  @keyframes petal-fall {
+    0% { transform: translateY(-20px) rotate(0deg) scale(0.8); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 0.9; }
+    100% { transform: translateY(120px) rotate(160deg) scale(1); opacity: 0; }
   }
 }
 

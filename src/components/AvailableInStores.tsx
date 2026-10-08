@@ -33,14 +33,14 @@ export default function AvailableInStores() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         {/* Section Heading */}
         <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-tea-green/15 bg-white px-3.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em] text-tea-green shadow-xs">
-            <span className="h-1.5 w-1.5 rounded-full bg-tea-green" />
+          <span className="inline-flex items-center gap-2 rounded-full border border-tea-gold/30 bg-warm-surface px-3.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em] text-charcoal shadow-xs">
+            <span className="h-1.5 w-1.5 rounded-full bg-coral" />
             Everywhere You Need Us
           </span>
-          <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-tea-ink sm:text-4xl md:text-5xl">
+          <h2 className="mt-3 font-display text-3xl font-black tracking-tight text-charcoal sm:text-4xl md:text-5xl">
             Available where you shop.
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-ink-soft sm:text-lg">
+          <p className="mt-4 text-base leading-relaxed text-charcoal/70 sm:text-lg">
             Pick your favourite way to experience TMUG — from our official Amazon brand store to
             instant WhatsApp concierge and nationwide express shipping.
           </p>
@@ -121,27 +121,27 @@ export default function AvailableInStores() {
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.55, delay: 0.1 }}
             whileHover={{ y: -6 }}
-            className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] border border-ink/8 bg-white p-7 shadow-[0_16px_36px_-16px_rgba(11,61,46,0.18)] transition-all duration-300 hover:border-tea-green/40 sm:p-9"
+            className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] border border-charcoal/10 bg-white p-7 shadow-[0_16px_36px_-16px_rgba(39,35,41,0.12)] transition-all duration-300 hover:border-tea-gold/40 sm:p-9"
           >
             {/* Top accent badge */}
             <div className="flex items-center justify-between">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#25D366]/15 px-3 py-1 text-xs font-extrabold text-tea-deep">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#25D366]/15 px-3 py-1 text-xs font-extrabold text-charcoal">
                 <span className="h-2 w-2 rounded-full bg-[#25D366]" />
                 Direct from Brand
               </span>
-              <span className="text-xs font-bold text-ink-soft/70">Personal Concierge</span>
+              <span className="text-xs font-bold text-charcoal/60">Personal Concierge</span>
             </div>
 
             <div className="my-6 grid items-center gap-6 sm:grid-cols-[1fr_auto]">
               <div>
-                <h3 className="font-display text-2xl font-extrabold text-tea-ink sm:text-3xl">
+                <h3 className="font-display text-2xl font-extrabold text-charcoal sm:text-3xl">
                   Order on WhatsApp
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink-soft sm:text-base">
+                <p className="mt-2 text-sm leading-relaxed text-charcoal/70 sm:text-base">
                   Chat directly with our team. Order fresh batches, request personalized brewing
                   recommendations, or arrange bespoke gifting sets.
                 </p>
-                <ul className="mt-4 space-y-1.5 text-xs font-bold text-tea-deep sm:text-sm">
+                <ul className="mt-4 space-y-1.5 text-xs font-bold text-charcoal sm:text-sm">
                   <li className="flex items-center gap-2">
                     <span className="text-[#25D366]">✓</span> Real human tea experts on chat
                   </li>

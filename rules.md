@@ -103,3 +103,30 @@ TMUG’s personality must remain distinctly Indian, botanically authentic, edito
 9. **Truth & Product Integrity**: Never fabricate prices, products, reviews, certifications, or URLs.
 10. **Responsive & Quality Verification**: Test Desktop, Tablet, and Mobile (360px–430px). Verify builds and Git status.
 11. **Absolute Workflow**: `READ → UNDERSTAND → CHECK CURRENT STATE → PLAN → IMPLEMENT → UPDATE DOCUMENTATION → VERIFY → GIT CHECK`.
+
+---
+
+## 9. Homepage V2 & Zero Green UI Directives
+
+- **STRICT ZERO GREEN UI RULE**: Green is NOT an approved active homepage UI color. Never use green for navbars, buttons, CTA controls, section backgrounds, cards, borders, active states, hover states, navigation links, badges, gradients, or UI containers. Avoid dark green, forest green, bottle green, emerald, sage, olive, or mint green as UI styling. Authentic photographic greens inside verified packaging packshots, tea leaves, flowers, and natural estate photos are strictly preserved.
+- **Approved 12-Color Master UI Palette**:
+  - Warm Ivory: `#FFF8EE`
+  - Soft Warm Surface: `#F7EBDD`
+  - Tea Gold: `#D9A441`
+  - Bright Saffron: `#F4B400`
+  - Coral: `#F26B5E`
+  - Light Pink / Gen-Z Accent: `#F7B6C8`
+  - Berry: `#C94C7C`
+  - Violet: `#6C4AB6`
+  - Indigo: `#4056A1`
+  - Deep Plum: `#33243A`
+  - Warm Charcoal: `#272329`
+  - White: `#FFFFFF`
+- **Hero Banner Slider**: Storefront campaign window using authentic supplied artwork from `public/banners/`. Do not redraw banners in HTML. Maintain correct aspect ratio and image-fit strategy.
+- **Product Reveal & Cart In-Place Controls**:
+  - Card hover triggers organic wavy motion and soft light pink (`#F7B6C8`) / coral (`#F26B5E`) Gen-Z glow.
+  - Back-side reveal must use real `back` image assets from `variant.images`. Never fabricate unverified back labels.
+  - Mobile tap provides touch-friendly flip toggle.
+  - Must provide Add to Cart, In Cart quantity stepper, and direct Remove option calling `removeLine(variantId)`.
+  - "Delete/Remove" strictly modifies the customer's cart selection. Never delete catalog data.
+- **Open / Reveal Section**: Placed mid-page between Best Sellers and Why TMUG. Features 3D box unboxing, subtle non-blocking flower petal shower, thank-you emoji feedback, and add-to-cart action.

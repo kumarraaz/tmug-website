@@ -29,34 +29,42 @@ TMUG merges contemporary beverage culture with timeless Indian tea traditions. T
 
 ---
 
-## 3. Color System
+## 3. Color System (Homepage V2 Master Palette)
 
-All colors are defined in `@theme` inside `src/app/globals.css`. Do not invent unapproved color values.
+> [!IMPORTANT]
+> **STRICT ZERO GREEN UI RULE**: Green is NOT an approved active homepage UI color.
+> Do NOT use green for navbar, buttons, CTA buttons, section backgrounds, cards, borders, active states, hover states, navigation links, badges, gradients, or UI containers.
+> Authentic photographic green appearing naturally inside supplied banner photography, authentic packaging, tea leaves, flowers, and natural estate photos is strictly preserved and must not be artificially altered.
 
-### Core Brand Palette
+All primary UI colors are configured in `@theme` inside `src/app/globals.css`:
+
+### Approved 12-Color Master UI Palette
 | Token | Hex Value | Role / Usage |
 | :--- | :--- | :--- |
-| `--color-tea-green` | `#176B4D` | Primary brand green, key buttons, links, accents |
-| `--color-tea-deep` | `#0E513B` | Deep botanical green for prominent headers and borders |
-| `--color-tea-dark` | `#0B3D2E` | Deepest foliage shade; high-contrast text and dark cards |
-| `--color-tea-ink` | `#082A20` | Ultra-dark green used as replacement for jet black |
-| `--color-gold` | `#D8A62A` | Premium gold accent, ratings, highlight rings, Assam Gold tea |
-| `--color-gold-soft` | `#EFC65E` | Secondary soft gold for background tints and glow rings |
-| `--color-cream` | `#FFF8EA` | Primary page background; warm, tactile, paper-like |
-| `--color-cream-light` | `#FFFDF7` | Card surfaces, modal backgrounds, input fields |
-| `--color-cream-dark` | `#F3E8CF` | Section dividers, borders, subtle card containers |
-| `--color-ink` | `#172018` | Primary body text and editorial headings |
-| `--color-ink-soft` | `#4A5548` | Secondary copy, descriptions, captions, inactive tabs |
+| `Warm Ivory` / `--color-warm-ivory` | `#FFF8EE` | Primary page & hero background; warm, breathable, tactile |
+| `Soft Warm Surface` / `--color-cream-warm` | `#F7EBDD` | Cards, secondary section backgrounds, modal containers |
+| `Tea Gold` / `--color-tea-gold` | `#D9A441` | Signature brand gold, badge outlines, rating stars, accents |
+| `Bright Saffron` / `--color-saffron` | `#F4B400` | High-energy accent, pill highlights, hover accents |
+| `Light Pink` / `--color-pink-accent` | `#F7B6C8` | Gen-Z reveal accent, halo glows, playful botanical highlights |
+| `Coral` / `--color-coral` | `#F26B5E` | Primary high-conversion CTA buttons, alert badges, cart remove |
+| `Berry` / `--color-berry` | `#C94C7C` | Rich berry accent, floral badges, taglines |
+| `Violet` / `--color-violet` | `#6C4AB6` | Butterfly pea ritual accents, evening tea tags |
+| `Indigo` / `--color-indigo` | `#4056A1` | Deep blue flower tea accents, contrast chips |
+| `Deep Plum` / `--color-deep-plum` | `#33243A` | Rich header typography, high-contrast dark sections, footer |
+| `Warm Charcoal` / `--color-charcoal` | `#272329` | Editorial text, primary dark buttons, navigation text |
+| `White` / `--color-white` | `#FFFFFF` | Product stage card surfaces, contrast badges, clean cards |
 
-### Per-Tea Accent Colors
-Used selectively for product cards, badges, and background glows:
-| Token | Hex Value | Soft Hex | Tea Assignment |
-| :--- | :--- | :--- | :--- |
-| `--color-pea` | `#4A6FD4` | `#DBE4FF` | Butterfly Pea Flower Tea (Blue Tea) |
-| `--color-blossom` | `#D84F6D` | `#FFDDE6` | Hibiscus Flower Tea (Ruby Red) |
-| `--color-limepop` | `#8FC93A` | `#E9F6D2` | Lemongrass Tea (Citrus Herbal) |
-| `--color-honey` | `#E8A93D` | `#FFEFD2` | Chamomile Flower Tea (Golden Calm) |
-| `--color-darjeeling`| `#2E7D4F` | `#DDF0E2` | Darjeeling Green Tea (Misty Mountain) |
+### Product Card Reveal & Gen-Z Interaction System
+- **Default State**: Clear authentic front packaging view with full label visibility.
+- **Hover State (Desktop)**:
+  - Organic wavy liquid transition using spring physics (`stiffness: 300, damping: 25`).
+  - Soft light pink (`#F7B6C8`) and coral (`#F26B5E`) halo glow wrapping the card perimeter (`glow-pulse` animation).
+  - Authentic back packshot reveals smoothly from verified `back` image asset.
+  - Duration: ~400–700ms smooth organic motion.
+- **Mobile Tap Reveal**:
+  - Touch-friendly toggle on card tap (without blocking CTA buttons or links).
+  - Tapping reveals the back packshot; tapping again returns to front.
+  - Important pricing and Add to Cart controls remain visible and accessible in both states.
 
 ---
 
@@ -79,9 +87,15 @@ Configured via `next/font/google` in `src/app/layout.tsx`:
 ### Button Styling
 - Shape: Fully rounded pill shape (`rounded-full`).
 - Padding: `px-6 py-3.5` on desktop, `px-5 py-3` on mobile.
-- Typography: Bold font weight (`font-bold` or `font-extrabold`), tracking-wide.
+- Typography: Bold font weight (`font-bold` or `font-black`), tracking-wide.
 - Interactive Feedback: `active:scale-95` tap response, smooth hover elevation.
-- Primary CTA Colors: TMUG Green (`bg-tea-green text-cream`), WhatsApp (`bg-[#25D366] text-white`), Outline (`border-2 border-ink/15 text-ink`).
+- Primary CTA Colors (Zero Green):
+  - Primary Dark: `bg-charcoal text-white hover:bg-deep-plum`
+  - High-Visibility Coral: `bg-coral text-white hover:bg-coral/90`
+  - Gold Accent: `bg-tea-gold text-charcoal hover:bg-saffron`
+  - WhatsApp: `bg-[#25D366] text-white hover:bg-[#20ba59]` (preserves authentic WhatsApp brand mark)
+  - Outline: `border-2 border-charcoal/20 text-charcoal hover:border-charcoal`
+
 
 ---
 

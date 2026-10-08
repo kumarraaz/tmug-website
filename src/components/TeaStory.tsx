@@ -59,8 +59,8 @@ const RITUAL_MOMENTS: StoryMoment[] = [
       "Unfermented whole leaves hand-selected from misty high-elevation slopes. Delicate vegetal sweetness, nutty aroma, and clean finish without harsh astringency.",
     flavorProfile: ["Vegetal", "Nutty Sweet", "Rich Antioxidants", "Crisp Clean"],
     productImage: "/hero/darjeeling-100g-jar-front.png",
-    accentColor: "#2D7D46",
-    bgTint: "rgba(45, 125, 70, 0.08)",
+    accentColor: "#6C4AB6",
+    bgTint: "rgba(108, 74, 182, 0.08)",
     tagline: "Zero bitterness. Pure mountain leaf.",
   },
   {
@@ -73,8 +73,8 @@ const RITUAL_MOMENTS: StoryMoment[] = [
       "Sun-dried German chamomile flowers with intact golden centres. Naturally sweet, honey-apple aroma that eases racing thoughts and welcomes restful sleep.",
     flavorProfile: ["Apple-Blossom", "Naturally Sweet", "Calming", "Zero Caffeine"],
     productImage: "/hero/chamomile-50g-jar-front.png",
-    accentColor: "#E59830",
-    bgTint: "rgba(229, 152, 48, 0.08)",
+    accentColor: "#D9A441",
+    bgTint: "rgba(217, 164, 65, 0.08)",
     tagline: "Pure botanical comfort in a cup.",
   },
 ];
@@ -87,12 +87,12 @@ export default function TeaStory() {
     <section
       id="about"
       aria-label="The TMUG Tea Story"
-      className="relative overflow-hidden bg-cream-light py-16 sm:py-24"
+      className="relative overflow-hidden bg-warm-surface/40 py-16 sm:py-24"
     >
       {/* Decorative botanical backdrop elements */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-20 top-1/4 h-80 w-80 rounded-full bg-tea-green/5 blur-3xl" />
-        <div className="absolute -right-20 bottom-1/4 h-80 w-80 rounded-full bg-gold/10 blur-3xl" />
+        <div className="absolute -left-20 top-1/4 h-80 w-80 rounded-full bg-tea-gold/10 blur-3xl" />
+        <div className="absolute -right-20 bottom-1/4 h-80 w-80 rounded-full bg-pink-accent/15 blur-3xl" />
         <Image
           src="/assets/stickers/sparkle.svg"
           alt=""
@@ -112,14 +112,14 @@ export default function TeaStory() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         {/* Section Heading */}
         <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-tea-green/15 bg-white px-3.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em] text-tea-green shadow-xs">
-            <span className="h-1.5 w-1.5 rounded-full bg-tea-green" />
+          <span className="inline-flex items-center gap-2 rounded-full border border-tea-gold/30 bg-white px-3.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em] text-charcoal shadow-xs">
+            <span className="h-1.5 w-1.5 rounded-full bg-coral" />
             The TMUG Ritual
           </span>
-          <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-tea-ink sm:text-4xl md:text-5xl">
+          <h2 className="mt-3 font-display text-3xl font-black tracking-tight text-charcoal sm:text-4xl md:text-5xl">
             More than just a cup of tea.
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-ink-soft sm:text-lg">
+          <p className="mt-4 text-base leading-relaxed text-charcoal/70 sm:text-lg">
             From your first morning sip to late-night conversations, TMUG brings a little more
             colour, craft, and joy to your everyday tea.
           </p>
@@ -185,15 +185,15 @@ export default function TeaStory() {
                     </span>
                   </div>
 
-                  <h3 className="mt-4 font-display text-2xl font-extrabold text-tea-ink sm:text-3xl md:text-4xl">
+                  <h3 className="mt-4 font-display text-2xl font-extrabold text-charcoal sm:text-3xl md:text-4xl">
                     {current.teaName}
                   </h3>
 
-                  <p className="mt-1 font-display text-base font-semibold italic text-tea-green sm:text-lg">
+                  <p className="mt-1 font-display text-base font-semibold italic text-coral sm:text-lg">
                     “{current.tagline}”
                   </p>
 
-                  <p className="mt-4 text-sm leading-relaxed text-ink-soft sm:text-base">
+                  <p className="mt-4 text-sm leading-relaxed text-charcoal/75 sm:text-base">
                     {current.description}
                   </p>
 
@@ -202,7 +202,7 @@ export default function TeaStory() {
                     {current.flavorProfile.map((note) => (
                       <span
                         key={note}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-ink/8 bg-cream/70 px-3.5 py-1 text-xs font-extrabold text-tea-deep"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-charcoal/10 bg-warm-ivory px-3.5 py-1 text-xs font-extrabold text-charcoal"
                       >
                         <span
                           className="h-1.5 w-1.5 rounded-full"
@@ -216,15 +216,15 @@ export default function TeaStory() {
                   {/* Actions */}
                   <div className="mt-8 flex flex-wrap items-center gap-4">
                     <Link
-                      href="#shop"
-                      className="inline-flex items-center gap-2 rounded-full bg-tea-green px-7 py-3.5 text-sm font-extrabold text-cream shadow-md transition-all duration-200 hover:bg-tea-deep hover:scale-[1.03] active:scale-[0.98]"
+                      href="/#shop"
+                      className="inline-flex items-center gap-2 rounded-full bg-charcoal px-7 py-3.5 text-sm font-extrabold text-white shadow-md transition-all duration-200 hover:bg-tea-gold hover:text-charcoal hover:scale-[1.03] active:scale-[0.98]"
                     >
                       Explore the range
                       <IconArrowRight className="h-4 w-4" />
                     </Link>
                     <Link
                       href="/collections"
-                      className="inline-flex items-center gap-2 rounded-full border border-ink/15 px-6 py-3.5 text-sm font-extrabold text-tea-ink transition-colors hover:bg-cream"
+                      className="inline-flex items-center gap-2 rounded-full border border-charcoal/15 bg-white px-6 py-3.5 text-sm font-extrabold text-charcoal transition-colors hover:bg-warm-surface"
                     >
                       Browse Collections
                     </Link>
@@ -267,10 +267,10 @@ export default function TeaStory() {
                         height={28}
                       />
                       <div className="text-left">
-                        <p className="text-[10px] font-extrabold uppercase tracking-wider text-tea-green">
+                        <p className="text-[10px] font-extrabold uppercase tracking-wider text-tea-gold">
                           Fresh Harvest
                         </p>
-                        <p className="text-xs font-extrabold text-tea-ink">Pure Botanicals</p>
+                        <p className="text-xs font-extrabold text-charcoal">Pure Botanicals</p>
                       </div>
                     </div>
                   </div>

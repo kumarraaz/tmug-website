@@ -28,15 +28,42 @@ Secondary Tagline:
 
 ## 3. Section Copy & Messaging Standards
 
-### Hero Section
-- **Main Headline**: *"Tea, but make it fun."*
-- **Supporting Copy**: *"Whole-flower herbal infusions that bloom blue and ruby, single-origin Darjeeling green leaves, and unapologetically kadak Assam CTC chai — packed fresh for your everyday ritual."*
-- **Primary Action (CTA)**: `"Explore Our Teas"` (jumps to `#shop`)
-- **Secondary Action**: `"Official Amazon Store"` (links to verified Amazon store)
-- **Verified Claims Only**: 100% natural, no synthetic essences, direct garden sourcing.
+### Hero Banner Campaign Artwork & Messaging (Homepage V2)
+The hero slider runs full storefront campaign banners using authenticated brand artwork assets:
 
-### Shop Collections
-- **Section Heading**: *"Shop our collections"*
+1. **Blue Tea Ritual** (`butterfly-pea-tea-ritual.png`):
+   - Headline: *"Meet Your Blue Tea Ritual."*
+   - Subtitle: *"Naturally vibrant butterfly pea flowers, brewed into a beautiful everyday cup."*
+   - Badges: `Floral • Caffeine-Free • Naturally Blue`
+   - Primary CTA: `"Shop Butterfly Pea Tea →"` (routes to `/products/butterfly-pea-flower-tea`)
+2. **Wellness 7 Herbal Teas** (`wellness-seven-herbal-teas.png`):
+   - Headline: *"Wellness, Wrapped in 7 Herbal Teas"*
+   - Subtitle: *"Pure flowers. Real flavour. A happier you, one cup at a time."*
+   - Badges: `Caffeine-Free • All Natural • Daily Wellness`
+   - Primary CTA: `"Explore Herbal Teas →"` (routes to `/#collections`)
+3. **Properly Kadak Chai** (`properly-kadak-chai-1.png`):
+   - Headline: *"Properly Kadak. Properly TMUG."*
+   - Subtitle: *"Bold everyday chai for mornings, breaks and everything in between."*
+   - Badges: `Rich Aroma • Bold Taste • Everyday Chai`
+   - Primary CTA: `"Shop Chai →"` (routes to `/#collections`)
+4. **Tea, But Make It Fun** (`modern-indian-tea-garden.png`):
+   - Headline: *"Tea, but make it fun."*
+   - Subtitle: *"Floral brews, fresh leaves & properly kadak chai — made for your everyday ritual."*
+   - Badges: `Modern Indian Tea Co.`
+   - Primary CTA: `"Shop Tea →"` (routes to `/#collections`)
+5. **Butterfly Pea In Bloom** (`blue-tea-ritual-in-bloom.png`):
+   - Headline: *"Butterfly Pea Flower Tea"*
+   - Subtitle: *"Naturally beautiful. Naturally you. Vibrant blue flowers for a refreshing cup."*
+   - Badges: `100% Natural Flowers • Rich in Antioxidants • Naturally Caffeine-Free`
+   - Primary CTA: `"Order Blue Tea →"` (routes to `/products/butterfly-pea-flower-tea`)
+6. **Morning Kadak Ritual** (`properly-kadak-chai-3.png`):
+   - Headline: *"Properly Kadak. Properly TMUG."*
+   - Subtitle: *"A rich Assam CTC & Orthodox blend crafted for an authentic Indian breakfast chai."*
+   - Badges: `Assam CTC & Orthodox • Rich Golden Liquor • 100% Pure`
+   - Primary CTA: `"Shop Kadak Chai →"` (routes to `/#collections`)
+
+### Shop by Product / Collections
+- **Section Heading**: *"Shop by Product"*
 - **Subtitle**: *"From slow caffeine-free evening flowers to proper morning doodh chai."*
 - **Approved Active Categories**:
   - `All Teas` — The full lineup of whole flower teas, green tea, and chai blends.
@@ -45,6 +72,23 @@ Secondary Tagline:
   - `Green Tea` — Whole loose-leaf unfermented tea from high-altitude Darjeeling gardens.
   - `Herbal & Fresh` — Pure citrus lemongrass leaves.
   - `Bestsellers` — Verified customer favorite blends.
+
+### Best Sellers 50/50 Showcase
+- **Section Heading**: *"Best Sellers"*
+- **Subtitle**: *"The teas our community brews on repeat — from colour-changing blue blooms to properly kadak morning chai."*
+- **Split Layout**: 50% high-impact visual packaging view with front/back toggle + 50% editorial product details, verified pricing, variant selector, Add to Cart, and Remove controls.
+- **Featured Teas**:
+  - Butterfly Pea Flower Tea (₹249)
+  - Hibiscus Flower Tea (₹249)
+  - Darjeeling Green Tea (₹299)
+  - TMUG Gold Tea (₹149)
+
+### Open / Reveal Experience (Mid-Page)
+- **Section Heading**: *"The TMUG Unboxing Experience"*
+- **Subtitle**: *"Tap to explore our signature tea rituals. Whole flowers, fresh aroma, zero artificial dust."*
+- **Interactive Rituals**: Morning Kadak Chai, Afternoon Blue Bloom, Evening Reset, Calming Drift.
+- **Feedback Celebrations**: Non-blocking botanical petal shower (blue pea, hibiscus, chamomile, tea leaves) and thank-you badge (`🍵 Order Ready`, `✨ Added to Cart`, `🙏 Dhanyawad!`).
+
 
 > [!NOTE]
 > Only categories that exist in `src/data/collections.ts` are approved for display.

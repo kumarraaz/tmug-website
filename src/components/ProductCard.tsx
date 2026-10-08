@@ -3,12 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useSpring, AnimatePresence } from "framer-motion";
 import type { Product } from "@/types";
 import { frontImage, getVariant } from "@/data/products";
 import { useShop } from "@/lib/store";
 import { formatINR } from "@/lib/format";
-import { IconArrowRight, IconStar } from "./icons";
+import { IconArrowRight, IconStar, IconCheck, IconTrash } from "./icons";
 import AddToCartButton from "./cart/AddToCartButton";
 
 /** Small pill selector for product variants (weight/pack). */
@@ -38,14 +38,13 @@ export function VariantSelector({
               e.stopPropagation();
               onChange(v.id);
             }}
-            className={`rounded-full border font-bold transition-all duration-200 ${
+            className={`rounded-full border font-bold transition-all duration-200 cursor-pointer ${
               small ? "px-2.5 py-1 text-[11px]" : "px-4 py-2 text-sm"
             } ${
               selected
-                ? "border-transparent text-cream shadow-md"
-                : "border-ink/15 bg-white/70 text-ink hover:border-tea-green/60"
+                ? "border-charcoal bg-charcoal text-white shadow-xs"
+                : "border-charcoal/15 bg-white/80 text-charcoal hover:border-tea-gold hover:bg-white"
             }`}
-            style={selected ? { backgroundColor: product.accent } : undefined}
           >
             {v.label}
           </button>
@@ -55,47 +54,48 @@ export function VariantSelector({
   );
 }
 
-/** +/- stepper. */
+/** Stepper for quantity selection (used in modals and details). */
 export function QuantitySelector({
   qty,
   onChange,
+  min = 1,
+  max = 99,
   small = false,
 }: {
   qty: number;
   onChange: (qty: number) => void;
+  min?: number;
+  max?: number;
   small?: boolean;
 }) {
-  const btn = small ? "h-7 w-7" : "h-9 w-9";
   return (
     <div
-      className={`inline-flex items-center gap-1 rounded-full border border-ink/15 bg-white ${
+      className={`inline-flex items-center rounded-full border border-charcoal/20 bg-white ${
         small ? "p-0.5" : "p-1"
       }`}
-      aria-label="Quantity"
     >
       <button
         type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          onChange(Math.max(1, qty - 1));
-        }}
-        disabled={qty <= 1}
         aria-label="Decrease quantity"
-        className={`${btn} flex items-center justify-center rounded-full text-lg font-bold text-ink transition-colors hover:bg-cream-dark disabled:opacity-30`}
+        disabled={qty <= min}
+        onClick={() => onChange(Math.max(min, qty - 1))}
+        className={`flex items-center justify-center rounded-full font-bold text-charcoal hover:bg-cream-warm disabled:opacity-40 cursor-pointer ${
+          small ? "h-6 w-6 text-xs" : "h-8 w-8 text-base"
+        }`}
       >
         −
       </button>
-      <span className={`min-w-6 text-center font-extrabold ${small ? "text-sm" : "text-base"}`} aria-live="polite">
+      <span className={`text-center font-bold text-charcoal ${small ? "w-6 text-xs" : "w-8 text-sm"}`}>
         {qty}
       </span>
       <button
         type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          onChange(Math.min(99, qty + 1));
-        }}
         aria-label="Increase quantity"
-        className={`${btn} flex items-center justify-center rounded-full text-lg font-bold text-ink transition-colors hover:bg-cream-dark`}
+        disabled={qty >= max}
+        onClick={() => onChange(Math.min(max, qty + 1))}
+        className={`flex items-center justify-center rounded-full font-bold text-charcoal hover:bg-cream-warm disabled:opacity-40 cursor-pointer ${
+          small ? "h-6 w-6 text-xs" : "h-8 w-8 text-base"
+        }`}
       >
         +
       </button>
@@ -104,54 +104,96 @@ export function QuantitySelector({
 }
 
 /**
- * Premium D2C product card: accent-tinted, hover lift + image zoom/rotate,
- * quick-view + product-page links, animated Add to Cart.
+ * Premium D2C Product Card with:
+ * - Wavy organic liquid hover reveal
+ * - Soft light pink (#F7B6C8) / coral (#F26B5E) Gen-Z glow
+ * - Authentic back-side packaging reveal
+ * - Mobile tap-to-reveal toggle
+ * - Direct Add to Cart + In Cart quantity controls & Remove option
+ * - Full unclipped packaging presentation
  */
-export default function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
-  const { setQuickViewId } = useShop();
+export default function ProductCard({
+  product,
+  index = 0,
+  className = "",
+}: {
+  product: Product;
+  index?: number;
+  className?: string;
+}) {
+  const { lines, updateQty, removeLine, showToast } = useShop();
   const [variantId, setVariantId] = useState(product.variants[0].id);
   const variant = getVariant(product, variantId);
   const front = frontImage(variant);
   const back = variant.images.find((i) => i.kind === "back");
 
-  /**
-   * Playful wavy interaction: the product leans toward the cursor with
-   * spring-smoothed motion (translate ±6px, rotate ±2.5°, scale 1.03),
-   * easing back to neutral on leave. Idle 3px bob underneath via CSS.
-   * Disabled under prefers-reduced-motion; touch uses a tap lift instead.
-   */
-  const reduceWavy = useReducedMotion();
-  const [wavyHover, setWavyHover] = useState(false);
+  // Check if current variant is already in cart
+  const cartItem = lines.find((l) => l.variantId === variant.id);
+  const isInCart = Boolean(cartItem);
+
+
+  // Mobile tap reveal toggle state
+  const [isMobileFlipped, setIsMobileFlipped] = useState(false);
+
+  // Hover states & motion values
+  const reduceMotion = useReducedMotion();
+  const [isHovered, setIsHovered] = useState(false);
   const wtx = useMotionValue(0);
   const wty = useMotionValue(0);
   const wrt = useMotionValue(0);
-  const wavySpring = { stiffness: 200, damping: 20, mass: 0.6 };
+  const wavySpring = { stiffness: 220, damping: 18, mass: 0.5 };
   const wsx = useSpring(wtx, wavySpring);
   const wsy = useSpring(wty, wavySpring);
   const wsr = useSpring(wrt, wavySpring);
 
   const handleWavyMove = (e: React.MouseEvent<HTMLElement>) => {
-    if (reduceWavy) return;
+    if (reduceMotion) return;
     const r = e.currentTarget.getBoundingClientRect();
-    // normalized cursor position: -0.5 … 0.5 on each axis
     const nx = (e.clientX - r.left) / r.width - 0.5;
     const ny = (e.clientY - r.top) / r.height - 0.5;
-    // lean with the cursor: right → lean right, up → rise, etc.
-    wtx.set(nx * 12);
-    wty.set(ny * 12);
-    wrt.set(nx * 5);
+    wtx.set(nx * 14);
+    wty.set(ny * 14);
+    wrt.set(nx * 6);
   };
-  const handleWavyEnter = (e: React.MouseEvent<HTMLElement>) => {
-    setWavyHover(true);
-    e.currentTarget.style.borderColor = product.accent;
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
   };
-  const handleWavyLeave = (e: React.MouseEvent<HTMLElement>) => {
-    setWavyHover(false);
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
     wtx.set(0);
     wty.set(0);
     wrt.set(0);
-    e.currentTarget.style.borderColor = "";
   };
+
+  const handleMobileCardClick = (e: React.MouseEvent) => {
+    // On touch devices without hover, toggle flip
+    if (window.matchMedia("(hover: none)").matches && back) {
+      // Don't intercept button or link clicks
+      const target = e.target as HTMLElement;
+      if (target.closest("button") || target.closest("a")) return;
+      setIsMobileFlipped((prev) => !prev);
+    }
+  };
+
+  const handleRemoveFromCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    removeLine(variant.id);
+    showToast(`${product.name} removed from cart`);
+  };
+
+  const handleQtyChange = (e: React.MouseEvent, newQty: number) => {
+    e.stopPropagation();
+    if (newQty <= 0) {
+      removeLine(variant.id);
+      showToast(`${product.name} removed from cart`);
+    } else {
+      updateQty(variant.id, newQty);
+    }
+  };
+
+  const showBack = (isHovered || isMobileFlipped) && Boolean(back);
 
   return (
     <motion.article
@@ -159,102 +201,222 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay: (index % 4) * 0.06, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -6 }}
-      whileTap={{ y: -4 }}
       onMouseMove={handleWavyMove}
-      onMouseEnter={handleWavyEnter}
-      onMouseLeave={handleWavyLeave}
-      className="group relative flex h-full flex-col overflow-hidden rounded-[1.25rem] border border-ink/8 bg-white shadow-[0_10px_28px_-16px_rgba(11,61,46,0.22)] transition-shadow duration-300 hover:shadow-[0_22px_45px_-18px_rgba(11,61,46,0.35)]"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleMobileCardClick}
+      className={`group relative flex h-full flex-col overflow-hidden rounded-[1.35rem] border border-charcoal/10 bg-white shadow-[0_10px_28px_-16px_rgba(39,35,41,0.18)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_22px_45px_-16px_rgba(39,35,41,0.25)] hover:border-tea-gold/50 ${className}`}
     >
-      {/* Image — full pack always visible, never cropped.
-          Wavy layer: pointer springs on the outer wrapper, gentle idle bob
-          inside, so the two motions never fight. pointer-events-none keeps
-          the card link + quick-view button clickable. */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden" style={{ backgroundColor: product.accentSoft }}>
+      {/* ── Product Packshot Frame with Wavy Reveal & Soft Pink Glow ── */}
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-warm-surface/70">
+        {/* Luminous Gen-Z Pink / Coral Glow (animates on hover/reveal) */}
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 transition-opacity duration-500 ${
+            showBack ? "opacity-100" : "opacity-0"
+          }`}
+          style={{
+            background:
+              "radial-gradient(circle at center, rgba(247,182,200,0.5) 0%, rgba(242,107,94,0.2) 48%, transparent 72%)",
+          }}
+        />
+
+        {/* Wavy organic liquid highlight overlay */}
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute -inset-2 transition-transform duration-700 ease-out ${
+            showBack ? "scale-105 opacity-80" : "scale-95 opacity-0"
+          }`}
+        >
+          <svg viewBox="0 0 200 200" className="h-full w-full opacity-35" preserveAspectRatio="none">
+            <path
+              d="M 40 10 C 90 2, 130 18, 170 12 C 190 40, 195 90, 180 140 C 160 180, 110 195, 60 185 C 20 170, 5 120, 15 65 Z"
+              fill="#F7B6C8"
+            />
+          </svg>
+        </div>
+
+        {/* Wavy Spring Packshot Stage */}
         <motion.div
           aria-hidden="true"
           style={{ x: wsx, y: wsy, rotate: wsr }}
-          animate={{ scale: wavyHover && !reduceWavy ? 1.03 : 1 }}
-          whileTap={{ scale: 1.02 }}
+          animate={{ scale: isHovered && !reduceMotion ? 1.04 : 1 }}
           transition={{ type: "spring", stiffness: 260, damping: 22 }}
-          className="pointer-events-none absolute inset-0"
+          className="pointer-events-none absolute inset-0 flex items-center justify-center p-3 sm:p-4"
         >
-          <div className={reduceWavy ? "h-full w-full" : "h-full w-full animate-bob"}>
+          {/* Packaging Container — Always full pack, object-contain, never cropped */}
+          <div className="relative h-full w-full">
+            {/* Front Image */}
             <Image
               src={front.src}
               alt={front.alt}
               fill
-              sizes="(max-width: 640px) 60vw, (max-width: 1024px) 30vw, 22vw"
+              sizes="(max-width: 640px) 70vw, (max-width: 1024px) 33vw, 24vw"
               loading="lazy"
-              className={`object-contain p-4 transition-opacity duration-300 ${
-                back ? "group-hover:opacity-0" : ""
+              className={`object-contain transition-all duration-500 ease-out ${
+                showBack
+                  ? "opacity-0 scale-95 blur-[1px]"
+                  : "opacity-100 scale-100 blur-0"
               }`}
             />
+
+            {/* Back-Side Image with Wavy Reveal Transition */}
             {back && (
               <Image
                 src={back.src}
-                alt=""
-                aria-hidden="true"
+                alt={`Back view of ${product.name} packaging`}
                 fill
-                sizes="(max-width: 640px) 60vw, (max-width: 1024px) 30vw, 22vw"
+                sizes="(max-width: 640px) 70vw, (max-width: 1024px) 33vw, 24vw"
                 loading="lazy"
-                className="object-contain p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                className={`object-contain transition-all duration-500 ease-out ${
+                  showBack
+                    ? "opacity-100 scale-100 blur-0"
+                    : "opacity-0 scale-95 blur-[1px]"
+                }`}
               />
             )}
           </div>
         </motion.div>
-        <Link href={`/products/${product.slug}`} aria-label={`View ${product.name}`} className="absolute inset-0 z-10">
+
+        {/* Subtle Badge Tags */}
+        <div className="absolute left-3 top-3 z-20 flex flex-col gap-1.5">
+          {product.featured && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-tea-gold px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-charcoal shadow-xs">
+              <IconStar className="h-2.5 w-2.5 fill-charcoal" /> Bestseller
+            </span>
+          )}
+          {showBack && (
+            <span className="inline-block rounded-full bg-pink-accent/90 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-charcoal shadow-xs backdrop-blur-xs">
+              Back View
+            </span>
+          )}
+        </div>
+
+        {/* Mobile tap flip hint pill (visible only on touch devices with back images) */}
+        {back && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsMobileFlipped((prev) => !prev);
+            }}
+            aria-label={isMobileFlipped ? "Show front packaging" : "Reveal back packaging"}
+            className="absolute bottom-2.5 right-2.5 z-20 flex sm:hidden items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-extrabold text-charcoal shadow-xs backdrop-blur-xs active:bg-tea-gold"
+          >
+            🔄 {isMobileFlipped ? "Front" : "Flip"}
+          </button>
+        )}
+
+        {/* Direct Link to product detail page */}
+        <Link
+          href={`/products/${product.slug}`}
+          aria-label={`View ${product.name}`}
+          className="absolute inset-0 z-10"
+        >
           <span className="sr-only">View {product.name}</span>
         </Link>
-        {product.featured && (
-          <span
-            className="absolute left-2.5 top-2.5 z-20 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-white"
-            style={{ backgroundColor: product.accent }}
-          >
-            <IconStar className="h-2.5 w-2.5" /> Bestseller
-          </span>
-        )}
-        {/* quick view pill — appears on hover (desktop), always visible on touch */}
-        <button
-          type="button"
-          onClick={() => setQuickViewId(product.id)}
-          className="absolute bottom-2.5 left-1/2 z-20 -translate-x-1/2 rounded-full bg-tea-ink/85 px-3.5 py-1.5 text-[11px] font-extrabold text-cream backdrop-blur transition-all duration-300 hover:bg-tea-ink sm:translate-y-12 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
-        >
-          Quick view
-        </button>
       </div>
 
-      {/* Body */}
-      <div className="flex flex-1 flex-col gap-1.5 p-4">
+      {/* ── Product Card Body ── */}
+      <div className="flex flex-1 flex-col gap-2 p-4">
+        {/* Category Profile & Title */}
         <div>
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.14em]" style={{ color: product.accent }}>
+          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-coral">
             {product.profile.split("·")[0]?.trim()}
           </p>
-          <Link href={`/products/${product.slug}`} className="hover:underline decoration-2 underline-offset-4" style={{ textDecorationColor: product.accent }}>
-            <h3 className="mt-0.5 font-display text-[17px] font-bold leading-snug text-ink">
-              {product.name}
-            </h3>
+          <Link
+            href={`/products/${product.slug}`}
+            className="block font-display text-[16px] sm:text-[17px] font-bold leading-snug text-charcoal transition-colors hover:text-coral"
+          >
+            {product.name}
           </Link>
-          <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wider text-ink-soft">
+          <p className="text-[11px] font-bold text-charcoal/60">
             {variant.label}
           </p>
         </div>
 
+        {/* Variant Selector Pills */}
         <VariantSelector product={product} selectedId={variantId} onChange={setVariantId} small />
 
-        <div className="mt-auto flex items-center justify-between gap-2 pt-1.5">
-          <p className="font-display text-lg font-extrabold text-tea-deep">
-            {formatINR(variant.price)}
-          </p>
-          <AddToCartButton product={product} variant={variant} className="px-3.5 py-2 text-[13px]" />
-        </div>
+        {/* Price & Add to Cart / In Cart Controls */}
+        <div className="mt-auto pt-2 border-t border-charcoal/8">
+          <div className="flex items-center justify-between gap-2">
+            <div>
+              <p className="font-display text-lg font-black text-charcoal">
+                {formatINR(variant.price)}
+              </p>
+            </div>
 
-        <Link
-          href={`/products/${product.slug}`}
-          className="inline-flex items-center gap-1 text-[11px] font-bold text-ink-soft transition-colors hover:text-tea-green"
-        >
-          View details <IconArrowRight className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-1" />
-        </Link>
+            {/* Cart Interactive Actions */}
+            {!isInCart ? (
+              <AddToCartButton
+                product={product}
+                variant={variant}
+                className="px-3.5 py-2 text-xs"
+              />
+            ) : (
+              <div className="flex items-center gap-1.5">
+                {/* Quantity Stepper */}
+                <div className="flex items-center rounded-full border border-tea-gold bg-warm-ivory p-0.5 shadow-xs">
+                  <button
+                    type="button"
+                    onClick={(e) => handleQtyChange(e, (cartItem?.qty || 1) - 1)}
+                    aria-label="Decrease quantity"
+                    className="flex h-6 w-6 items-center justify-center rounded-full text-xs font-black text-charcoal hover:bg-tea-gold/20 active:scale-95 cursor-pointer"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-5 text-center text-xs font-black text-charcoal">
+                    {cartItem?.qty || 1}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={(e) => handleQtyChange(e, (cartItem?.qty || 1) + 1)}
+                    aria-label="Increase quantity"
+                    className="flex h-6 w-6 items-center justify-center rounded-full text-xs font-black text-charcoal hover:bg-tea-gold/20 active:scale-95 cursor-pointer"
+                  >
+                    +
+                  </button>
+                </div>
+
+                {/* Remove from Cart Button */}
+                <button
+                  type="button"
+                  onClick={handleRemoveFromCart}
+                  aria-label={`Remove ${product.name} from cart`}
+                  className="flex h-7 w-7 items-center justify-center rounded-full border border-coral/30 bg-coral/10 text-coral transition-colors hover:bg-coral hover:text-white active:scale-95 cursor-pointer"
+                  title="Remove from cart"
+                >
+                  <IconTrash className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* In Cart Confirmation Note */}
+          {isInCart && (
+            <p className="mt-1 flex items-center gap-1 text-[10px] font-bold text-tea-gold">
+              <IconCheck className="h-3 w-3" /> In your cart •{" "}
+              <button
+                type="button"
+                onClick={handleRemoveFromCart}
+                className="underline hover:text-coral cursor-pointer"
+              >
+                Remove
+              </button>
+            </p>
+          )}
+
+          {/* Details Link */}
+          <div className="mt-2 text-right">
+            <Link
+              href={`/products/${product.slug}`}
+              className="inline-flex items-center gap-1 text-[11px] font-bold text-charcoal/70 transition-colors hover:text-coral"
+            >
+              View details <IconArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+        </div>
       </div>
     </motion.article>
   );

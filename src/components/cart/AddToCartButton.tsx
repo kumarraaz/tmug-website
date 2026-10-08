@@ -75,8 +75,10 @@ export default function AddToCartButton({
           ? `${product.name} added to cart`
           : `Add ${product.name} (${variant.label}) to cart`
       }
-      className={`group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-extrabold transition-all duration-200 hover:scale-[1.03] hover:shadow-[0_10px_24px_-10px_rgba(11,61,46,0.5)] active:scale-[0.97] ${
-        phase === "added" ? "bg-tea-green text-cream" : "bg-ink text-cream hover:bg-tea-green"
+      className={`group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-extrabold transition-all duration-200 hover:scale-[1.03] hover:shadow-[0_10px_24px_-10px_rgba(217,164,65,0.4)] active:scale-[0.97] ${
+        phase === "added"
+          ? "bg-tea-gold text-charcoal shadow-md"
+          : "bg-charcoal text-white hover:bg-tea-gold hover:text-charcoal shadow-sm"
       } ${className}`}
     >
       {/* subtle shine sweep on hover */}

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { PRODUCTS } from "@/data/products";
 import type { Product } from "@/types";
 import ProductCard from "./ProductCard";
@@ -87,7 +87,7 @@ export default function ShopCollections() {
     <section
       id="collections"
       aria-label="Shop our collections"
-      className="relative overflow-hidden bg-cream-light py-14 sm:py-20"
+      className="relative overflow-hidden bg-warm-ivory py-14 sm:py-20"
     >
       {/* Decorative subtle background accents */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -115,16 +115,16 @@ export default function ShopCollections() {
         {/* Section Header with Carousel Controls */}
         <div className="flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-end">
           <Reveal className="text-center sm:text-left">
-            <span className="inline-flex items-center gap-2 rounded-full border border-tea-green/20 bg-white/80 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-tea-green shadow-xs">
-              <span className="h-2 w-2 rounded-full bg-gold" />
-              Curated Blends
+            <span className="inline-flex items-center gap-2 rounded-full border border-tea-gold/30 bg-warm-surface px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-charcoal shadow-xs">
+              <span className="h-2 w-2 rounded-full bg-tea-gold" />
+              Shop by Product
             </span>
-            <h2 className="text-section mt-3 font-display font-extrabold text-tea-ink">
-              Shop Our <span className="text-tea-green">Collections</span>
+            <h2 className="text-section mt-3 font-display font-black text-charcoal">
+              Shop Our <span className="text-coral">Collections</span>
             </h2>
-            <p className="mt-2 max-w-lg text-[15px] sm:text-base text-ink-soft">
-              Explore by mood, taste, or ritual. Every pack is sealed fresh with whole leaves and
-              flowers.
+            <p className="mt-2 max-w-lg text-[15px] sm:text-base text-charcoal/70">
+              From slow caffeine-free evening flowers to proper morning doodh chai.
+              Every pack is sealed fresh with whole leaves.
             </p>
           </Reveal>
 
@@ -135,10 +135,10 @@ export default function ShopCollections() {
               onClick={() => scroll("left")}
               disabled={!canScrollLeft}
               aria-label="Previous products"
-              className={`flex h-11 w-11 items-center justify-center rounded-full border border-ink/12 bg-white text-tea-ink shadow-sm transition-all duration-200 ${
+              className={`flex h-11 w-11 items-center justify-center rounded-full border border-charcoal/15 bg-white text-charcoal shadow-xs transition-all duration-200 ${
                 canScrollLeft
-                  ? "hover:bg-tea-green hover:text-white hover:scale-105 active:scale-95 cursor-pointer"
-                  : "opacity-40 cursor-not-allowed"
+                  ? "hover:bg-tea-gold hover:text-charcoal hover:scale-105 active:scale-95 cursor-pointer"
+                  : "opacity-35 cursor-not-allowed"
               }`}
             >
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -150,10 +150,10 @@ export default function ShopCollections() {
               onClick={() => scroll("right")}
               disabled={!canScrollRight}
               aria-label="Next products"
-              className={`flex h-11 w-11 items-center justify-center rounded-full border border-ink/12 bg-white text-tea-ink shadow-sm transition-all duration-200 ${
+              className={`flex h-11 w-11 items-center justify-center rounded-full border border-charcoal/15 bg-white text-charcoal shadow-xs transition-all duration-200 ${
                 canScrollRight
-                  ? "hover:bg-tea-green hover:text-white hover:scale-105 active:scale-95 cursor-pointer"
-                  : "opacity-40 cursor-not-allowed"
+                  ? "hover:bg-tea-gold hover:text-charcoal hover:scale-105 active:scale-95 cursor-pointer"
+                  : "opacity-35 cursor-not-allowed"
               }`}
             >
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -174,8 +174,8 @@ export default function ShopCollections() {
                 onClick={() => handleTabChange(tab.id)}
                 className={`shrink-0 rounded-full px-5 py-2.5 text-xs sm:text-sm font-extrabold transition-all duration-300 cursor-pointer ${
                   isActive
-                    ? "bg-tea-green text-cream shadow-[0_8px_20px_-6px_rgba(23,107,77,0.5)] scale-105"
-                    : "border border-ink/10 bg-white/80 text-tea-ink hover:border-tea-green/40 hover:bg-white"
+                    ? "bg-charcoal text-white shadow-[0_8px_20px_-6px_rgba(39,35,41,0.4)] scale-105 ring-2 ring-tea-gold"
+                    : "border border-charcoal/15 bg-white text-charcoal hover:border-tea-gold hover:text-coral hover:bg-white"
                 }`}
               >
                 {tab.label}
@@ -208,7 +208,7 @@ export default function ShopCollections() {
 
           {/* Mobile Swipe Indicators & Arrow Controls */}
           <div className="mt-4 flex items-center justify-between sm:hidden px-2">
-            <span className="text-xs font-bold text-ink-soft">
+            <span className="text-xs font-bold text-charcoal/60">
               ← Swipe to explore teas →
             </span>
             <div className="flex items-center gap-2">
@@ -217,8 +217,8 @@ export default function ShopCollections() {
                 onClick={() => scroll("left")}
                 disabled={!canScrollLeft}
                 aria-label="Previous"
-                className={`flex h-9 w-9 items-center justify-center rounded-full border border-ink/12 bg-white text-tea-ink ${
-                  canScrollLeft ? "active:bg-tea-green active:text-white" : "opacity-35"
+                className={`flex h-9 w-9 items-center justify-center rounded-full border border-charcoal/15 bg-white text-charcoal ${
+                  canScrollLeft ? "active:bg-tea-gold active:text-charcoal" : "opacity-35"
                 }`}
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -230,8 +230,8 @@ export default function ShopCollections() {
                 onClick={() => scroll("right")}
                 disabled={!canScrollRight}
                 aria-label="Next"
-                className={`flex h-9 w-9 items-center justify-center rounded-full border border-ink/12 bg-white text-tea-ink ${
-                  canScrollRight ? "active:bg-tea-green active:text-white" : "opacity-35"
+                className={`flex h-9 w-9 items-center justify-center rounded-full border border-charcoal/15 bg-white text-charcoal ${
+                  canScrollRight ? "active:bg-tea-gold active:text-charcoal" : "opacity-35"
                 }`}
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -246,9 +246,9 @@ export default function ShopCollections() {
         <div className="mt-8 text-center sm:mt-10">
           <Link
             href="/collections"
-            className="inline-flex items-center gap-2 rounded-full border-2 border-tea-green/25 bg-white px-8 py-3.5 text-sm font-extrabold text-tea-green shadow-xs transition-all duration-300 hover:border-tea-green hover:bg-tea-green hover:text-white hover:scale-105 active:scale-95"
+            className="inline-flex items-center gap-2 rounded-full border-2 border-charcoal/20 bg-white px-8 py-3.5 text-sm font-extrabold text-charcoal shadow-xs transition-all duration-300 hover:border-tea-gold hover:bg-tea-gold hover:text-charcoal hover:scale-105 active:scale-95"
           >
-            Explore Complete Catalog <IconArrowRight className="h-4 w-4" />
+            Explore Complete Catalog <IconArrowRight className="h-4 w-4 text-coral" />
           </Link>
         </div>
       </div>

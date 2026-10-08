@@ -57,10 +57,10 @@ export default function TrustStrip() {
                 />
               </div>
               <div className="min-w-0">
-                <p className="text-[12px] font-black uppercase tracking-wider text-tea-ink leading-tight">
+                <p className="text-[12px] font-black uppercase tracking-wider text-charcoal leading-tight">
                   {item.title}
                 </p>
-                <p className="text-[10px] font-medium text-ink-soft leading-tight truncate">
+                <p className="text-[10px] font-medium text-charcoal/70 leading-tight truncate">
                   {item.subtitle}
                 </p>
               </div>
@@ -73,9 +73,9 @@ export default function TrustStrip() {
           {TRUST_POINTS.map((item) => (
             <div
               key={item.title}
-              className="flex shrink-0 snap-start items-center gap-3 rounded-2xl border border-[#D8A62A]/25 bg-white/80 px-4 py-2.5 shadow-xs backdrop-blur-xs"
+              className="flex shrink-0 snap-start items-center gap-3 rounded-2xl border border-tea-gold/30 bg-white/90 px-4 py-2.5 shadow-xs backdrop-blur-xs"
             >
-              <div className="relative h-9 w-9 shrink-0 flex items-center justify-center rounded-xl bg-tea-green/10 p-1.5">
+              <div className="relative h-9 w-9 shrink-0 flex items-center justify-center rounded-xl bg-tea-gold/15 p-1.5">
                 <Image
                   src={item.icon}
                   alt=""
@@ -85,10 +85,10 @@ export default function TrustStrip() {
                 />
               </div>
               <div>
-                <p className="text-xs font-black uppercase tracking-wider text-tea-ink whitespace-nowrap">
+                <p className="text-xs font-black uppercase tracking-wider text-charcoal whitespace-nowrap">
                   {item.title}
                 </p>
-                <p className="text-[10px] font-medium text-ink-soft whitespace-nowrap">
+                <p className="text-[10px] font-medium text-charcoal/70 whitespace-nowrap">
                   {item.subtitle}
                 </p>
               </div>

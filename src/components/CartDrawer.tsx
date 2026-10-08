@@ -47,14 +47,14 @@ function CouponBox() {
 
   if (coupon) {
     return (
-      <div className="flex items-center justify-between rounded-xl bg-tea-green/10 px-4 py-2.5">
-        <p className="text-sm font-bold text-tea-green">
+      <div className="flex items-center justify-between rounded-xl bg-tea-gold/15 px-4 py-2.5">
+        <p className="text-sm font-bold text-charcoal">
           ✓ {coupon} applied — {siteConfig.promo.discountPercent}% off
         </p>
         <button
           type="button"
           onClick={removeCoupon}
-          className="text-xs font-bold text-ink-soft underline-offset-2 hover:underline"
+          className="text-xs font-bold text-coral underline-offset-2 hover:underline cursor-pointer"
         >
           Remove
         </button>
@@ -181,20 +181,20 @@ export default function CartDrawer() {
             {/* Lines */}
             {lines.length === 0 ? (
               <div className="flex flex-1 flex-col items-center justify-center gap-4 px-8 text-center">
-                <span className="flex h-20 w-20 items-center justify-center rounded-full bg-tea-green/10 text-4xl" aria-hidden="true">
+                <span className="flex h-20 w-20 items-center justify-center rounded-full bg-tea-gold/15 text-4xl" aria-hidden="true">
                   🍵
                 </span>
-                <p className="font-display text-2xl font-extrabold text-ink">Your cart is empty</p>
-                <p className="text-sm text-ink-soft">
+                <p className="font-display text-2xl font-extrabold text-charcoal">Your cart is empty</p>
+                <p className="text-sm text-charcoal/70">
                   Every great ritual starts with the first sip. Go find your tea.
                 </p>
                 <button
                   type="button"
                   onClick={() => {
                     setCartOpen(false);
-                    document.querySelector("#shop")?.scrollIntoView({ behavior: "smooth" });
+                    document.querySelector("#collections")?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="rounded-full bg-tea-green px-6 py-3 text-sm font-extrabold text-cream transition-transform hover:scale-[1.03]"
+                  className="rounded-full bg-charcoal px-6 py-3 text-sm font-extrabold text-white transition-all hover:bg-tea-gold hover:text-charcoal cursor-pointer"
                 >
                   Browse Teas
                 </button>
@@ -210,31 +210,31 @@ export default function CartDrawer() {
                         initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, x: 40 }}
-                        className="flex gap-3 rounded-2xl bg-white p-3 shadow-sm"
+                        className="flex gap-3 rounded-2xl bg-white p-3 shadow-xs border border-charcoal/8"
                       >
-                        <span className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-cream-dark">
+                        <span className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-warm-surface p-1">
                           {l.image ? (
-                            <Image src={l.image} alt={l.imageAlt} fill sizes="80px" className="object-cover" />
+                            <Image src={l.image} alt={l.imageAlt} fill sizes="80px" className="object-contain" />
                           ) : null}
                         </span>
                         <div className="flex min-w-0 flex-1 flex-col">
                           <div className="flex items-start justify-between gap-2">
                             <div className="min-w-0">
-                              <p className="truncate text-sm font-extrabold text-ink">{l.productName}</p>
-                              <p className="text-xs font-semibold text-ink-soft">{l.variantLabel}</p>
+                              <p className="truncate text-sm font-extrabold text-charcoal">{l.productName}</p>
+                              <p className="text-xs font-semibold text-charcoal/60">{l.variantLabel}</p>
                             </div>
                             <button
                               type="button"
                               onClick={() => removeLine(l.variantId)}
                               aria-label={`Remove ${l.productName} (${l.variantLabel})`}
-                              className="rounded-full p-1.5 text-ink-soft transition-colors hover:bg-red-50 hover:text-red-600"
+                              className="rounded-full p-1.5 text-charcoal/50 transition-colors hover:bg-coral/10 hover:text-coral cursor-pointer"
                             >
                               <IconTrash />
                             </button>
                           </div>
                           <div className="mt-auto flex items-center justify-between pt-2">
                             <QuantitySelector small qty={l.qty} onChange={(q) => updateQty(l.variantId, q)} />
-                            <p className="text-sm font-extrabold text-tea-green">
+                            <p className="text-sm font-black text-charcoal">
                               {formatINR(l.price * l.qty)}
                             </p>
                           </div>
@@ -245,24 +245,24 @@ export default function CartDrawer() {
                 </ul>
 
                 {/* Footer */}
-                <div className="space-y-3 border-t border-ink/10 bg-white px-5 py-4">
+                <div className="space-y-3 border-t border-charcoal/10 bg-white px-5 py-4">
                   <CouponBox />
                   <dl className="space-y-1.5 text-sm">
                     <div className="flex items-center justify-between">
-                      <dt className="font-semibold text-ink-soft">Subtotal</dt>
-                      <dd className="font-bold text-ink">{formatINR(subtotal)}</dd>
+                      <dt className="font-semibold text-charcoal/70">Subtotal</dt>
+                      <dd className="font-bold text-charcoal">{formatINR(subtotal)}</dd>
                     </div>
                     {coupon && (
-                      <div className="flex items-center justify-between text-tea-green">
+                      <div className="flex items-center justify-between text-coral">
                         <dt className="font-semibold">
                           Discount ({coupon} — {siteConfig.promo.discountPercent}%)
                         </dt>
                         <dd className="font-bold">−{formatMoney(discount)}</dd>
                       </div>
                     )}
-                    <div className="flex items-center justify-between border-t border-ink/10 pt-2">
-                      <dt className="font-bold text-ink">Total</dt>
-                      <dd className="font-display text-xl font-extrabold text-ink">
+                    <div className="flex items-center justify-between border-t border-charcoal/10 pt-2">
+                      <dt className="font-bold text-charcoal">Total</dt>
+                      <dd className="font-display text-xl font-black text-charcoal">
                         {coupon ? formatMoney(total) : formatINR(subtotal)}
                       </dd>
                     </div>

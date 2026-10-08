@@ -128,3 +128,39 @@ Under no circumstances should any developer or automated agent fabricate:
     - Any remaining issue or user decision required.
 12. **Absolute Rule**: `READ → UNDERSTAND → CHECK CURRENT STATE → PLAN → IMPLEMENT → UPDATE DOCUMENTATION → VERIFY → GIT CHECK`.
 
+---
+
+## 10. Homepage V2 Architectural & Design Decisions
+
+### Hero Banner Slider Architecture
+- Transformed the hero from an isolated 3D stage into a storefront campaign promotional banner slider.
+- Consumes 6 high-resolution brand campaign artworks stored in `/public/banners/` via centralized configuration `src/config/banners.ts`.
+- Features crossfade transitions, autoplay with pause on hover/interaction, previous/next buttons, pagination pills, `01 / 06` counter, and touch swipe gestures.
+- Direct links route users to verified product (`/products/butterfly-pea-flower-tea`) and collection (`/#collections`) pages.
+
+### Strict Zero Green UI Rule
+- Green is strictly prohibited as an active UI color across navbar, buttons, CTA controls, section backgrounds, cards, borders, active states, hover states, navigation links, badges, gradients, or UI containers.
+- Natural photographic green appearing inside supplied banner artwork, tea packaging packshots, tea leaves, and garden photos is preserved.
+
+### Master 12-Color Palette
+- Warm Ivory (`#FFF8EE`), Soft Warm Surface (`#F7EBDD`), Tea Gold (`#D9A441`), Bright Saffron (`#F4B400`), Light Pink (`#F7B6C8`), Coral (`#F26B5E`), Berry (`#C94C7C`), Violet (`#6C4AB6`), Indigo (`#4056A1`), Deep Plum (`#33243A`), Warm Charcoal (`#272329`), White (`#FFFFFF`).
+
+### Product Reveal & In-Place Cart Experience
+- **Wavy Hover Reveal**: Organic liquid transition with spring physics and soft light pink (`#F7B6C8`) Gen-Z glow.
+- **Authentic Back Packaging**: Back packshot renders from verified `back` images in `src/data/products.ts`.
+- **Mobile Tap Reveal**: Tapping card toggles front/back packshot on touch screens without blocking links/buttons.
+- **In-Place Cart Controls**: Prominent Add to Cart button transitions immediately to an In Cart quantity stepper (`−` qty `+`) and a direct Remove button calling `removeLine(variantId)`.
+
+### Best Sellers 50/50 Split Showcase
+- Split composition: 50% large packaging visual with front/back toggle + 50% product details, pricing, variant selector, Add to Cart, and Remove controls.
+- Interactive product switcher between 4 verified best sellers: Butterfly Pea Flower Tea, Hibiscus Flower Tea, Darjeeling Green Tea, and TMUG Gold Tea.
+- Accompanied by a responsive product card rail.
+
+### Open / Reveal Section Repositioning
+- Moved into the middle of the homepage between Best Sellers and Why TMUG.
+- Interactive 3D box unboxing, ritual switcher, non-blocking botanical flower petal shower, thank-you emoji badge feedback (`🍵`, `✨`, `🙏`), and direct add-to-cart action.
+
+### Why TMUG Redesign
+- Redesigned in warm ivory, gold, and coral tones with prominent authentic packaging packshots, botanical watermark, and zero green UI.
+
+

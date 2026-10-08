@@ -58,11 +58,11 @@ git status
 # 2. Stage changes
 git add .
 
-# 3. Commit with concise semantic message
-git commit -m "Update TMUG project documentation"
+# 3. Commit with approved semantic message
+git commit -m "Redesign TMUG homepage with banners, product sliders and interactive reveals"
 
-# 4. Push directly to the active branch (main)
-git push origin main
+# 4. Push directly to current configured branch
+git push origin <branch>
 ```
 
 > [!WARNING]
@@ -78,7 +78,8 @@ The repository is linked to Vercel for automated zero-downtime deployments:
 graph LR
     A[Local Code / Fixes] --> B[git commit]
     B --> C[git push origin main]
-    C --> D[GitHub Repository: kumarraaz/tmug-website]
+    D[GitHub Repository: kumarraaz/tmug-website]
+    C --> D
     D --> E[Vercel Automated Build]
     E --> F[Global Edge CDN Deployment]
 ```
@@ -90,22 +91,30 @@ graph LR
 
 ---
 
-## 5. Production QA Protocol
+## 5. Production QA Protocol (Homepage V2)
 
 Before accepting any production deployment, execute the following audit checklist:
 
-- [ ] **Homepage Experience**: Hero 3D showcase renders, kulhad cup floats, and trust marquee scrolls continuously without jank.
-- [ ] **Product Pages**: All 7 products open at `/products/[slug]` with functional variant selectors and accurate pricing.
+- [ ] **Hero Banner Slider**: All 6 supplied storefront campaign banners render cleanly with crossfade, autoplay, swipe, arrows, pagination pills, and `01 / 06` counter.
+- [ ] **Zero Green Active UI**: Verify that green is NOT used as an active UI color on navbar, buttons, cards, borders, badges, or section backgrounds.
+- [ ] **Product Card Wavy Reveal**: Hover triggers organic wavy liquid motion with soft light pink (`#F7B6C8`) and coral (`#F26B5E`) Gen-Z glow.
+- [ ] **Back-Side Packaging Reveal**: Alternate/back packshot renders cleanly from authentic `back` image assets.
+- [ ] **Mobile Tap Flip**: Tapping a product card flips between front and back packaging views without blocking Add to Cart or links.
+- [ ] **In-Place Cart & Remove Controls**: Add to Cart immediately shows In Cart state, quantity stepper, and a working Remove button calling `removeLine(variantId)`.
+- [ ] **Best Sellers 50/50 Showcase**: 50% packaging visual with front/back toggle + 50% product details, pricing, Add to Cart, and Remove controls.
+- [ ] **Open / Reveal Section**: Mid-page position, interactive unboxing, non-blocking flower petal shower, thank-you emoji badge feedback.
+- [ ] **Why TMUG Section**: Warm ivory/gold/coral palette, prominent packshot, botanical watermark, zero green UI.
 - [ ] **Cart Flow**: Cart opens, increments/decrements quantity, calculates subtotals, and persists across browser refreshes via `tmug-cart-v1`.
 - [ ] **Promo Codes**: Coupon `TMUG10` applies 10% discount in cart and updates final payable sum.
 - [ ] **Checkout via WhatsApp**: "Order on WhatsApp" correctly launches WhatsApp with pre-filled multi-line order details to `+91 81307 07344`.
-- [ ] **Navigation & Menus**: Desktop mega-dropdown and mobile navigation drawer open and close smoothly.
+- [ ] **Navigation & Menus**: Sticky header in warm ivory/white with charcoal typography, dropdowns, and mobile navigation drawer.
 - [ ] **Amazon CTA**: Official store link correctly navigates to the verified Amazon Brand Store page.
-- [ ] **Mobile Responsiveness**: Complete visual audit across 360px, 375px, 390px, 414px, and 430px screens.
+- [ ] **Mobile Responsiveness**: Complete visual audit across 360px, 375px, 390px, 414px, and 430px screens with zero horizontal overflow.
 - [ ] **Desktop Layout**: Balanced presentation and centered grid alignment across 1280px, 1440px, and 1920px viewports.
 - [ ] **Console Errors**: Browser DevTools console must remain free of JavaScript exceptions, 404 image errors, or hydration warnings.
-- [ ] **No Broken Images**: Every product image in `/public/products/` and `/public/hero/` loads with 200 HTTP status.
+- [ ] **No Broken Images**: Every product image in `/public/products/`, `/public/banners/`, and `/public/hero/` loads with 200 HTTP status.
 - [ ] **No Broken Links**: All internal anchors (`#shop`, `#collections`, `#why`, `#about`) and legal routes resolve properly.
+
 
 ---
 

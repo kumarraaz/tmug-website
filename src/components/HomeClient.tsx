@@ -5,87 +5,75 @@ import Header from "./Header";
 import Footer from "./Footer";
 import SiteOverlays from "./SiteOverlays";
 
-// 14-Section Homepage Sequence
-import Hero from "./Hero"; // 03. Hero Experience
+// TMUG Homepage Sequence (Hero → Collections → Best Sellers → Open/Reveal → Why TMUG → Brand/Story)
+import Hero from "./Hero"; // 03. Hero Banner Slider (Storefront Campaign Window)
 import TrustStrip from "./TrustStrip"; // 04. Trust / Highlights Strip
-import ShopCollections from "./ShopCollections"; // 05. Shop Our Collections (Product Slider)
-import BrandProof from "./BrandProof"; // 06. Brand / Social Proof
-import WhyTmug from "./WhyTmug"; // 08. Why TMUG?
-import MadeWithRealTea from "./MadeWithRealTea"; // 09. Made With Real Tea / Ingredients
-import TeaStory from "./TeaStory"; // 10. Product / Tea Story
-import LifestyleGallery from "./LifestyleGallery"; // 11. Lifestyle / Collaboration Gallery
-import AvailableInStores from "./AvailableInStores"; // 12. Available Where You Shop
+import ShopCollections from "./ShopCollections"; // 05. Shop by Product / Collections (Product Slider)
+import BestSellers from "./BestSellers"; // 06. Best Sellers & Half-Screen 50/50 Showcase
+import OpenRevealSection from "./OpenRevealSection"; // 07. Open / Reveal Experience (3D Box & Flower Shower)
+import WhyTmug from "./WhyTmug"; // 08. Why TMUG (Redesigned, large packaging, flower watermark)
+import MadeWithRealTea from "./MadeWithRealTea"; // 09. Made With Real Tea / Ingredients Transparency
+import TeaStory from "./TeaStory"; // 10. Tea Story / Daily Rituals
+import LifestyleGallery from "./LifestyleGallery"; // 11. Lifestyle Gallery ("Made for moments that linger")
+import BrandProof from "./BrandProof"; // 12. Honest Quality & Community Proof
 import CustomerLove from "./CustomerLove"; // 13. Customer Love / Reviews
-import FinalCta from "./FinalCta"; // 14. Newsletter / Final CTA
+import AvailableInStores from "./AvailableInStores"; // 14. Available Where You Shop (Amazon & WhatsApp)
+import FinalCta from "./FinalCta"; // 15. Final Conversion CTA
 
-/**
- * TMUG Homepage Visual Redesign
- *
- * Sequence:
- * 01. Announcement / top strip
- * 02. Premium navigation
- * 03. HERO EXPERIENCE (3D Discovery Box, Kulhad Cup & Steaming Leaves, Surrounding Tea packs)
- * 04. Trust / highlights strip (Sticker icons)
- * 05. FEATURED PRODUCT SLIDER (Meet Your New Favourite Tea)
- * 06. SHOP OUR COLLECTIONS (Interactive tabs, full packshots)
- * 07. BRAND / PRESS / SOCIAL PROOF (Tea worth talking about)
- * 08. WHY TMUG? (5-Pack lineup arc & core pillars)
- * 09. MADE WITH REAL TEA / INGREDIENTS (Verified botanical layers)
- * 10. PRODUCT / TEA STORY (More than just a cup of tea - rituals)
- * 11. LIFESTYLE / COLLABORATION GALLERY (Editorial collage)
- * 12. AVAILABLE WHERE YOU SHOP (Official Amazon Brand Store + WhatsApp Concierge)
- * 13. REVIEWS / CUSTOMER LOVE (Real feedback preview & direct chat)
- * 14. FINAL CTA (Ready to make tea more fun?)
- * 15. Footer (Complete links & official store)
- */
 export default function HomeClient() {
   return (
     <>
-      {/* 01. Announcement / top strip */}
+      {/* 01. Announcement / top promotional strip */}
       <AnnouncementBar />
 
-      {/* 02. Premium navigation */}
+      {/* 02. Premium navigation (Warm Ivory / White, Zero Green UI) */}
       <Header />
 
       <main className="relative">
-        {/* 03. Hero Experience */}
+        {/* 03. HERO BANNER SLIDER (Large Promotional Storefront Campaign Window) */}
         <Hero />
 
-        {/* 04. Trust / highlights strip */}
+        {/* 04. Value-prop highlights strip */}
         <TrustStrip />
 
-        {/* 05. Shop our collections (Interactive Product Slider) */}
+        {/* 05. SHOP BY PRODUCT / COLLECTIONS (Horizontal Product Carousel) */}
         <ShopCollections />
 
-        {/* 07. Brand / Social proof */}
-        <BrandProof />
+        {/* 06. BEST SELLERS & HALF-SCREEN 50/50 EXPERIENCE */}
+        <BestSellers />
 
-        {/* 08. Why TMUG? */}
+        {/* 07. OPEN / REVEAL EXPERIENCE (3D Box, Flower Shower, Emoji Feedback) */}
+        <OpenRevealSection />
+
+        {/* 08. WHY TMUG? (Redesigned, large packs, flower watermark, zero green UI) */}
         <WhyTmug />
 
-        {/* 09. Made with real tea / real ingredients */}
+        {/* 09. Made with real tea / real botanical ingredients */}
         <MadeWithRealTea />
 
-        {/* 10. Product / Tea story */}
+        {/* 10. Product / Tea story rituals */}
         <TeaStory />
 
-        {/* 11. Lifestyle / Collaboration gallery */}
+        {/* 11. Lifestyle Gallery ("Made for moments that linger") */}
         <LifestyleGallery />
 
-        {/* 12. Available where you shop */}
-        <AvailableInStores />
+        {/* 12. Honest Quality / Social proof */}
+        <BrandProof />
 
         {/* 13. Customer love / reviews */}
         <CustomerLove />
 
-        {/* 14. Final conversion CTA */}
+        {/* 14. Available where you shop (Amazon Brand Store & WhatsApp Concierge) */}
+        <AvailableInStores />
+
+        {/* 15. Final conversion CTA */}
         <FinalCta />
       </main>
 
-      {/* 15. Footer */}
+      {/* 16. Footer */}
       <Footer />
 
-      {/* Existing functional overlays: Cart, Search, Promo, WhatsApp */}
+      {/* 17. Existing functional overlays: CartDrawer, SearchOverlay, PromoModal, WhatsAppButton */}
       <SiteOverlays />
     </>
   );

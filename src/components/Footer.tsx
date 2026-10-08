@@ -9,7 +9,7 @@ import FloatingLogo from "./motion/FloatingLogo";
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="relative overflow-hidden bg-tea-ink text-cream/80">
+    <footer className="relative overflow-hidden bg-charcoal text-warm-ivory/80">
       <FloatingLogo opacity={0.04} size="90%" className="opacity-100" />
       <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12">
         <div className="grid gap-8 md:grid-cols-[1.4fr_1fr_1fr_1fr]">

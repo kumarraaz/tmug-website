@@ -16,39 +16,50 @@ TMUG is a premium Indian D2C tea ecommerce experience focused on product discove
 
 ---
 
-## Homepage Requirements
+## Homepage Requirements (Homepage V2)
 
 The TMUG homepage follows a structured, conversion-driven narrative sequence:
 
-1. **Announcement Bar** (`AnnouncementBar` in `Header.tsx`): Sitewide promotional ribbon featuring active discount code (`TMUG10` for 10% off) and free-delivery threshold alerts.
-2. **Premium Navigation** (`Header.tsx`): Sticky blurred header with brand logo, dropdown collection links, quick search trigger, and cart drawer badge.
-3. **Hero** (`Hero.tsx`): Interactive 3D collector's showcase featuring the TMUG tea box, steaming kulhad cup, floating botanical leaves, and immediate call to action.
-4. **Trust Strip** (`TrustStrip.tsx`): Value-prop marquee highlighting 100% natural whole leaves, no artificial essences, fast dispatch, and direct sourcing.
-5. **Featured Products**: Highlighted spotlight teas for first-time visitors seeking signature blends.
-6. **Shop Our Collections** (`ShopCollections.tsx`): Interactive multi-tab horizontal product carousel (All Teas, Flower Teas, Chai, Green Tea, Herbal & Fresh, Bestsellers) with full packaging cards and variant selectors.
-7. **Social Proof** (`BrandProof.tsx`): Community counters, media quotes, and customer enthusiasm without fabricated credentials.
-8. **Why TMUG** (`WhyTmug.tsx`): Brand philosophy contrasting generic dusty CTC bags with whole-leaf, pesticide-free, small-batch tea.
-9. **Made With Real Tea** (`MadeWithRealTea.tsx`): Transparent ingredient showcase detailing unadulterated botanicals (Aparajita, Babune ke phool, Gudhal, Nimbu ghas, Darjeeling whole leaf).
+1. **Announcement Bar** (`AnnouncementBar` in `Header.tsx`): Sitewide promotional ribbon featuring active discount code (`TMUG10` for 10% off) and free-delivery threshold alerts. Styled in warm ivory and tea gold, zero green UI.
+2. **Premium Navigation** (`Header.tsx`): Sticky blurred header in warm ivory/white with charcoal typography, gold accents, dropdown collection links, live search trigger, and cart drawer counter badge. Zero green UI.
+3. **Hero Banner Slider** (`Hero.tsx`): Storefront promotional banner slider showcasing all 6 authentic campaign artworks (`public/banners/`) with smooth crossfade motion, autoplay, pause on hover/interaction, previous/next controls, pagination pills, `01 / 06` counter, touch swipe gestures, and verified product/collection click destinations.
+4. **Trust Strip** (`TrustStrip.tsx`): Four-pillar botanical value-prop ribbon highlighting 100% whole leaves, zero synthetic essences, rapid dispatch, and direct estate sourcing.
+5. **Shop by Product / Collections** (`ShopCollections.tsx`): Interactive multi-tab horizontal product slider across curated tea collections with smooth touch scrolling, Add to Cart buttons, In Cart quantity steppers, and direct Remove options.
+6. **Best Sellers Showcase** (`BestSellers.tsx`): Premium 50/50 split half-screen showcase featuring verified best sellers (`butterfly-pea`, `hibiscus`, `darjeeling-green`, `gold-tea`). Left half presents 50% large product visual with front/back packaging view toggle; right half presents title, tasting notes, pricing, variant selector, quantity controls, Add to Cart, and Remove action. Accompanied by a responsive product card rail.
+7. **Open / Reveal Experience** (`OpenRevealSection.tsx`): Repositioned to the middle of the homepage. Features realistic unboxing of the TMUG tea box, multi-ritual switcher, subtle non-blocking botanical flower petal shower, thank-you emoji feedback (`🍵`, `✨`, `🙏`), and direct add-to-cart action.
+8. **Why TMUG** (`WhyTmug.tsx`): Redesigned campaign composition in warm ivory, gold, and coral tones with prominent authentic packaging packshots, botanical watermarks, and zero green UI.
+9. **Made With Real Tea** (`MadeWithRealTea.tsx`): Transparent ingredient showcase detailing unadulterated botanicals (Aparajita, Babune ke phool, Gudhal, Nimbu ghas, Darjeeling whole leaf) in warm surface styling.
 10. **Tea Story** (`TeaStory.tsx`): Daily ritual timeline (Morning Kadak Kickstart, Afternoon Violet Bloom, Evening Himalayan Reset, Nighttime Chamomile Drift).
-11. **Lifestyle / Collaboration Gallery** (`LifestyleGallery.tsx`): Editorial poster section (*"Made for moments that linger."*) using playful typography, organic stickers, and decorative SVG motifs instead of oversized photos.
-12. **Available Where You Shop** (`AvailableInStores.tsx`): Verified retail links — direct brand store, WhatsApp Concierge, and the confirmed Amazon Brand Store.
-13. **Reviews** (`CustomerLove.tsx`): Genuine customer feedback and tea lover testimonials.
-14. **Final CTA** (`FinalCta.tsx`): High-converting closing invitation with newsletter perks and instant shop navigation.
-15. **Footer** (`Footer.tsx`): Complete legal navigation, FSSAI compliance notice, contact information, social links, and copyright statement.
+11. **Lifestyle Gallery** (`LifestyleGallery.tsx`): Editorial poster section (*"Made for moments that linger."*) using playful typography, organic stickers, and decorative SVG motifs.
+12. **Brand Proof** (`BrandProof.tsx`): Community counters, media quotes, and customer enthusiasm without fabricated credentials.
+13. **Customer Love** (`CustomerLove.tsx`): Genuine customer feedback and tea lover testimonials.
+14. **Available Where You Shop** (`AvailableInStores.tsx`): Verified retail links — direct brand store, WhatsApp Concierge, and the confirmed Amazon Brand Store.
+15. **Final CTA** (`FinalCta.tsx`): High-converting closing invitation with newsletter perks and instant shop navigation.
+16. **Footer** (`Footer.tsx`): Complete legal navigation, FSSAI compliance notice, contact information, social links, and copyright statement in warm charcoal styling.
 
 ---
 
-## Critical UX Requirements
+## Critical UX & Interaction Requirements
 
+- **Strict Zero Green UI Rule**: Green is strictly forbidden as an active UI color (navbar, buttons, section backgrounds, cards, borders, active states, hover states, badges, gradients). Authentic photographic greens within verified product packaging, tea leaves, and tea garden photography remain untouched.
+- **Product Reveal Interaction**:
+  - Desktop hover triggers an organic wavy liquid motion with depth.
+  - Soft light pink (`#F7B6C8`) and coral (`#F26B5E`) Gen-Z halo glow wraps the product during hover.
+  - Authentic back packshot reveals smoothly without fabricating unverified back labels.
+  - Mobile tap toggles the front and back views safely without blocking navigation or product buttons.
+- **In-Place Cart & Remove Controls**:
+  - Before adding: prominent `Add to Cart` button.
+  - After adding: immediate `In Cart` visual acknowledgement, quantity stepper (`−` qty `+`), and a direct `Remove` button calling `removeLine(variantId)`.
+  - Customer-facing "Delete/Remove" operates strictly on the customer's active shopping cart; catalog/database records are never destructively modified.
 - **Product packaging must never be cropped**: Real TMUG pouch and jar packshots must display their complete silhouette, label, weight indication, and FSSAI seal without being clipped by cards or overflow masks.
-- **Shop Our Collections must be a real slider/carousel**: Smooth horizontal scrolling with desktop arrow controls, touch swipe on mobile, and boundary scroll indicators (`canScrollLeft` / `canScrollRight`).
-- **Category tabs must work**: Instant filtering across *All Teas*, *Flower Teas*, *Chai*, *Green Tea*, *Herbal & Fresh*, and *Bestsellers* with scroll reset.
+- **Shop Collections must be a real slider**: Smooth horizontal scrolling with desktop arrow controls, touch swipe on mobile, and boundary scroll indicators.
 - **Mobile must support swipe**: Natural drag/swipe gestures with CSS snap scrolling and hidden default scrollbars for an app-like experience.
 - **No horizontal overflow**: Strict `overflow-x: clip` on the body and containment on all absolute/floating animated elements to eliminate side-scrolling on 360px+ screens.
 - **Existing cart must continue working**: `ShopProvider` local storage hydration (`tmug-cart-v1`), fly-to-cart animation, line item quantity manipulation, and coupon discount calculation.
 - **Existing checkout must continue working**: Seamless transfer of cart line items into WhatsApp order links (`whatsappOrderLink`) pre-filled with items, quantities, and coupon totals.
-- **Existing navigation must continue working**: Mobile drawer menu, desktop collection mega-dropdown, and anchor jumps to `#shop`, `#collections`, `#why`, and `#about`.
+- **Existing navigation must continue working**: Mobile drawer menu, desktop collection dropdowns, and anchor jumps.
 - **Existing WhatsApp integration must continue working**: Global floating button and contextual product order links mapped to `+91 81307 07344`.
+
 
 ---
 

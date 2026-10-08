@@ -17,19 +17,19 @@ const INGREDIENTS = [
     name: "Whole Chamomile Flowers",
     role: "Gentle Evening Calm",
     tea: "Babune ke phool with sweet apple-blossom notes for winding down without caffeine.",
-    color: "#E8A93D",
+    color: "#D9A441",
   },
   {
     name: "Ruby Hibiscus Petals",
     role: "Tart & Berry-Bright",
     tea: "Whole sun-dried hibiscus calyces brewing brilliant crimson — exceptional hot or iced.",
-    color: "#D84F6D",
+    color: "#F26B5E",
   },
   {
     name: "Darjeeling Long Leaf",
     role: "Single-Estate Green Tea",
     tea: "Delicate spring harvest leaves giving a clean, floral, antioxidant-rich amber cup.",
-    color: "#2E7D4F",
+    color: "#6C4AB6",
   },
 ];
 
@@ -37,7 +37,7 @@ export default function MadeWithRealTea() {
   return (
     <section
       aria-label="Made with real tea"
-      className="relative overflow-hidden bg-cream py-16 sm:py-24"
+      className="relative overflow-hidden bg-warm-ivory py-16 sm:py-24"
     >
       {/* Background radial aura & stickers */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -57,14 +57,14 @@ export default function MadeWithRealTea() {
           {/* Left Column: Editorial Copy & Ingredients Pills */}
           <div>
             <Reveal>
-              <span className="inline-flex items-center gap-2 rounded-full border border-tea-green/20 bg-white/80 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-tea-green shadow-xs">
-                <span className="h-2 w-2 rounded-full bg-gold" />
+              <span className="inline-flex items-center gap-2 rounded-full border border-tea-gold/30 bg-warm-surface px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-charcoal shadow-xs">
+                <span className="h-2 w-2 rounded-full bg-coral" />
                 Pure Botanicals
               </span>
-              <h2 className="text-section mt-4 font-display font-extrabold text-tea-ink">
-                Made with <span className="text-tea-green">real tea.</span>
+              <h2 className="text-section mt-4 font-display font-black text-charcoal">
+                Made with <span className="text-coral">real tea.</span>
               </h2>
-              <p className="mt-4 text-base sm:text-lg leading-relaxed text-ink-soft">
+              <p className="mt-4 text-base sm:text-lg leading-relaxed text-charcoal/75">
                 From vibrant butterfly pea flowers to fragrant hibiscus and carefully selected
                 long leaves, TMUG brings distinctive Indian botanical experiences to your everyday cup.
               </p>
@@ -79,7 +79,7 @@ export default function MadeWithRealTea() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.45, delay: i * 0.08 }}
-                  className="rounded-2xl border border-ink/8 bg-white/90 p-4 shadow-xs transition-all duration-300 hover:border-tea-green/30 hover:shadow-md"
+                  className="rounded-2xl border border-charcoal/10 bg-white p-4 shadow-xs transition-all duration-300 hover:border-tea-gold hover:shadow-md"
                 >
                   <div className="flex items-center gap-3">
                     <span
@@ -87,10 +87,10 @@ export default function MadeWithRealTea() {
                       style={{ backgroundColor: item.color }}
                     />
                     <div className="min-w-0">
-                      <p className="font-display text-[15px] font-bold text-tea-ink">
+                      <p className="font-display text-[15px] font-bold text-charcoal">
                         {item.name}
                       </p>
-                      <p className="text-xs text-ink-soft mt-0.5 leading-relaxed">
+                      <p className="text-xs text-charcoal/70 mt-0.5 leading-relaxed">
                         {item.tea}
                       </p>
                     </div>
@@ -101,8 +101,8 @@ export default function MadeWithRealTea() {
 
             <div className="mt-8">
               <Link
-                href="#shop"
-                className="inline-flex items-center gap-2 rounded-full bg-tea-green px-8 py-3.5 text-sm font-extrabold text-cream shadow-[0_14px_30px_-10px_rgba(23,107,77,0.5)] transition-all duration-200 hover:bg-tea-deep hover:scale-105 active:scale-95"
+                href="/#shop"
+                className="inline-flex items-center gap-2 rounded-full bg-charcoal px-8 py-3.5 text-sm font-extrabold text-white shadow-md transition-all duration-200 hover:bg-tea-gold hover:text-charcoal hover:scale-105 active:scale-95"
               >
                 Taste the Difference <IconArrowRight className="h-4 w-4" />
               </Link>
@@ -112,17 +112,17 @@ export default function MadeWithRealTea() {
           {/* Right Column: Organic Layered Botanical & Product Composition */}
           <div className="relative mx-auto w-full max-w-[460px] sm:max-w-[520px] aspect-square flex items-center justify-center">
             {/* Background Organic Sunburst & Circular Waves */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#EAD9BA]/50 via-[#F3E8CF]/80 to-[#FFF8EA] shadow-xl border border-gold/25" />
-            
+            <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-warm-surface via-white to-warm-surface shadow-xl border border-tea-gold/25" />
+
             {/* Radial decorative rings */}
-            <div className="absolute inset-6 rounded-full border border-dashed border-[#D8A62A]/40 animate-[spin_60s_linear_infinite]" />
-            <div className="absolute inset-16 rounded-full border border-[#176B4D]/15" />
+            <div className="absolute inset-6 rounded-full border border-dashed border-tea-gold/40 animate-[spin_60s_linear_infinite]" />
+            <div className="absolute inset-16 rounded-full border border-charcoal/10" />
 
             {/* Central Featured Product Composition */}
             <motion.div
               animate={{ y: [0, -8, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="relative z-10 w-[68%] aspect-[4/5] drop-shadow-[0_24px_45px_rgba(8,42,32,0.3)]"
+              className="relative z-10 w-[68%] aspect-[4/5] drop-shadow-[0_24px_45px_rgba(39,35,41,0.25)]"
             >
               <Image
                 src="/hero/butterfly-pea-100g-pouch-front.png"
@@ -138,7 +138,7 @@ export default function MadeWithRealTea() {
             <motion.div
               animate={{ y: [0, 8, 0], rotate: [-6, -2, -6] }}
               transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-              className="absolute left-[2%] bottom-[8%] z-20 w-[34%] aspect-square drop-shadow-[0_16px_28px_rgba(8,42,32,0.25)]"
+              className="absolute left-[2%] bottom-[8%] z-20 w-[34%] aspect-square drop-shadow-[0_16px_28px_rgba(39,35,41,0.2)]"
             >
               <Image
                 src="/hero/hibiscus-50g-jar-front.png"
@@ -153,7 +153,7 @@ export default function MadeWithRealTea() {
             <motion.div
               animate={{ y: [0, -6, 0], rotate: [6, 10, 6] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute right-[2%] top-[10%] z-20 w-[32%] aspect-square drop-shadow-[0_16px_28px_rgba(8,42,32,0.25)]"
+              className="absolute right-[2%] top-[10%] z-20 w-[32%] aspect-square drop-shadow-[0_16px_28px_rgba(39,35,41,0.2)]"
             >
               <Image
                 src="/hero/chamomile-50g-jar-front.png"
@@ -166,10 +166,10 @@ export default function MadeWithRealTea() {
 
             {/* Stamp Badge Overlay */}
             <div className="absolute right-[6%] bottom-[12%] z-30">
-              <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full border-2 border-[#D8A62A] bg-gradient-to-br from-[#0B3D2E] to-[#051F17] p-2 flex flex-col items-center justify-center text-center shadow-lg">
-                <span className="text-[7px] font-black uppercase tracking-widest text-[#EFC65E]">100%</span>
+              <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full border-2 border-tea-gold bg-gradient-to-br from-plum to-charcoal p-2 flex flex-col items-center justify-center text-center shadow-lg">
+                <span className="text-[7px] font-black uppercase tracking-widest text-tea-gold">100%</span>
                 <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-tight text-white leading-none">PURE</span>
-                <span className="text-[6px] font-bold text-cream/75">BOTANICALS</span>
+                <span className="text-[6px] font-bold text-warm-ivory/80">BOTANICALS</span>
               </div>
             </div>
           </div>
