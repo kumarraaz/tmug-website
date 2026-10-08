@@ -1,0 +1,282 @@
+# TMUG — Technical Architecture
+
+This document outlines the authentic system architecture, technology stack, directory organization, state management, and component hierarchy of the TMUG web platform.
+
+---
+
+## Technology Stack
+
+The application is built on a modern, high-performance web stack:
+
+| Layer | Technology | Version | Purpose |
+| :--- | :--- | :--- | :--- |
+| **Framework** | Next.js (App Router) | `16.3.8` | Server-side rendering, static generation, file-based routing |
+| **Core UI Library** | React | `19.2.8` | Component rendering, concurrent UI transitions |
+| **Language** | TypeScript | `^5.0.0` | Strict type safety across product models, store, and props |
+| **Styling** | Tailwind CSS v4 | `^4.0.0` | Utility-first CSS via `@tailwindcss/postcss` and `@theme` tokens |
+| **Animation Engine** | Framer Motion | `^14.0.0` | Orchestrated UI motion, spring physics, and layout animations |
+| **Fonts** | Next Google Fonts | Built-in | `Bricolage Grotesque` (display) and `DM Sans` (body) |
+| **Package Manager** | npm | `10.x+` | Dependency lifecycle management |
+| **Deployment Target**| Vercel / Node.js | Next-native | Edge edge-caching, serverless route handlers, static asset CDN |
+
+---
+
+## System Directory Organization
+
+```
+tmug-website/
+├── public/                     # Static public assets served from root
+│   ├── assets/
+│   │   └── stickers/           # SVG botanical, badge, and doodle stickers
+│   ├── hero/                   # High-res transparent PNG product packshots for 3D stage
+│   ├── logo/                   # TMUG brand emblems and logomarks (tmug-logo.png)
+│   ├── products/               # Master catalog JPG images (front, back, FSSAI views)
+│   ├── favicon.ico
+│   ├── icon.svg
+│   └── og-cover.jpg            # Open Graph social sharing banner (1200x630)
+├── src/
+│   ├── app/                    # Next.js App Router routes & layout definitions
+│   │   ├── about/              # Brand origin & founder story
+│   │   ├── admin/seo/          # Admin SEO management console
+│   │   ├── api/admin/seo/      # REST API route handler for dynamic SEO updates
+│   │   ├── collections/        # Filterable collection browsing view
+│   │   ├── contact/            # Customer care & wholesale inquiry page
+│   │   ├── faq/                # Brewing, shipping & return questions
+│   │   ├── privacy/            # Legal privacy notice
+│   │   ├── products/           # Dynamic product detail pages ([slug])
+│   │   ├── terms/              # Terms & conditions
+│   │   ├── globals.css         # Global Tailwind v4 theme, keyframes, and utilities
+│   │   ├── layout.tsx          # Root layout, Google fonts, JSON-LD Schema, ShopProvider
+│   │   ├── page.tsx            # Main storefront entry point with ItemList schema
+│   │   ├── robots.ts           # Dynamic crawlers instruction file
+│   │   ├── sitemap.ts          # XML Sitemap generator for SEO
+│   │   └── template.tsx        # View transition page wrapper
+│   ├── components/             # Reusable UI components
+│   │   ├── cart/               # AddToCartButton, Toast notification system
+│   │   ├── motion/             # Framer Motion primitives (Reveal, FloatingLogo)
+│   │   ├── AnnouncementBar.tsx # (Exported from Header.tsx) Site announcement strip
+│   │   ├── AvailableInStores.tsx# Verified retail and marketplace channels
+│   │   ├── BrandProof.tsx      # Social proof, community metrics, press citations
+│   │   ├── CartDrawer.tsx      # Fixed portal slide-over cart & WhatsApp checkout
+│   │   ├── CustomerLove.tsx    # Customer reviews and testimonials
+│   │   ├── FeaturedProduct.tsx # Single product feature spotlight
+│   │   ├── FeaturedSlider.tsx  # Product slider component (standalone/legacy)
+│   │   ├── FinalCta.tsx        # Closing conversion card & email newsletter
+│   │   ├── Footer.tsx          # Sitewide footer and legal disclosures
+│   │   ├── Header.tsx          # Global navigation, mobile menu, search trigger
+│   │   ├── Hero.tsx            # 3D interactive hero experience & product stage
+│   │   ├── HomeClient.tsx      # Client-side 14-section homepage orchestrator
+│   │   ├── icons.tsx           # SVG icon library (close, trash, search, bag, arrow, WhatsApp)
+│   │   ├── LifestyleGallery.tsx# "Made for moments that linger" sticker composition
+│   │   ├── MadeWithRealTea.tsx # Whole botanical ingredients transparency breakdown
+│   │   ├── ProductCard.tsx     # Standard product card with variant toggle & QuickView
+│   │   ├── ProductDetail.tsx   # Detailed product view (images, brew guide, ingredients)
+│   │   ├── ProductQuickView.tsx# Modal quick-view overlay for rapid browsing
+│   │   ├── SearchOverlay.tsx   # Live product search drawer with fuzzy matching
+│   │   ├── ShopCollections.tsx # Multi-tab product slider with horizontal swipe
+│   │   ├── SiteOverlays.tsx    # Container for CartDrawer, SearchOverlay, PromoModal
+│   │   ├── TeaStory.tsx        # Daily tea ritual timeline (Morning, Afternoon, Evening)
+│   │   ├── TrustStrip.tsx      # Four-pillar botanical trust and shipping badge marquee
+│   │   ├── WhatsAppButton.tsx  # Floating quick-chat concierge launcher
+│   │   └── WhyTmug.tsx         # Brand value proposition & whole-leaf manifesto
+│   ├── config/
+│   │   ├── seo.ts              # Default SEO meta definitions
+│   │   └── site.ts             # Central site configuration, URLs, promo codes, WhatsApp links
+│   ├── data/
+│   │   ├── collections.ts      # Collection definitions, navigation hierarchy, product relations
+│   │   ├── products.ts         # SINGLE SOURCE OF TRUTH for products, variants, and prices
+│   │   └── reviews.ts          # Verified review entries
+│   ├── lib/
+│   │   ├── format.ts           # INR currency formatter (formatINR, formatMoney)
+│   │   ├── seo-store.ts        # Server-side persistent SEO settings cache
+│   │   └── store.tsx           # React Context shop state (cart, promo codes, fly animation)
+│   └── types/
+│       └── index.ts            # TypeScript interfaces for Product, Variant, CartLine, Collection
+```
+
+---
+
+## Homepage Component Architecture & Boundaries
+
+The storefront homepage (`src/app/page.tsx` rendering `src/components/HomeClient.tsx`) coordinates 14 distinct visual and architectural layers:
+
+```mermaid
+graph TD
+    A[RootLayout: layout.tsx] --> B[Home: page.tsx]
+    B --> C[HomeClient.tsx]
+    C --> D1[01. AnnouncementBar - Header.tsx]
+    C --> D2[02. Header & Nav - Header.tsx]
+    C --> D3[03. Hero Experience - Hero.tsx]
+    C --> D4[04. TrustStrip - TrustStrip.tsx]
+    C --> D5[05. ShopCollections Slider - ShopCollections.tsx]
+    C --> D6[06. BrandProof - BrandProof.tsx]
+    C --> D7[07. WhyTmug - WhyTmug.tsx]
+    C --> D8[08. MadeWithRealTea - MadeWithRealTea.tsx]
+    C --> D9[09. TeaStory - TeaStory.tsx]
+    C --> D10[10. LifestyleGallery - LifestyleGallery.tsx]
+    C --> D11[11. AvailableInStores - AvailableInStores.tsx]
+    C --> D12[12. CustomerLove / Reviews - CustomerLove.tsx]
+    C --> D13[13. FinalCta - FinalCta.tsx]
+    C --> D14[14. Footer - Footer.tsx]
+    C --> D15[15. SiteOverlays - SiteOverlays.tsx]
+    D15 --> E1[CartDrawer.tsx]
+    D15 --> E2[SearchOverlay.tsx]
+    D15 --> E3[PromoModal.tsx]
+    D15 --> E4[WhatsAppButton.tsx]
+```
+
+### Component Boundaries & Real Paths:
+1. **AnnouncementBar**: `src/components/Header.tsx` (top promotional strip)
+2. **Header**: `src/components/Header.tsx` (sticky navigation, collection mega-menus, search & bag icons)
+3. **Hero**: `src/components/Hero.tsx` (interactive 3D box, steaming kulhad cup, botanical layers)
+4. **TrustStrip**: `src/components/TrustStrip.tsx` (4-pillar marquee strip)
+5. **ShopCollections**: `src/components/ShopCollections.tsx` (category-tabbed horizontal product slider)
+6. **BrandProof**: `src/components/BrandProof.tsx` (social validation & customer numbers)
+7. **WhyTMUG**: `src/components/WhyTmug.tsx` (brand differentiators & whole-leaf arc)
+8. **MadeWithRealTea**: `src/components/MadeWithRealTea.tsx` (real botanical ingredients inspection)
+9. **TeaStory**: `src/components/TeaStory.tsx` (interactive time-of-day tea rituals)
+10. **LifestyleGallery**: `src/components/LifestyleGallery.tsx` ("Made for moments that linger" sticker composition)
+11. **AvailableInStores**: `src/components/AvailableInStores.tsx` (official Amazon store & WhatsApp store)
+12. **Reviews**: `src/components/CustomerLove.tsx` (customer feedback & rating highlights)
+13. **FinalCTA**: `src/components/FinalCta.tsx` (closing newsletter & shop anchor)
+14. **Footer**: `src/components/Footer.tsx` (comprehensive links, copyright & FSSAI info)
+15. **FeaturedSlider** (`src/components/FeaturedSlider.tsx`): Preserved standalone component for standalone featured rails.
+
+---
+
+## Product Data Architecture
+
+The single source of truth for the entire product catalog is `src/data/products.ts`. All interfaces are defined in `src/types/index.ts`:
+
+```typescript
+export interface ProductImage {
+  src: string;
+  alt: string;
+  kind: "front" | "back" | "fssai";
+}
+
+export interface ProductVariant {
+  id: string;        // e.g. "butterfly-pea-50g-jar"
+  sku: string;       // e.g. "TMUG-BUTTERFLY-PEA-50G-JAR"
+  label: string;     // e.g. "50g Jar"
+  weight: string;    // e.g. "50g"
+  pack: "jar" | "pouch";
+  price: number;     // Genuine selling price in INR (e.g. 99)
+  images: ProductImage[];
+  inStock: boolean;
+}
+
+export interface Product {
+  id: string;
+  slug: string;
+  name: string;
+  tagline: string;
+  category: "herbal-flower" | "chai" | "green-tea";
+  description: string;
+  brewGuide: string;
+  ingredients: string;
+  profile: string;
+  accent: string;
+  accentSoft: string;
+  featured?: boolean;
+  seoTitle: string;
+  metaDescription: string;
+  variants: ProductVariant[];
+}
+```
+
+### Active Catalog Summary:
+- **Butterfly Pea Flower Tea** (`butterfly-pea`): 50g Jar (₹99), 100g Pouch (₹189)
+- **Chamomile Flower Tea** (`chamomile`): 50g Jar (₹129), 100g Pouch (₹209)
+- **Hibiscus Flower Tea** (`hibiscus`): 50g Jar (₹119), 100g Pouch (₹199)
+- **Lemongrass Tea** (`lemongrass`): 50g Jar (₹99), 100g Pouch (₹199)
+- **Darjeeling Green Tea** (`darjeeling-green`): 100g Jar (₹149)
+- **TMUG Premium Tea** (`premium-tea`): 250g Pouch (₹299), 500g Pouch (₹449)
+- **TMUG Gold Tea** (`gold-tea`): 250g Pouch (₹399), 500g Pouch (₹749)
+
+---
+
+## Slider & Carousel Architecture
+
+The primary carousel on the homepage is `ShopCollections.tsx`:
+1. **Category Tabs State**: `activeTab` filters `PRODUCTS` dynamically into the active list.
+2. **Scroll Container**: Powered by a native horizontal scrolling container with CSS scroll snap (`scroll-snap-type: x mandatory`).
+3. **Scroll Bounds Detection**: `checkScrollBounds` tracks `scrollLeft`, `scrollWidth`, and `clientWidth` to toggle arrow states (`canScrollLeft`, `canScrollRight`).
+4. **Desktop Navigation**: Clicking left/right scroll buttons computes item width (`clientWidth * 0.75`) and performs smooth scrolling (`behavior: "smooth"`).
+5. **Mobile Swipe**: Native touch deceleration with hidden scrollbars (`no-scrollbar`) ensures zero horizontal page blowout.
+6. **No Cropping**: Each `ProductCard` utilizes `h-[260px]` to `h-[300px]` with `object-contain` for complete packaging visibility.
+
+---
+
+## State Management & Cart Architecture
+
+State is centralized in `src/lib/store.tsx` via `ShopProvider`:
+- **Cart Storage**: Hydrated lazily from `localStorage.getItem("tmug-cart-v1")`.
+- **Coupon Handling**: Hydrated from `localStorage.getItem("tmug-coupon-v1")`. Validates against `siteConfig.promo` (Code: `TMUG10`, 10% discount).
+- **Fly-to-Cart Animation**: `triggerFly` coordinates coordinates `(fromX, fromY)` to header bag `(toX, toY)` with Framer Motion spring physics.
+- **Cart Drawer (`CartDrawer.tsx`)**: Rendered using `createPortal(children, document.body)` to avoid clipping inside parent stacking contexts. Adapts to a bottom sheet on mobile (`max-width: 639px`) and a slide-over panel on desktop.
+
+---
+
+## Checkout & WhatsApp Architecture
+
+TMUG features a high-converting **direct-to-WhatsApp concierge checkout**:
+1. When a user clicks **"Order on WhatsApp"** in `CartDrawer.tsx`, `whatsappOrderLink()` compiles:
+   - Formatted item list (Name, Variant, Qty, Unit Price).
+   - Subtotal in INR.
+   - Applied coupon discount breakdown (e.g. `TMUG10 — 10% off`).
+   - Final payable total.
+2. Link generates an encrypted URL to `https://wa.me/918130707344?text=...`.
+3. Customer confirms order directly with the TMUG fulfillment team.
+4. A secondary **"Checkout"** button displays a friendly notice that direct gateway payment is coming soon while WhatsApp is the active immediate checkout avenue.
+
+---
+
+## Asset Architecture
+
+All static assets reside under `/public/`:
+- `/public/products/`: 31 authentic product packaging JPG photographs covering front, back, and FSSAI views.
+- `/public/hero/`: 11 high-definition transparent PNG cutouts of jars and pouches for layered 3D scenes.
+- `/public/assets/stickers/`: Handcrafted SVG brand stickers (`tea-leaf.svg`, `flower-doodle.svg`, `tea-cup.svg`, `sparkle.svg`, `arrow-doodle.svg`, `badge-kadak.svg`, `badge-natural.svg`).
+- `/public/logo/`: Official brand identity files (`tmug-logo.png`).
+
+---
+
+## Animation & Motion Architecture
+
+- **Framer Motion (`framer-motion`)**: Used for page reveals (`Reveal.tsx`), interactive floating cards, modal transitions, and cart line item exit animations.
+- **Tailwind Theme Keyframes**:
+  - `marquee`: Infinite linear 30s scroll for trust banners.
+  - `float`: Smooth 7s vertical idle float.
+  - `steam-rise`: Gentle steam rising effect above the kulhad cup.
+  - `cup-float`: 6s subtle grounding float.
+  - `bob`: 5s gentle product hovering.
+- **Accessibility**: Automatically disabled when user prefers reduced motion via `@media (prefers-reduced-motion: reduce)` in `globals.css` and `useReducedMotion()`.
+
+---
+
+## Responsive Architecture
+
+- Mobile-first approach utilizing Tailwind breakpoints:
+  - `sm`: 640px (Small tablets & large phones)
+  - `md`: 768px (Tablets)
+  - `lg`: 1024px (Laptops / Small desktops)
+  - `xl`: 1280px (Standard desktops)
+  - `2xl`: 1536px (Large monitors)
+- Fluid typography utilizing `clamp()` expressions:
+  - `.text-hero`: `clamp(2.625rem, 7vw, 4.5rem)`
+  - `.text-hero-xl`: `clamp(2.625rem, 9vw, 4.5rem)`
+  - `.text-section`: `clamp(1.875rem, 4vw, 3rem)`
+- `overflow-x: clip` on `body` guarantees zero side scrolling across all viewport widths.
+
+---
+
+## External Integrations
+
+1. **Amazon Brand Store**:
+   `https://www.amazon.in/stores/Tmug/page/4EF8CF60-EB4F-4438-B735-748BE0ED8162?lp_asin=B0H25XRHC5&ref_=ast_bln`
+2. **WhatsApp Business Concierge**:
+   `+91 81307 07344` (`https://wa.me/918130707344`)
+3. **Structured Data (Schema.org)**:
+   - `Organization` and `WebSite` JSON-LD in `layout.tsx`.
+   - `ItemList` with product offers in `page.tsx`.
