@@ -102,3 +102,29 @@ Under no circumstances should any developer or automated agent fabricate:
 5. **Premium design**: Editorial typography, warm cream canvas, refined botanical colors.
 6. **Playful interaction**: Tactile stickers, 3D hover effects, gentle tea steam animations.
 7. **Accessibility**: Clear contrast, screen-reader semantic HTML, full `prefers-reduced-motion` compliance.
+
+---
+
+## 9. Permanent Development & Context Control Protocol
+
+1. **Mandatory Documentation Review**: Before every single task, review all 9 living documentation files (`prd.md`, `architecture.md`, `rules.md`, `design.md`, `task.md`, `content.md`, `deployment.md`, `memory.md`, `stickers.md`) alongside active components, styling, product data, and git state.
+2. **Current State First**: Never rewrite working code to implement a new request. Modify the smallest appropriate part of the existing system.
+3. **Documentation Evolves with Code**: Whenever a change is implemented, update the corresponding documentation files as part of the exact same task.
+4. **Color Code Rule**: The latest user-approved color code is ALWAYS the current source of truth. When the user provides a new color code, update documentation and theme tokens immediately, remove conflicting older references, and record the change in `design.md` and `memory.md`. Never invent replacement colors without user approval.
+5. **User Priority**: The latest explicit user-approved decision wins.
+6. **Additive Memory**: Preserve valuable historical context; add new requirements without erasing foundational memory.
+7. **Plan Before Code**: Map impacts across components, responsive layouts, data, tokens, and SEO prior to writing code.
+8. **Brand & Asset Consistency**: Follow the current documented TMUG design system. Never introduce random styles. Reuse existing assets in `/public/`.
+9. **Truth & Product Integrity**: Never fabricate prices, products, reviews, certifications, or URLs.
+10. **Responsive & Quality Verification**: Test Desktop, Tablet, and Mobile (360px–430px). Verify builds and Git status.
+11. **Final Task Reporting Standard**: Every task response must report:
+    - What changed.
+    - Which components/files changed.
+    - Which documentation files were updated.
+    - Any new design/color/content decisions recorded.
+    - Validation/build result.
+    - Git status.
+    - Commit/push status if performed.
+    - Any remaining issue or user decision required.
+12. **Absolute Rule**: `READ → UNDERSTAND → CHECK CURRENT STATE → PLAN → IMPLEMENT → UPDATE DOCUMENTATION → VERIFY → GIT CHECK`.
+

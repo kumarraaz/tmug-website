@@ -87,3 +87,19 @@ TMUG’s personality must remain distinctly Indian, botanically authentic, edito
 - **Keep code maintainable**: Write clear TypeScript interfaces and modular components.
 - **Keep marketplace URLs configurable**: Reference `siteConfig.amazonStore` and `siteConfig.marketplaces` in `src/config/site.ts`. Never hardcode raw URLs in component bodies.
 - **Avoid duplicated business data**: Centralize promotional codes, contact phone numbers, and WhatsApp messages inside `src/config/site.ts`.
+
+---
+
+## 8. Permanent Context Control & Documentation Evolution Protocol
+
+1. **Mandatory Documentation Review**: Before starting ANY task, always inspect and understand the 9 official documentation files (`prd.md`, `architecture.md`, `rules.md`, `design.md`, `task.md`, `content.md`, `deployment.md`, `memory.md`, `stickers.md`), along with active source code, assets, and product data.
+2. **Current State First**: Never rewrite working functionality just to implement a new request. Modify the smallest appropriate part of the existing system.
+3. **Documentation Evolves with Code**: Whenever a website, design, content, UI, UX, styling, feature, product, or architectural change is implemented, update the relevant documentation files as part of the exact same task. Code and documentation must never drift apart.
+4. **Color Code Rule**: The latest user-approved color code is ALWAYS the current source of truth. When the user provides a new color code, update documentation and theme tokens immediately, remove conflicting older references, and record the change in `design.md` and `memory.md`. Never invent replacement colors without user approval.
+5. **User Instructions Have Priority**: The latest explicit user-approved decision wins. Compare new instructions with existing docs; refine additively or replace outdated rules cleanly.
+6. **Additive Memory & Change Logging**: Preserve valuable historical context while establishing current rules.
+7. **Plan Before Code**: Evaluate impacts on components, responsive views, product assets, and design tokens prior to writing code.
+8. **Brand & Asset Consistency**: Follow the documented TMUG design system. Never introduce random styles. Reuse existing assets in `/public/`.
+9. **Truth & Product Integrity**: Never fabricate prices, products, reviews, certifications, or URLs.
+10. **Responsive & Quality Verification**: Test Desktop, Tablet, and Mobile (360px–430px). Verify builds and Git status.
+11. **Absolute Workflow**: `READ → UNDERSTAND → CHECK CURRENT STATE → PLAN → IMPLEMENT → UPDATE DOCUMENTATION → VERIFY → GIT CHECK`.
