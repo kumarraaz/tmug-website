@@ -152,3 +152,22 @@ Before accepting any production deployment, execute the following audit checklis
 - [x] Modifying product prices, banner titles, or section visibility updates the live state.
 - [x] Reset to Defaults restores default system state with confirmation.
 
+---
+
+## 8. Website Visual Control Center Deployment & Persistence
+
+### Serverless & Edge Persistence Architecture
+- **Local & Container Runtimes**: Writes atomicity to `data/site-controls.json` with synchronous in-memory read-through cache.
+- **Vercel Serverless Functions**: Read/write calls to `data/site-controls.json` are wrapped with graceful in-memory fallback.
+- **Pluggable Cloud Adapter**: All persistence methods (`get`, `saveDraft`, `publish`, `rollback`, `resetDefaults`) in `src/lib/site-control-store.ts` are fully async. They can seamlessly bridge to Vercel KV, Redis, or Supabase without modifying application components.
+- **Environment Variables**:
+  - `ADMIN_EMAIL` and `ADMIN_PASSWORD` must be configured in Vercel Project Settings > Environment Variables for production admin access.
+
+### Production Release Verification
+- [x] Production build passes cleanly: `npm run build` exits with code 0 across all 28 routes.
+- [x] Admin API authentication validated via `scripts/verify-control-center.mjs`.
+- [x] Draft vs. Published isolation verified.
+- [x] History snapshot generation and one-click rollback verified.
+- [x] Dynamic CSS custom properties and Google Fonts load correctly on edge storefront.
+
+

@@ -4,14 +4,26 @@ import { motion } from "framer-motion";
 import { DEMO_REVIEWS, FEEDBACK_MESSAGE } from "@/data/reviews";
 import { siteConfig, whatsappLink } from "@/config/site";
 import { IconArrowRight, IconWhatsApp } from "./icons";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 /**
  * Customer Love — authentic review section with warm surface background.
  * Zero Green UI.
  */
 export default function CustomerLove() {
+  const { controls } = useSiteControls();
+  const cl = controls?.sectionsVisual?.customerLove;
+
   return (
-    <section aria-label="Customer love" className="relative overflow-hidden bg-plum py-8 sm:py-12 text-warm-ivory">
+    <section
+      aria-label="Customer love"
+      style={{
+        backgroundColor: cl?.bgColor || undefined,
+        paddingTop: cl?.paddingTop !== undefined ? `${cl.paddingTop}px` : undefined,
+        paddingBottom: cl?.paddingBottom !== undefined ? `${cl.paddingBottom}px` : undefined,
+      }}
+      className="relative overflow-hidden bg-plum py-8 sm:py-12 text-warm-ivory"
+    >
       {/* Background decorations */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="absolute -left-20 top-10 h-64 w-64 rounded-full bg-tea-gold/10 blur-3xl" />
@@ -35,11 +47,17 @@ export default function CustomerLove() {
             <span className="h-1.5 w-1.5 rounded-full bg-tea-gold" aria-hidden="true" />
             Customer love
           </span>
-          <h2 className="text-section font-display font-black text-balance text-warm-ivory">
-            Good tea deserves good company.
+          <h2
+            style={{ color: cl?.headingColor || undefined }}
+            className="text-section font-display font-black text-balance text-warm-ivory"
+          >
+            {cl?.heading || "Good tea deserves good company."}
           </h2>
-          <p className="text-xs sm:text-sm leading-relaxed text-warm-ivory/70">
-            Your next favourite cup starts here.
+          <p
+            style={{ color: cl?.textColor || undefined }}
+            className="text-xs sm:text-sm leading-relaxed text-warm-ivory/70"
+          >
+            {cl?.subheading || "Your next favourite cup starts here."}
           </p>
         </motion.div>
 

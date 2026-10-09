@@ -4,11 +4,21 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { siteConfig, whatsappLink } from "@/config/site";
 import { IconArrowRight, IconWhatsApp } from "./icons";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 export default function AvailableInStores() {
+  const { controls } = useSiteControls();
+  const ais = controls?.sectionsVisual?.availableInStores;
+  const amazonStoreUrl = ais?.amazonUrl || siteConfig.amazonStore;
+
   return (
     <section
       aria-label="Available where you shop"
+      style={{
+        backgroundColor: ais?.bgColor || undefined,
+        paddingTop: ais?.paddingTop !== undefined ? `${ais.paddingTop}px` : undefined,
+        paddingBottom: ais?.paddingBottom !== undefined ? `${ais.paddingBottom}px` : undefined,
+      }}
       className="relative overflow-hidden bg-warm-surface/50 py-8 sm:py-12"
     >
       {/* Background radial gradients */}
@@ -37,12 +47,17 @@ export default function AvailableInStores() {
             <span className="h-1.5 w-1.5 rounded-full bg-coral" />
             Everywhere You Need Us
           </span>
-          <h2 className="mt-2 font-display text-2xl font-black tracking-tight text-charcoal sm:text-3xl md:text-4xl">
-            Available where you shop.
+          <h2
+            style={{ color: ais?.headingColor || undefined }}
+            className="mt-2 font-display text-2xl font-black tracking-tight text-charcoal sm:text-3xl md:text-4xl"
+          >
+            {ais?.heading || "Available where you shop."}
           </h2>
-          <p className="mt-2 text-xs sm:text-sm leading-relaxed text-charcoal/70">
-            Pick your favourite way to experience TMUG — from our official Amazon brand store to
-            instant WhatsApp concierge and nationwide express shipping.
+          <p
+            style={{ color: ais?.textColor || undefined }}
+            className="mt-2 text-xs sm:text-sm leading-relaxed text-charcoal/70"
+          >
+            {ais?.subheading || "Pick your favourite way to experience TMUG — from our official Amazon brand store to instant WhatsApp concierge and nationwide express shipping."}
           </p>
         </div>
 

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 const TRUST_POINTS = [
   {
@@ -32,9 +33,18 @@ const TRUST_POINTS = [
 ];
 
 export default function TrustStrip() {
+  const { controls } = useSiteControls();
+  const ts = controls?.sectionsVisual?.trustStrip;
+
   return (
     <section
       aria-label="TMUG Quality Highlights"
+      style={{
+        backgroundColor: ts?.bgColor || undefined,
+        color: ts?.textColor || undefined,
+        paddingTop: ts?.paddingTop !== undefined ? `${ts.paddingTop}px` : undefined,
+        paddingBottom: ts?.paddingBottom !== undefined ? `${ts.paddingBottom}px` : undefined,
+      }}
       className="relative z-10 border-y border-tea-gold/20 bg-gradient-to-r from-warm-ivory via-peach-cream/40 to-warm-ivory py-3 sm:py-4 shadow-xs"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">

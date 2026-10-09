@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Reveal from "./motion/Reveal";
 import { IconArrowRight } from "./icons";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 const INGREDIENTS = [
   {
@@ -34,9 +35,17 @@ const INGREDIENTS = [
 ];
 
 export default function MadeWithRealTea() {
+  const { controls } = useSiteControls();
+  const mrt = controls?.sectionsVisual?.madeWithRealTea;
+
   return (
     <section
       aria-label="Made with real tea"
+      style={{
+        backgroundColor: mrt?.bgColor || undefined,
+        paddingTop: mrt?.paddingTop !== undefined ? `${mrt.paddingTop}px` : undefined,
+        paddingBottom: mrt?.paddingBottom !== undefined ? `${mrt.paddingBottom}px` : undefined,
+      }}
       className="relative overflow-hidden bg-warm-ivory py-8 sm:py-12"
     >
       {/* Background radial aura & stickers */}
@@ -61,12 +70,21 @@ export default function MadeWithRealTea() {
                 <span className="h-2 w-2 rounded-full bg-coral" />
                 Pure Botanicals
               </span>
-              <h2 className="text-section mt-2 font-display font-black text-charcoal">
-                Made with <span className="text-coral">real tea.</span>
+              <h2
+                style={{ color: mrt?.headingColor || undefined }}
+                className="text-section mt-2 font-display font-black text-charcoal"
+              >
+                {mrt?.heading || (
+                  <>
+                    Made with <span className="text-coral">real tea.</span>
+                  </>
+                )}
               </h2>
-              <p className="mt-2 text-sm sm:text-base leading-relaxed text-charcoal/75">
-                From vibrant butterfly pea flowers to fragrant hibiscus and carefully selected
-                long leaves, TMUG brings distinctive Indian botanical experiences to your everyday cup.
+              <p
+                style={{ color: mrt?.textColor || undefined }}
+                className="mt-2 text-sm sm:text-base leading-relaxed text-charcoal/75"
+              >
+                {mrt?.subheading || "From vibrant butterfly pea flowers to fragrant hibiscus and carefully selected long leaves, TMUG brings distinctive Indian botanical experiences to your everyday cup."}
               </p>
             </Reveal>
 

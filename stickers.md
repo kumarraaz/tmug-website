@@ -186,3 +186,12 @@ In addition to vector stickers, verified brand creative assets are preserved as 
   - `chamomile-daily-ritual.png`
   - `ruby-hibiscus-daily-ritual.png`
 
+---
+
+## 9. Visual Control Center Sticker & Badge Toggles
+
+- **Product Card Badge Toggles**: `controls.components.productCard.showBadges` allows operators to toggle promotional badges on product cards on or off in real-time.
+- **Dynamic Accent Inheriting**: Vector stickers and badges dynamically adapt to the global brand accent color (`controls.globalDesign.colors.accent`) and gold tones without hardcoded style modifications.
+- **Zero Dark Green UI**: All sticker backgrounds and badge fills remain strictly protected against dark green styling sitewide.
+
+

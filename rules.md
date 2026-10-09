@@ -144,4 +144,16 @@ TMUG’s personality must remain distinctly Indian, botanically authentic, edito
   - Local credentials are configured via `.env.local` (kept strictly Git-ignored); production credentials are configured via Vercel Project Environment Variables.
   - Controls must cover Hero banners, Products, Prices, Images, Collections, Best Seller / Popular Pick flags, and Section visibility/ordering.
 
+---
+
+## 10. Website Visual Control Center Directives
+
+- **Zero-Code Styling Operations**: Routine design changes (colors, typography, spacing, section visibility, banner sequencing, product card styling, hover effects) must be fully executed through the Admin Panel (`/admin`) without modifying codebase files.
+- **Draft vs. Published Isolation**: Draft modifications remain strictly isolated to the admin operator environment. Public shoppers only ever receive published settings.
+- **Safe Rollback**: Every "Publish All" action must automatically log a history snapshot. Operators can roll back to any historical snapshot without engineering intervention.
+- **Strict Zero Dark Green UI Rule Enforcement**: Admin visual controls default to canonical warm ivory, terracotta, gold, and coral tones. Dark green UI must never be applied to buttons, navbars, cards, or headers.
+- **Non-Destructive E-Commerce Preservation**: Visual control mutations must never destructively alter authentic catalog definitions (`data/products.ts`), cart mechanics (`ShopProvider`), or WhatsApp checkout generation.
+- **Multi-Device Responsiveness**: All custom styles, padding overrides, and font sizes must preserve flawless layouts across Desktop (1280px+), Tablet (768px), and Mobile (360px–430px) viewports with zero horizontal overflow.
+
+
 

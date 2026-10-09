@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { COLLECTIONS } from "@/data/collections";
@@ -5,11 +7,23 @@ import { PRODUCTS } from "@/data/products";
 import { siteConfig, whatsappLink } from "@/config/site";
 import { IconWhatsApp } from "./icons";
 import FloatingLogo from "./motion/FloatingLogo";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 export default function Footer() {
+  const { controls } = useSiteControls();
+  const f = controls?.sectionsVisual?.footer;
   const year = new Date().getFullYear();
+
   return (
-    <footer className="relative overflow-hidden bg-charcoal text-warm-ivory/80">
+    <footer
+      style={{
+        backgroundColor: f?.bgColor || undefined,
+        color: f?.textColor || undefined,
+        paddingTop: f?.paddingTop !== undefined ? `${f.paddingTop}px` : undefined,
+        paddingBottom: f?.paddingBottom !== undefined ? `${f.paddingBottom}px` : undefined,
+      }}
+      className="relative overflow-hidden bg-charcoal text-warm-ivory/80"
+    >
       <FloatingLogo opacity={0.04} size="90%" className="opacity-100" />
       <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12">
         <div className="grid gap-8 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
@@ -19,11 +33,19 @@ export default function Footer() {
               alt="TMUG logo"
               width={220}
               height={112}
-              className="h-auto w-36"
+              style={{
+                height: f?.logoHeight ? `${f.logoHeight}px` : undefined,
+                width: "auto",
+              }}
+              className="w-36"
               loading="lazy"
             />
             <p className="mt-4 max-w-xs font-display text-lg font-bold leading-snug text-cream">
-              Tea, but make it <span className="text-gold">TMUG.</span>
+              {f?.tagline || (
+                <>
+                  Tea, but make it <span className="text-gold">TMUG.</span>
+                </>
+              )}
             </p>
             <p className="mt-2 max-w-xs text-[13px] leading-relaxed text-cream/60">
               Whole-flower herbals, Darjeeling green and kadak CTC chai — packed fresh, shipped
@@ -37,24 +59,26 @@ export default function Footer() {
             >
               <IconWhatsApp className="h-4 w-4" /> {siteConfig.whatsapp.display}
             </a>
-            <div className="mt-5 flex gap-2">
-              {[
-                { label: "Instagram", href: siteConfig.socials.instagram },
-                { label: "Facebook", href: siteConfig.socials.facebook },
-                { label: "YouTube", href: siteConfig.socials.youtube },
-              ].map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`TMUG on ${s.label}`}
-                  className="rounded-full border border-white/15 px-4 py-2 text-xs font-bold text-cream/70 transition-colors hover:border-gold hover:text-gold"
-                >
-                  {s.label}
-                </a>
-              ))}
-            </div>
+            {f?.showSocials !== false && (
+              <div className="mt-5 flex gap-2">
+                {[
+                  { label: "Instagram", href: siteConfig.socials.instagram },
+                  { label: "Facebook", href: siteConfig.socials.facebook },
+                  { label: "YouTube", href: siteConfig.socials.youtube },
+                ].map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`TMUG on ${s.label}`}
+                    className="rounded-full border border-white/15 px-4 py-2 text-xs font-bold text-cream/70 transition-colors hover:border-gold hover:text-gold"
+                  >
+                    {s.label}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
           <nav aria-label="Shop">

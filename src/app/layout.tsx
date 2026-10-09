@@ -3,6 +3,9 @@ import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import { seoStore } from "@/lib/seo-store";
 import { siteConfig } from "@/config/site";
 import { ShopProvider } from "@/lib/store";
+import { siteControlStore } from "@/lib/site-control-store";
+import { SiteControlsProvider } from "@/lib/site-controls-context";
+import DynamicThemeProvider from "@/components/DynamicThemeProvider";
 import "./globals.css";
 
 const display = Bricolage_Grotesque({
@@ -78,12 +81,18 @@ function JsonLd() {
   );
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const initialControls = await siteControlStore.get("published");
+
   return (
     <html lang="en">
       <body className={`${display.variable} ${sans.variable}`}>
         <JsonLd />
-        <ShopProvider>{children}</ShopProvider>
+        <SiteControlsProvider initialControls={initialControls}>
+          <DynamicThemeProvider>
+            <ShopProvider>{children}</ShopProvider>
+          </DynamicThemeProvider>
+        </SiteControlsProvider>
       </body>
     </html>
   );

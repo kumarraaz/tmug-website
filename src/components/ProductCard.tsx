@@ -10,6 +10,7 @@ import { useShop } from "@/lib/store";
 import { formatINR } from "@/lib/format";
 import { IconArrowRight, IconStar, IconCheck, IconTrash } from "./icons";
 import AddToCartButton from "./cart/AddToCartButton";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 /** Small pill selector for product variants (weight/pack). */
 export function VariantSelector({
@@ -120,6 +121,9 @@ export default function ProductCard({
   index?: number;
   className?: string;
 }) {
+  const { controls } = useSiteControls();
+  const pc = controls?.productCard || controls?.components?.productCard;
+
   const { lines, updateQty, removeLine, showToast } = useShop();
   const [variantId, setVariantId] = useState(product.variants[0].id);
   const variant = getVariant(product, variantId);
@@ -153,6 +157,15 @@ export default function ProductCard({
 
   const showBack = (isHovered || isMobileFlipped) && Boolean(back);
 
+  const hoverEffectClass =
+    pc?.hoverEffect === "none"
+      ? ""
+      : pc?.hoverEffect === "scale"
+      ? "hover:scale-[1.02]"
+      : pc?.hoverEffect === "glow"
+      ? "hover:shadow-[0_0_25px_rgba(250,164,181,0.5)]"
+      : "hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-14px_rgba(51,36,58,0.22)]";
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 16 }}
@@ -161,7 +174,11 @@ export default function ProductCard({
       transition={{ duration: 0.45, delay: (index % 4) * 0.05, ease: [0.22, 1, 0.36, 1] }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`group relative flex h-full flex-col overflow-hidden rounded-[1.35rem] border border-[#3A3438]/10 bg-white shadow-[0_8px_24px_-12px_rgba(51,36,58,0.14)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-14px_rgba(51,36,58,0.22)] hover:border-[#FAA4B5]/60 ${className}`}
+      style={{
+        backgroundColor: pc?.cardBg || undefined,
+        borderRadius: pc?.borderRadius !== undefined ? `${pc.borderRadius}px` : undefined,
+      }}
+      className={`group relative flex h-full flex-col overflow-hidden rounded-[1.35rem] border border-[#3A3438]/10 bg-white shadow-[0_8px_24px_-12px_rgba(51,36,58,0.14)] transition-all duration-300 hover:border-[#FAA4B5]/60 ${hoverEffectClass} ${className}`}
     >
       {/* ── Product Packshot Frame with Soft Gen-Z Glow ── */}
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-gradient-to-b from-[#FFF7EF] to-[#FBE7DC]/60">
@@ -220,7 +237,7 @@ export default function ProductCard({
 
         {/* Badges */}
         <div className="absolute left-3 top-3 z-20 flex flex-col gap-1.5">
-          {product.featured && (
+          {product.featured && pc?.showBadge !== false && (
             <span className="inline-flex items-center gap-1 rounded-full bg-[#FFF183] border border-[#F8B77C] px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#33243A] shadow-xs">
               <IconStar className="h-2.5 w-2.5 fill-[#33243A]" /> Bestseller
             </span>
@@ -286,7 +303,10 @@ export default function ProductCard({
         <div className="mt-auto pt-2.5 border-t border-[#3A3438]/10">
           <div className="flex items-center justify-between gap-2">
             <div>
-              <p className="font-display text-base sm:text-lg font-black text-[#33243A]">
+              <p
+                style={{ color: pc?.priceColor || undefined }}
+                className="font-display text-base sm:text-lg font-black text-[#33243A]"
+              >
                 {formatINR(variant.price)}
               </p>
             </div>
@@ -296,6 +316,10 @@ export default function ProductCard({
               <AddToCartButton
                 product={product}
                 variant={variant}
+                style={{
+                  backgroundColor: pc?.buttonBg || undefined,
+                  color: pc?.buttonTextColor || undefined,
+                }}
                 className="bg-[#FAA4B5] hover:bg-[#F8B77C] text-[#33243A] px-3.5 py-1.5 text-xs font-black rounded-full shadow-xs transition-transform duration-200 group-hover:scale-105 active:scale-95"
               />
             ) : (

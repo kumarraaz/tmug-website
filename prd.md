@@ -113,3 +113,45 @@ The TMUG website homepage and documentation are accepted only when:
 15. **Full-Width Collections Rail**: Carousel rail spans from left to right showing 4–6 products on desktop; navigation arrows placed on outer flanks outside product visual packaging.
 16. **Compact Best Sellers Grid**: Sleek 4-product D2C card deck with transparent cutouts, live INR pricing, and direct cart steppers.
 17. **Admin Real Media File Upload**: Native file picker integration via `/api/admin/upload`, slot requirements boxes (1:1 for product cutouts, 3:1 for hero banners), and real-time image preview inspection modal (filename, dimensions, format, size, transparency detection).
+18. **Website Visual Control Center**: Production-ready visual management system in `/admin` granting complete visual, layout, typography, and color control over all 14 homepage sections and reusable UI components. Includes live multi-device preview (Desktop, Tablet, Mobile), draft vs. published isolation, atomic publishing, and snapshot history with one-click rollback.
+
+---
+
+## Website Visual Control Center Requirements
+
+The TMUG Visual Control Center provides store operators complete visual authority over the storefront without code modification:
+
+1. **Global Design Controls**:
+   - Palette Tokens: Background (`#FDFBF7`), Surface (`#FFFFFF`), Primary Text (`#1C1917`), Secondary Text (`#78716C`), Brand Accent (`#C2410C`), Border (`#E7E5E4`), and Muted surfaces.
+   - Typography System: Primary font family (Outfit, Inter, DM Sans, Plus Jakarta Sans, etc.), Display font family (Bricolage Grotesque, Playfair Display, Cinzel, Montserrat, etc.), base font size (14–18px), heading weights, and uppercase toggles.
+   - Global Borders & Shadows: Card radius (0–24px), button radius (0–9999px), shadow depth (`none`, `soft`, `medium`, `elevated`), and animation speed (`snappy`, `smooth`, `relaxed`).
+
+2. **Header & Navigation Controls**:
+   - Announcement bar text, active toggle, background color, text color, link URL, and speed.
+   - Header height, background opacity/color, logo height (mobile & desktop), sticky header toggle, navigation link font size, and action icons toggle.
+
+3. **Hero Banner Slider Controls**:
+   - Dynamic slide management: artwork URL, title, subtitle, CTA text, CTA destination URL, text alignment, and badge tags.
+   - Autoplay toggle, interval duration (3000–9000ms), transition effect (`crossfade`, `slide`), previous/next arrows toggle, pagination dots toggle, and slide counter badge toggle.
+
+4. **14 Section Visual Controls**:
+   - Each homepage section (`hero`, `trustStrip`, `collections`, `bestSellers`, `revealExperience`, `whyTmug`, `realTeaIngredients`, `teaRituals`, `teaStory`, `lifestyleGallery`, `brandProof`, `customerLove`, `availableInStores`, `finalCta`) provides:
+     - Visibility toggle (`enabled: boolean`)
+     - Headline text and Subtitle text overrides
+     - Section background color override
+     - Heading & body text color overrides
+     - Top and bottom padding controls (mobile & desktop)
+     - Section-specific controls (e.g., Amazon link for `availableInStores`, CTA button styles for `finalCta`, category tab count for `collections`).
+
+5. **Reusable UI Component Styling**:
+   - Product Card: background color, border radius, shadow preset, hover interaction (`lift`, `scale`, `glow`, `none`), badge visibility, price color, and Add to Cart button theme.
+   - Global Cart Drawer: heading copy, free shipping threshold, background, checkout button color, and empty state suggestions.
+   - WhatsApp Concierge: floating widget visibility, position, button color, and default inquiry text.
+
+6. **Draft vs. Published Workflow & Rollback**:
+   - Save Draft: Persists changes to operator draft state without affecting public shoppers.
+   - Publish All: Atomically promotes draft to live site and creates an immutable snapshot item in the last 10 snapshots history log.
+   - Discard Draft: Reverts draft to active published state.
+   - Rollback: Restores published state to any previously captured snapshot.
+   - Reset to Defaults: Restores canonical brand defaults with a single confirmation.
+

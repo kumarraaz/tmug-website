@@ -165,3 +165,29 @@ https://www.amazon.in/stores/Tmug/page/4EF8CF60-EB4F-4438-B735-748BE0ED8162?lp_a
    - Asset: `public/recipes/lemongrass-ginger-chai-soup.png`
    - Verified Creations: *Lemongrass Ginger Chai, Coconut Soup.*
 
+---
+
+## 7. Website Visual Control Center Editable Content Inventory
+
+All 14 homepage sections and primary interface elements can have their headlines, subtitles, and calls-to-action updated live via the Admin Control Center without touching source code:
+
+| Section / Element | Default Copy Key | Default Text |
+| :--- | :--- | :--- |
+| **Announcement Bar** | `header.announcementText` | *"Festive offer — 10% off with code TMUG10 • Whole flowers & leaves, never dust • Ships across India"* |
+| **Hero Slider** | `heroSlider.slides[i].title` | Verified campaign slogans (e.g., *"Meet Your Blue Tea Ritual"*, *"Properly Kadak. Properly TMUG."*) |
+| **Trust Strip** | `sectionsVisual.trustStrip.heading` | Four-pillar value proposition |
+| **Collections** | `sectionsVisual.collections.heading` | *"Shop by Product"* / *"From slow caffeine-free evening flowers to proper morning doodh chai."* |
+| **Best Sellers** | `sectionsVisual.bestSellers.heading` | *"Top Rated Best Sellers"* / *"The everyday teas our community keeps reordering."* |
+| **Open Reveal** | `sectionsVisual.revealExperience.heading` | *"Open Your TMUG Box"* / *"Tap the collector’s box to pop open whole botanicals..."* |
+| **Why TMUG** | `sectionsVisual.whyTmug.heading` | *"Tea should feel exciting, not ordinary."* / *"Most supermarket tea is dusty CTC sweepings..."* |
+| **Real Tea** | `sectionsVisual.realTeaIngredients.heading`| *"Real leaves. Real flowers. Real flavour."* / *"Turn the pack over. Every ingredient is a plant you recognize."* |
+| **Tea Rituals** | `sectionsVisual.teaRituals.heading` | *"Rituals & Cafe Recipes"* / *"From cold brew infusions to soothing bedtime lattes."* |
+| **Tea Story** | `sectionsVisual.teaStory.heading` | *"A Day of TMUG Rituals"* / *"From early dawn to deep sleep, there is a cup crafted for every hour."* |
+| **Lifestyle Gallery**| `sectionsVisual.lifestyleGallery.heading`| *"Made for moments that linger."* |
+| **Brand Proof** | `sectionsVisual.brandProof.heading` | *"Loved by Tea Enthusiasts"* |
+| **Customer Love** | `sectionsVisual.customerLove.heading` | *"Real Words from Real Sippers"* |
+| **Available Stores** | `sectionsVisual.availableInStores.heading` | *"Available Where You Shop"* (Verified Amazon Brand Store link editable) |
+| **Final CTA** | `sectionsVisual.finalCta.heading` | *"Find Your Daily Cup"* / CTA button: *"Explore All Teas →"* |
+| **Footer** | `footer.tagline` | *"Whole flower teas, green tea & properly kadak chai."* |
+
+

@@ -184,5 +184,19 @@ Under no circumstances should any developer or automated agent fabricate:
 - **Local & Production Configuration**: Configured locally via `.env.local` (kept git-ignored by `.gitignore`) and in production via Vercel Project Environment Variables.
 - **Session Protection**: Server issues an HTTP-only, SameSite=lax cookie (`tmug-admin`) with 12-hour expiration, safeguarding `/admin`, `/admin/seo`, `/api/admin/site-controls`, and `/api/admin/upload`.
 
+---
+
+## 11. Website Visual Control Center (Milestone Completion)
+
+- **Comprehensive Visual Authority**: Operators have full visual and layout control over all 14 homepage sections and reusable UI components through `/admin` without manual code edits.
+- **Typed Schema & Defaults**: `src/types/site-controls.ts` and `src/config/site-controls.ts` provide strict typing and canonical fallback values adhering to TMUG brand identity and zero dark green UI rules.
+- **Dual-State Persistence Layer**: `src/lib/site-control-store.ts` enforces draft vs. published isolation. Draft changes are stored in `data/site-controls.json` and previewed privately. "Publish All" pushes changes atomically to public shoppers and records an immutable snapshot in `state.history` (retains last 10 snapshots).
+- **One-Click Rollback**: Any historical snapshot can be restored with a single click, instantly reinstating prior published settings.
+- **Real-Time Cross-Window Sync**: HTML5 `postMessage` protocol syncs live edits between admin form fields and the live preview iframe without page reload or network delay.
+- **Dynamic Theme & Typography**: `DynamicThemeProvider.tsx` injects dynamic `:root` CSS custom properties (`--brand-cream`, `--brand-terracotta`, `--brand-gold`, font sizes, radii, shadows) and dynamically loads Google Fonts on demand.
+- **Preserved Core Mechanics**: Authentic product catalog (`data/products.ts`), `ShopProvider` cart state, WhatsApp order generator, and SEO metadata remain 100% operational and non-destructively protected.
+- **Automated Validation**: End-to-end automated verification script (`scripts/verify-control-center.mjs`) validates login, draft isolation, publishing, rollback, and reset.
+
+
 
 

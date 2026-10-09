@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconArrowRight } from "./icons";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 interface StoryMoment {
   id: string;
@@ -80,6 +81,9 @@ const RITUAL_MOMENTS: StoryMoment[] = [
 ];
 
 export default function TeaStory() {
+  const { controls } = useSiteControls();
+  const tsSettings = controls?.sectionsVisual?.teaStory;
+
   const [activeMoment, setActiveMoment] = useState<string>("morning");
   const current = RITUAL_MOMENTS.find((m) => m.id === activeMoment) || RITUAL_MOMENTS[0];
 
@@ -87,6 +91,11 @@ export default function TeaStory() {
     <section
       id="about"
       aria-label="The TMUG Tea Story"
+      style={{
+        backgroundColor: tsSettings?.bgColor || undefined,
+        paddingTop: tsSettings?.paddingTop !== undefined ? `${tsSettings.paddingTop}px` : undefined,
+        paddingBottom: tsSettings?.paddingBottom !== undefined ? `${tsSettings.paddingBottom}px` : undefined,
+      }}
       className="relative overflow-hidden bg-warm-surface/40 py-8 sm:py-12"
     >
       {/* Decorative botanical backdrop elements */}
@@ -116,12 +125,17 @@ export default function TeaStory() {
             <span className="h-1.5 w-1.5 rounded-full bg-coral" />
             The TMUG Ritual
           </span>
-          <h2 className="mt-2 font-display text-2xl font-black tracking-tight text-charcoal sm:text-3xl md:text-4xl">
-            More than just a cup of tea.
+          <h2
+            style={{ color: tsSettings?.headingColor || undefined }}
+            className="mt-2 font-display text-2xl font-black tracking-tight text-charcoal sm:text-3xl md:text-4xl"
+          >
+            {tsSettings?.heading || "More than just a cup of tea."}
           </h2>
-          <p className="mt-2 text-xs sm:text-sm leading-relaxed text-charcoal/70">
-            From your first morning sip to late-night conversations, TMUG brings a little more
-            colour, craft, and joy to your everyday tea.
+          <p
+            style={{ color: tsSettings?.textColor || undefined }}
+            className="mt-2 text-xs sm:text-sm leading-relaxed text-charcoal/70"
+          >
+            {tsSettings?.subheading || "From your first morning sip to late-night conversations, TMUG brings a little more colour, craft, and joy to your everyday tea."}
           </p>
         </div>
 

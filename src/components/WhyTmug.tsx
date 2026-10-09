@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { IconCup, IconLeaf, IconShield, IconTruck, IconArrowRight, IconSparkle } from "./icons";
 import Reveal from "./motion/Reveal";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 const PILLARS = [
   {
@@ -34,10 +35,18 @@ const PILLARS = [
 ];
 
 export default function WhyTmug() {
+  const { controls } = useSiteControls();
+  const wt = controls?.sectionsVisual?.whyTmug;
+
   return (
     <section
       id="why"
       aria-label="Why TMUG — Our Tea Philosophy"
+      style={{
+        backgroundColor: wt?.bgColor || undefined,
+        paddingTop: wt?.paddingTop !== undefined ? `${wt.paddingTop}px` : undefined,
+        paddingBottom: wt?.paddingBottom !== undefined ? `${wt.paddingBottom}px` : undefined,
+      }}
       className="relative scroll-mt-24 overflow-hidden bg-warm-ivory py-8 sm:py-12"
     >
       {/* Botanical Flower Watermarks & Warm Golden Ambient Auras */}
@@ -83,11 +92,21 @@ export default function WhyTmug() {
               <span className="h-2 w-2 rounded-full bg-coral" />
               The TMUG Difference
             </span>
-            <h2 className="text-section mt-2 font-display font-black text-charcoal">
-              Tea should feel <span className="text-coral">exciting</span>, not ordinary.
+            <h2
+              style={{ color: wt?.headingColor || undefined }}
+              className="text-section mt-2 font-display font-black text-charcoal"
+            >
+              {wt?.heading || (
+                <>
+                  Tea should feel <span className="text-coral">exciting</span>, not ordinary.
+                </>
+              )}
             </h2>
-            <p className="mt-2 text-xs sm:text-sm leading-relaxed text-charcoal/75">
-              Most supermarket tea is dusty CTC sweepings or artificial flavor sprays. We set out to craft honest cups celebrating authentic botanical petals and bold garden-fresh leaves.
+            <p
+              style={{ color: wt?.textColor || undefined }}
+              className="mt-2 text-xs sm:text-sm leading-relaxed text-charcoal/75"
+            >
+              {wt?.subheading || "Most supermarket tea is dusty CTC sweepings or artificial flavor sprays. We set out to craft honest cups celebrating authentic botanical petals and bold garden-fresh leaves."}
             </p>
           </Reveal>
         </div>

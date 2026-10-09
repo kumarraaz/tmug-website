@@ -11,6 +11,7 @@ import { formatINR } from "@/lib/format";
 import Reveal from "./motion/Reveal";
 import AddToCartButton from "./cart/AddToCartButton";
 import { IconArrowRight, IconStar, IconCheck, IconTrash } from "./icons";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 // Verified Best Seller IDs from catalog
 const BEST_SELLER_IDS = ["butterfly-pea", "hibiscus", "darjeeling-green", "gold-tea"];
@@ -19,6 +20,9 @@ const BEST_SELLER_PRODUCTS: Product[] = BEST_SELLER_IDS.map((id) =>
 ).filter(Boolean);
 
 export default function BestSellers() {
+  const { controls } = useSiteControls();
+  const bsSettings = controls?.sectionsVisual?.bestSellers;
+
   const reduceMotion = useReducedMotion();
   const { lines, updateQty, removeLine, showToast } = useShop();
 
@@ -57,6 +61,11 @@ export default function BestSellers() {
     <section
       id="best-sellers"
       aria-label="TMUG Best Sellers"
+      style={{
+        backgroundColor: bsSettings?.bgColor || undefined,
+        paddingTop: bsSettings?.paddingTop !== undefined ? `${bsSettings.paddingTop}px` : undefined,
+        paddingBottom: bsSettings?.paddingBottom !== undefined ? `${bsSettings.paddingBottom}px` : undefined,
+      }}
       className="relative overflow-hidden bg-gradient-to-b from-[#FFF7EF] via-[#FBE7DC]/50 to-[#FFF7EF] py-10 sm:py-14"
     >
       {/* Decorative Ambiance Blobs (Palette: #FAA4B5, #FFF183, #70C1E1) */}
@@ -82,11 +91,21 @@ export default function BestSellers() {
               <IconStar className="h-3.5 w-3.5 fill-[#F8B77C] text-[#F8B77C]" />
               Customer Favourites
             </span>
-            <h2 className="text-section mt-1.5 font-display font-black text-[#33243A]">
-              Top Rated <span className="text-[#FAA4B5]">Best Sellers</span>
+            <h2
+              style={{ color: bsSettings?.headingColor || undefined }}
+              className="text-section mt-1.5 font-display font-black text-[#33243A]"
+            >
+              {bsSettings?.heading || (
+                <>
+                  Top Rated <span className="text-[#FAA4B5]">Best Sellers</span>
+                </>
+              )}
             </h2>
-            <p className="mt-1 text-xs sm:text-sm text-[#3A3438]/80 max-w-lg mx-auto">
-              The everyday teas our community keeps reordering. Whole flowers and mountain estate leaves with zero additives.
+            <p
+              style={{ color: bsSettings?.textColor || undefined }}
+              className="mt-1 text-xs sm:text-sm text-[#3A3438]/80 max-w-lg mx-auto"
+            >
+              {bsSettings?.subheading || "The everyday teas our community keeps reordering. Whole flowers and mountain estate leaves with zero additives."}
             </p>
           </Reveal>
         </div>

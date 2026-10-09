@@ -5,8 +5,30 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { HERO_BANNERS, type HeroBanner } from "@/config/banners";
+import { useSiteControls } from "@/lib/site-controls-context";
+
+function mapToHeroBanner(b: any): HeroBanner {
+  return {
+    id: b.id || "banner",
+    headline: b.headline || b.title || "Experience Pure Tea",
+    subtitle: b.subtitle || b.subheadline || "",
+    campaign: b.campaign || "Featured",
+    category: b.category || "Botanical Tea",
+    cta: b.cta || b.ctaText || "Shop Collection",
+    destination: b.destination || b.ctaLink || "/#shop",
+    image: b.image || b.desktopSrc || "/hero/butterfly-pea-100g-jar-front.png",
+    mobileImage: b.mobileImage || b.mobileSrc || b.image || b.desktopSrc || "/hero/butterfly-pea-100g-jar-front.png",
+    alt: b.alt || b.headline || b.title || "TMUG Tea",
+  };
+}
 
 export default function Hero() {
+  const { controls } = useSiteControls();
+  const heroSettings = controls?.sectionsVisual?.hero;
+  const banners: HeroBanner[] = (controls?.banners && controls.banners.length > 0)
+    ? controls.banners.map(mapToHeroBanner)
+    : HERO_BANNERS;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -14,8 +36,8 @@ export default function Hero() {
   const reduceMotion = useReducedMotion();
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const bannerCount = HERO_BANNERS.length;
-  const currentBanner = HERO_BANNERS[currentIndex];
+  const bannerCount = banners.length;
+  const currentBanner = banners[currentIndex] || banners[0] || HERO_BANNERS[0];
 
   const goToNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % bannerCount);
@@ -29,18 +51,21 @@ export default function Hero() {
     setCurrentIndex(idx);
   };
 
-  // Autoplay management (5.5s per slide, paused on hover/touch)
+  const autoplayInterval = heroSettings?.interval || 5500;
+  const isAutoplay = heroSettings?.autoplay !== false;
+
+  // Autoplay management (paused on hover/touch)
   useEffect(() => {
-    if (isPaused || reduceMotion) return;
+    if (!isAutoplay || isPaused || reduceMotion) return;
 
     autoplayTimerRef.current = setTimeout(() => {
       goToNext();
-    }, 5500);
+    }, autoplayInterval);
 
     return () => {
       if (autoplayTimerRef.current) clearTimeout(autoplayTimerRef.current);
     };
-  }, [currentIndex, isPaused, reduceMotion, goToNext]);
+  }, [currentIndex, isPaused, reduceMotion, goToNext, autoplayInterval, isAutoplay]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -82,6 +107,11 @@ export default function Hero() {
     <section
       id="hero-banner"
       aria-label="Featured Campaigns & Hero Banners"
+      style={{
+        backgroundColor: heroSettings?.bgColor || undefined,
+        paddingTop: heroSettings?.paddingTop !== undefined ? `${heroSettings.paddingTop}px` : undefined,
+        paddingBottom: heroSettings?.paddingBottom !== undefined ? `${heroSettings.paddingBottom}px` : undefined,
+      }}
       className="relative overflow-hidden bg-warm-surface"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
@@ -143,34 +173,36 @@ export default function Hero() {
           </AnimatePresence>
 
           {/* Previous / Next Arrow Controls (Desktop & Tablet) */}
-          <div className="pointer-events-none absolute inset-y-0 inset-x-3 sm:inset-x-6 z-20 flex items-center justify-between">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                goToPrev();
-              }}
-              aria-label="Previous promotional banner"
-              className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/90 text-charcoal shadow-lg backdrop-blur-md transition-all duration-200 hover:bg-tea-gold hover:text-charcoal hover:scale-110 active:scale-95 focus-visible:ring-2 focus-visible:ring-tea-gold cursor-pointer"
-            >
-              <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                goToNext();
-              }}
-              aria-label="Next promotional banner"
-              className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/90 text-charcoal shadow-lg backdrop-blur-md transition-all duration-200 hover:bg-tea-gold hover:text-charcoal hover:scale-110 active:scale-95 focus-visible:ring-2 focus-visible:ring-tea-gold cursor-pointer"
-            >
-              <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
+          {heroSettings?.showArrows !== false && (
+            <div className="pointer-events-none absolute inset-y-0 inset-x-3 sm:inset-x-6 z-20 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  goToPrev();
+                }}
+                aria-label="Previous promotional banner"
+                className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/90 text-charcoal shadow-lg backdrop-blur-md transition-all duration-200 hover:bg-tea-gold hover:text-charcoal hover:scale-110 active:scale-95 focus-visible:ring-2 focus-visible:ring-tea-gold cursor-pointer"
+              >
+                <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  goToNext();
+                }}
+                aria-label="Next promotional banner"
+                className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/90 text-charcoal shadow-lg backdrop-blur-md transition-all duration-200 hover:bg-tea-gold hover:text-charcoal hover:scale-110 active:scale-95 focus-visible:ring-2 focus-visible:ring-tea-gold cursor-pointer"
+              >
+                <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Campaign Navigation & Pagination Strip */}
@@ -192,25 +224,27 @@ export default function Hero() {
             </div>
 
             {/* Pagination Line / Pill Indicators */}
-            <div className="flex items-center gap-1.5 sm:gap-2" role="tablist" aria-label="Banner slides">
-              {HERO_BANNERS.map((banner, idx) => {
-                const isActive = idx === currentIndex;
-                return (
-                  <button
-                    key={banner.id}
-                    role="tab"
-                    aria-selected={isActive}
-                    aria-label={`Go to slide ${idx + 1}: ${banner.headline}`}
-                    onClick={() => goToSlide(idx)}
-                    className={`relative h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                      isActive
-                        ? "w-7 sm:w-10 bg-tea-gold shadow-xs"
-                        : "w-2 bg-charcoal/20 hover:bg-charcoal/40"
-                    }`}
-                  />
-                );
-              })}
-            </div>
+            {heroSettings?.showDots !== false && (
+              <div className="flex items-center gap-1.5 sm:gap-2" role="tablist" aria-label="Banner slides">
+                {banners.map((banner, idx) => {
+                  const isActive = idx === currentIndex;
+                  return (
+                    <button
+                      key={banner.id}
+                      role="tab"
+                      aria-selected={isActive}
+                      aria-label={`Go to slide ${idx + 1}: ${banner.headline}`}
+                      onClick={() => goToSlide(idx)}
+                      className={`relative h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                        isActive
+                          ? "w-7 sm:w-10 bg-tea-gold shadow-xs"
+                          : "w-2 bg-charcoal/20 hover:bg-charcoal/40"
+                      }`}
+                    />
+                  );
+                })}
+              </div>
+            )}
 
             {/* Direct Action Link */}
             <div className="hidden md:flex items-center gap-3">

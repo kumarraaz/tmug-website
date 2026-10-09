@@ -1,5 +1,6 @@
 "use client";
 
+import { useSiteControls } from "@/lib/site-controls-context";
 import { AnnouncementBar } from "./Header";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -22,62 +23,65 @@ import AvailableInStores from "./AvailableInStores"; // 15. Available Where You 
 import FinalCta from "./FinalCta"; // 16. Final Conversion CTA
 
 export default function HomeClient() {
+  const { controls } = useSiteControls();
+  const sv = controls?.sectionsVisual;
+
   return (
     <>
       {/* 01. Announcement / top promotional strip */}
       <AnnouncementBar />
 
-      {/* 02. Premium navigation (Warm Ivory / White, Zero Green UI) */}
+      {/* 02. Premium navigation (Warm Charcoal / Ivory, Zero Green UI) */}
       <Header />
 
       <main className="relative">
         {/* 03. HERO BANNER SLIDER (Large Promotional Storefront Campaign Window) */}
-        <Hero />
+        {sv?.hero?.enabled !== false && <Hero />}
 
         {/* 04. Value-prop highlights strip */}
-        <TrustStrip />
+        {sv?.trustStrip?.enabled !== false && <TrustStrip />}
 
         {/* 05. SHOP BY PRODUCT / COLLECTIONS (Horizontal Product Carousel) */}
-        <ShopCollections />
+        {sv?.collections?.enabled !== false && <ShopCollections />}
 
         {/* 06. BEST SELLERS & HALF-SCREEN 50/50 EXPERIENCE */}
-        <BestSellers />
+        {sv?.bestSellers?.enabled !== false && <BestSellers />}
 
         {/* 07. OPEN / REVEAL EXPERIENCE (3D Box, Flower Shower, Emoji Feedback) */}
-        <OpenRevealSection />
+        {sv?.openReveal?.enabled !== false && <OpenRevealSection />}
 
         {/* 08. WHY TMUG? (Redesigned, large packs, flower watermark, zero green UI) */}
-        <WhyTmug />
+        {sv?.whyTmug?.enabled !== false && <WhyTmug />}
 
         {/* 09. Made with real tea / real botanical ingredients */}
-        <MadeWithRealTea />
+        {sv?.madeWithRealTea?.enabled !== false && <MadeWithRealTea />}
 
         {/* 10. Product / Tea story rituals */}
-        <TeaStory />
+        {sv?.teaStory?.enabled !== false && <TeaStory />}
 
         {/* 11. Community rituals & creative recipe showcase */}
-        <TeaRitualsAndRecipes />
+        {sv?.ritualsRecipes?.enabled !== false && <TeaRitualsAndRecipes />}
 
         {/* 12. Lifestyle Gallery ("Made for moments that linger") */}
-        <LifestyleGallery />
+        {sv?.lifestyleGallery?.enabled !== false && <LifestyleGallery />}
 
-        {/* 12. Honest Quality / Social proof */}
-        <BrandProof />
+        {/* 13. Honest Quality / Social proof */}
+        {sv?.brandProof?.enabled !== false && <BrandProof />}
 
-        {/* 13. Customer love / reviews */}
-        <CustomerLove />
+        {/* 14. Customer love / reviews */}
+        {sv?.customerLove?.enabled !== false && <CustomerLove />}
 
-        {/* 14. Available where you shop (Amazon Brand Store & WhatsApp Concierge) */}
-        <AvailableInStores />
+        {/* 15. Available where you shop (Amazon Brand Store & WhatsApp Concierge) */}
+        {sv?.availableInStores?.enabled !== false && <AvailableInStores />}
 
-        {/* 15. Final conversion CTA */}
-        <FinalCta />
+        {/* 16. Final conversion CTA */}
+        {sv?.finalCta?.enabled !== false && <FinalCta />}
       </main>
 
-      {/* 16. Footer */}
-      <Footer />
+      {/* 17. Footer */}
+      {sv?.footer?.enabled !== false && <Footer />}
 
-      {/* 17. Existing functional overlays: CartDrawer, SearchOverlay, PromoModal, WhatsAppButton */}
+      {/* 18. Existing functional overlays: CartDrawer, SearchOverlay, PromoModal, WhatsAppButton */}
       <SiteOverlays />
     </>
   );

@@ -145,4 +145,41 @@ This file tracks project tasks, component audits, homepage iterations, quality a
   - [x] `src/config/site-controls.ts`: Default site controls
   - [x] `src/lib/site-control-store.ts`: JSON-backed persistence store
 
+---
+
+## Phase 5 — Website Visual Control Center (Master Implementation Complete)
+
+- [x] **Complete TypeScript Schema** (`src/types/site-controls.ts`):
+  - Global Design tokens (colors, typography, spacing, borders, shadows, animations)
+  - Header & Announcement bar settings
+  - Hero Slider settings and slides
+  - 14 Section visual settings (visibility, headings, colors, padding, links)
+  - Reusable UI component settings (`ProductCardSettings`, `CartDrawerSettings`, `QuickViewModalSettings`, `SearchOverlaySettings`, `PromoModalSettings`, `FloatingWhatsAppSettings`)
+  - Snapshot history schemas
+- [x] **Canonical Default Site Controls** (`src/config/site-controls.ts`):
+  - Bulletproof default values matching authentic TMUG branding and zero dark green rules
+- [x] **Persistence & State Management** (`src/lib/site-control-store.ts`):
+  - Published vs. Draft separation
+  - `deepMerge` ensuring no undefined fields
+  - Atomic publishing with snapshot history (last 10 snapshots)
+  - Rollback to historical snapshot
+  - JSON disk persistence (`data/site-controls.json`) with in-memory fallback
+- [x] **Admin & Public API Layer**:
+  - `/api/admin/site-controls`: Handles `save-draft`, `publish`, `discard-draft`, `reset-defaults`, `rollback`, and legacy `save`
+  - `/api/site-controls`: Public endpoint with authenticated `?preview=draft` support
+- [x] **Live Storefront Integration**:
+  - `SiteControlsProvider` & `useSiteControls()` hook with HTML5 `postMessage` cross-window event handling
+  - `DynamicThemeProvider` injecting dynamic `:root` CSS variables and loading Google Fonts stylesheets on demand
+  - Dynamic controls hooked into `Header`, `Hero`, `TrustStrip`, `ShopCollections`, `BestSellers`, `ProductCard`, `AddToCartButton`, `OpenRevealSection`, `WhyTmug`, `MadeWithRealTea`, `TeaStory`, `TeaRitualsAndRecipes`, `LifestyleGallery`, `BrandProof`, `CustomerLove`, `AvailableInStores`, `FinalCta`, `Footer`, and `HomeClient` section toggles
+- [x] **Admin Control Center UI** (`src/app/admin/page.tsx`):
+  - Expandable category sidebar (Dashboard, Global Design, Header & Nav, Hero Slider, Sections, Product Cards, Media Library, Live Preview, History)
+  - Modular field components: `ColorField.tsx`, `TypographyField.tsx`, `HoverEffectField.tsx`
+  - Responsive multi-device live preview (`LivePreviewPane.tsx`) supporting Desktop (1280px), Tablet (768px), and Mobile (375px)
+  - One-click Draft Save, Publish All, Discard Draft, Reset to Defaults, and Rollback
+- [x] **Automated End-to-End Verification** (`scripts/verify-control-center.mjs`):
+  - Verified Admin login, draft saving, draft isolation, publishing, public API reflection, snapshot rollback, and default reset
+- [x] **Production Build Validation**:
+  - `npm run build` passes with exit code 0 across all 28 static and SSG routes
+
+
 

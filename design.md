@@ -194,3 +194,32 @@ Strict adherence to user accessibility settings:
 }
 ```
 All Framer Motion components check `useReducedMotion()` and gracefully deactivate parallax and floating loops.
+
+---
+
+## 8. Dynamic Theme Tokens & Control Center Mapping
+
+The TMUG design system dynamically adapts to operator visual controls via `DynamicThemeProvider.tsx` and `useSiteControls()`:
+
+### Dynamic CSS Custom Properties (`:root`)
+| Variable | Default | Visual Control Source |
+| :--- | :--- | :--- |
+| `--brand-cream` | `#FDFBF7` | `controls.globalDesign.colors.background` |
+| `--brand-terracotta` | `#C2410C` | `controls.globalDesign.colors.accent` |
+| `--brand-gold` | `#D97706` | Derived gold/maize supporting accent |
+| `--brand-border` | `#E7E5E4` | `controls.globalDesign.colors.border` |
+| `--font-display` | `Bricolage Grotesque` | `controls.globalDesign.typography.displayFont` |
+| `--font-sans` | `DM Sans` | `controls.globalDesign.typography.primaryFont` |
+
+### Dynamic Google Fonts
+When an operator switches typography in the Control Center, `DynamicThemeProvider` dynamically injects the official Google Fonts stylesheet:
+- **Display Options**: `Bricolage Grotesque`, `Playfair Display`, `Outfit`, `Cinzel`, `Montserrat`, `Plus Jakarta Sans`, `DM Sans`.
+- **Primary Body Options**: `DM Sans`, `Inter`, `Outfit`, `Plus Jakarta Sans`, `Roboto`.
+
+### Product Card Hover Presets
+The Control Center provides 4 distinct hover interaction presets for product cards:
+1. **`lift`**: Standard D2C vertical translation (`translateY(-6px)`) with expanded shadow depth.
+2. **`scale`**: Fluid micro-scaling (`scale-105`) with smooth cubic-bezier easing.
+3. **`glow`**: Radiant soft halo glow wrapped behind the transparent packshot cutout.
+4. **`none`**: Modern flat editorial presentation without hover movement.
+

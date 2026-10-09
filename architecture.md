@@ -25,9 +25,12 @@ The application is built on a modern, high-performance web stack:
 
 ```
 tmug-website/
+├── data/
+│   └── site-controls.json      # Persistent JSON storage for draft, published & snapshot history
 ├── public/                     # Static public assets served from root
 │   ├── assets/
 │   │   └── stickers/           # SVG botanical, badge, and doodle stickers
+│   ├── banners/                # High-resolution campaign banners (1-6)
 │   ├── hero/                   # High-res transparent PNG product packshots for 3D stage
 │   ├── logo/                   # TMUG brand emblems and logomarks (tmug-logo.png)
 │   ├── products/               # Master catalog JPG images (front, back, FSSAI views)
@@ -37,8 +40,15 @@ tmug-website/
 ├── src/
 │   ├── app/                    # Next.js App Router routes & layout definitions
 │   │   ├── about/              # Brand origin & founder story
+│   │   ├── admin/              # Complete Website Visual Control Center
+│   │   │   ├── components/     # Modular admin inputs (ColorField, TypographyField, HoverEffectField, LivePreviewPane)
+│   │   │   └── page.tsx        # Comprehensive Admin Control Center dashboard
 │   │   ├── admin/seo/          # Admin SEO management console
+│   │   ├── api/admin/auth/     # Admin authentication endpoint
 │   │   ├── api/admin/seo/      # REST API route handler for dynamic SEO updates
+│   │   ├── api/admin/site-controls/ # Admin CRUD for draft/publish/history/rollback
+│   │   ├── api/admin/upload/   # Real media file upload handler
+│   │   ├── api/site-controls/  # Public site controls with authenticated ?preview=draft
 │   │   ├── collections/        # Filterable collection browsing view
 │   │   ├── contact/            # Customer care & wholesale inquiry page
 │   │   ├── faq/                # Brewing, shipping & return questions
@@ -46,42 +56,45 @@ tmug-website/
 │   │   ├── products/           # Dynamic product detail pages ([slug])
 │   │   ├── terms/              # Terms & conditions
 │   │   ├── globals.css         # Global Tailwind v4 theme, keyframes, and utilities
-│   │   ├── layout.tsx          # Root layout, Google fonts, JSON-LD Schema, ShopProvider
+│   │   ├── layout.tsx          # Root layout, Google fonts, JSON-LD Schema, DynamicThemeProvider, SiteControlsProvider
 │   │   ├── page.tsx            # Main storefront entry point with ItemList schema
 │   │   ├── robots.ts           # Dynamic crawlers instruction file
 │   │   ├── sitemap.ts          # XML Sitemap generator for SEO
 │   │   └── template.tsx        # View transition page wrapper
-│   ├── components/             # Reusable UI components
+│   ├── components/             # Reusable UI components hooked into useSiteControls()
 │   │   ├── cart/               # AddToCartButton, Toast notification system
 │   │   ├── motion/             # Framer Motion primitives (Reveal, FloatingLogo)
 │   │   ├── AnnouncementBar.tsx # (Exported from Header.tsx) Site announcement strip
 │   │   ├── AvailableInStores.tsx# Verified retail and marketplace channels
+│   │   ├── BestSellers.tsx     # Compact best sellers showcase
 │   │   ├── BrandProof.tsx      # Social proof, community metrics, press citations
 │   │   ├── CartDrawer.tsx      # Fixed portal slide-over cart & WhatsApp checkout
 │   │   ├── CustomerLove.tsx    # Customer reviews and testimonials
-│   │   ├── FeaturedProduct.tsx # Single product feature spotlight
-│   │   ├── FeaturedSlider.tsx  # Product slider component (standalone/legacy)
+│   │   ├── DynamicThemeProvider.tsx # Injects dynamic CSS variables and Google Fonts
 │   │   ├── FinalCta.tsx        # Closing conversion card & email newsletter
 │   │   ├── Footer.tsx          # Sitewide footer and legal disclosures
 │   │   ├── Header.tsx          # Global navigation, mobile menu, search trigger
-│   │   ├── Hero.tsx            # 3D interactive hero experience & product stage
-│   │   ├── HomeClient.tsx      # Client-side 14-section homepage orchestrator
+│   │   ├── Hero.tsx            # Campaign slider with autoplay & visual controls
+│   │   ├── HomeClient.tsx      # Client-side 14-section homepage orchestrator with section toggles
 │   │   ├── icons.tsx           # SVG icon library (close, trash, search, bag, arrow, WhatsApp)
 │   │   ├── LifestyleGallery.tsx# "Made for moments that linger" sticker composition
 │   │   ├── MadeWithRealTea.tsx # Whole botanical ingredients transparency breakdown
-│   │   ├── ProductCard.tsx     # Standard product card with variant toggle & QuickView
+│   │   ├── OpenRevealSection.tsx# Unboxing tea reveal experience
+│   │   ├── ProductCard.tsx     # Standard product card with dynamic styling & hover presets
 │   │   ├── ProductDetail.tsx   # Detailed product view (images, brew guide, ingredients)
 │   │   ├── ProductQuickView.tsx# Modal quick-view overlay for rapid browsing
 │   │   ├── SearchOverlay.tsx   # Live product search drawer with fuzzy matching
-│   │   ├── ShopCollections.tsx # Multi-tab product slider with horizontal swipe
+│   │   ├── ShopCollections.tsx # Multi-tab product slider with dynamic heading & colors
 │   │   ├── SiteOverlays.tsx    # Container for CartDrawer, SearchOverlay, PromoModal
+│   │   ├── TeaRitualsAndRecipes.tsx # Curated hot/cold brew recipes
 │   │   ├── TeaStory.tsx        # Daily tea ritual timeline (Morning, Afternoon, Evening)
 │   │   ├── TrustStrip.tsx      # Four-pillar botanical trust and shipping badge marquee
 │   │   ├── WhatsAppButton.tsx  # Floating quick-chat concierge launcher
 │   │   └── WhyTmug.tsx         # Brand value proposition & whole-leaf manifesto
 │   ├── config/
 │   │   ├── seo.ts              # Default SEO meta definitions
-│   │   └── site.ts             # Central site configuration, URLs, promo codes, WhatsApp links
+│   │   ├── site.ts             # Central site configuration, URLs, promo codes, WhatsApp links
+│   │   └── site-controls.ts    # Canonical DEFAULT_SITE_CONTROLS definitions
 │   ├── data/
 │   │   ├── collections.ts      # Collection definitions, navigation hierarchy, product relations
 │   │   ├── products.ts         # SINGLE SOURCE OF TRUTH for products, variants, and prices
@@ -89,10 +102,41 @@ tmug-website/
 │   ├── lib/
 │   │   ├── format.ts           # INR currency formatter (formatINR, formatMoney)
 │   │   ├── seo-store.ts        # Server-side persistent SEO settings cache
+│   │   ├── site-control-store.ts # Server-side persistent published/draft/history store
+│   │   ├── site-controls-context.tsx # React Context provider with postMessage live preview
 │   │   └── store.tsx           # React Context shop state (cart, promo codes, fly animation)
 │   └── types/
-│       └── index.ts            # TypeScript interfaces for Product, Variant, CartLine, Collection
+│       ├── index.ts            # Master TypeScript re-exports
+│       └── site-controls.ts    # Strict schemas for visual controls, global tokens & sections
 ```
+
+---
+
+## Website Visual Control Center Architecture
+
+### 1. Store & State Flow
+
+```mermaid
+graph TD
+    AdminUI[Admin Control Center UI] -->|POST save-draft| AdminAPI[/api/admin/site-controls]
+    AdminUI -->|POST publish| AdminAPI
+    AdminUI -->|postMessage| LivePreview[Live Preview Iframe]
+    AdminAPI --> Store[site-control-store.ts]
+    Store --> Disk[(data/site-controls.json)]
+    Store --> InMemory[In-Memory Cache Fallback]
+    LivePreview --> ClientCtx[SiteControlsProvider]
+    ClientCtx --> DynTheme[DynamicThemeProvider]
+    DynTheme --> Storefront[Storefront Sections & Components]
+    PublicUser[Public Shopper] -->|GET /api/site-controls| PublicAPI[/api/site-controls]
+    PublicAPI -->|Mode: published| Store
+```
+
+### 2. Dual Draft vs. Published Isolation
+- **Published State**: Served to all public visitors via SSR initial props (`RootLayout`) and the public `/api/site-controls` endpoint.
+- **Draft State**: Editable in the Admin Visual Control Center. Persisted separately in `data/site-controls.json`. Changes do not impact public users until "Publish All" is triggered.
+- **Live Preview Sync**: Uses HTML5 `postMessage` cross-frame messaging to update the live preview iframe instantly on every keystroke/color picker change without page reloading or server roundtrips.
+- **Snapshot History**: Every "Publish All" action captures an immutable snapshot into `state.history` (capped at 10 items). Operators can roll back to any historical snapshot with 1 click.
+- **Dynamic CSS Variables & Typography**: `DynamicThemeProvider` reads active global design controls and injects `--brand-cream`, `--brand-terracotta`, `--brand-gold`, font family tokens, border radii, and dynamically loads Google Fonts stylesheets without manual CSS modifications.
 
 ---
 

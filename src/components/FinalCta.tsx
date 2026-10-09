@@ -5,11 +5,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { siteConfig, whatsappLink } from "@/config/site";
 import { IconArrowRight, IconWhatsApp } from "./icons";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 /** Section 14 — Final Conversion CTA band */
 export default function FinalCta() {
+  const { controls } = useSiteControls();
+  const fc = controls?.sectionsVisual?.finalCta;
+
   return (
-    <section className="relative overflow-hidden bg-plum py-8 text-warm-ivory sm:py-12">
+    <section
+      style={{
+        backgroundColor: fc?.bgColor || undefined,
+        paddingTop: fc?.paddingTop !== undefined ? `${fc.paddingTop}px` : undefined,
+        paddingBottom: fc?.paddingBottom !== undefined ? `${fc.paddingBottom}px` : undefined,
+      }}
+      className="relative overflow-hidden bg-plum py-8 text-warm-ivory sm:py-12"
+    >
       {/* Decorative background glows & botanical shapes */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="absolute -left-28 top-0 h-96 w-96 rounded-full bg-coral/20 blur-3xl" />
@@ -45,13 +56,22 @@ export default function FinalCta() {
               Start Your Ritual
             </span>
 
-            <h2 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-warm-ivory sm:text-4xl md:text-5xl">
-              Ready to make tea <span className="text-tea-gold">more fun?</span>
+            <h2
+              style={{ color: fc?.headingColor || undefined }}
+              className="mt-4 font-display text-3xl font-extrabold tracking-tight text-warm-ivory sm:text-4xl md:text-5xl"
+            >
+              {fc?.heading || (
+                <>
+                  Ready to make tea <span className="text-tea-gold">more fun?</span>
+                </>
+              )}
             </h2>
 
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-warm-ivory/80 sm:text-lg">
-              Colour-changing blue teas, soothing whole chamomile, and properly brisk Assam chai
-              — packed fresh for your everyday cup.
+            <p
+              style={{ color: fc?.textColor || undefined }}
+              className="mt-4 max-w-xl text-base leading-relaxed text-warm-ivory/80 sm:text-lg"
+            >
+              {fc?.subheading || "Colour-changing blue teas, soothing whole chamomile, and properly brisk Assam chai — packed fresh for your everyday cup."}
               {siteConfig.promo.enabled && (
                 <span className="block mt-2 font-medium text-tea-gold">
                   ✨ Use code <strong className="font-extrabold text-tea-gold">{siteConfig.promo.code}</strong> for {siteConfig.promo.discountPercent}% off your order.
@@ -62,10 +82,14 @@ export default function FinalCta() {
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
               {/* Primary: Shop TMUG */}
               <Link
-                href="/#shop"
+                href={fc?.ctaLink || "/#shop"}
+                style={{
+                  backgroundColor: fc?.buttonBg || undefined,
+                  color: fc?.buttonText || undefined,
+                }}
                 className="inline-flex items-center gap-2 rounded-full bg-tea-gold px-8 py-4 text-sm font-extrabold text-charcoal shadow-[0_14px_30px_-12px_rgba(217,164,65,0.5)] transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] hover:bg-gold-soft"
               >
-                Shop TMUG
+                {fc?.ctaText || "Shop TMUG"}
                 <IconArrowRight className="h-4 w-4" />
               </Link>
 

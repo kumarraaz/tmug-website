@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Reveal from "./motion/Reveal";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 const TRUST_METRICS = [
   {
@@ -32,9 +33,17 @@ const TRUST_METRICS = [
 ];
 
 export default function BrandProof() {
+  const { controls } = useSiteControls();
+  const bp = controls?.sectionsVisual?.brandProof;
+
   return (
     <section
       aria-label="Tea worth talking about"
+      style={{
+        backgroundColor: bp?.bgColor || undefined,
+        paddingTop: bp?.paddingTop !== undefined ? `${bp.paddingTop}px` : undefined,
+        paddingBottom: bp?.paddingBottom !== undefined ? `${bp.paddingBottom}px` : undefined,
+      }}
       className="relative overflow-hidden bg-plum py-8 sm:py-12 text-warm-ivory"
     >
       {/* Background radial glow & floating decorative stickers */}
@@ -58,12 +67,21 @@ export default function BrandProof() {
             <span className="h-1.5 w-1.5 rounded-full bg-tea-gold" />
             Honest Quality
           </span>
-          <h2 className="text-section mt-2 font-display font-extrabold text-cream">
-            Tea worth <span className="text-tea-gold">talking about.</span>
+          <h2
+            style={{ color: bp?.headingColor || undefined }}
+            className="text-section mt-2 font-display font-extrabold text-cream"
+          >
+            {bp?.heading || (
+              <>
+                Tea worth <span className="text-tea-gold">talking about.</span>
+              </>
+            )}
           </h2>
-          <p className="mt-2 text-xs sm:text-sm leading-relaxed text-cream/75">
-            No corporate jargon. No artificial colours. Just proper Indian tea crafted with vibrant
-            whole botanicals and heritage teas made for your daily ritual.
+          <p
+            style={{ color: bp?.textColor || undefined }}
+            className="mt-2 text-xs sm:text-sm leading-relaxed text-cream/75"
+          >
+            {bp?.subheading || "No corporate jargon. No artificial colours. Just proper Indian tea crafted with vibrant whole botanicals and heritage teas made for your daily ritual."}
           </p>
         </Reveal>
 

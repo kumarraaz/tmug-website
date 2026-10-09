@@ -9,6 +9,7 @@ import type { Product } from "@/types";
 import ProductCard from "./ProductCard";
 import Reveal from "./motion/Reveal";
 import { IconArrowRight } from "./icons";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 const CATEGORY_TABS = [
   { id: "all-teas", label: "All Teas" },
@@ -22,31 +23,34 @@ const CATEGORY_TABS = [
 /**
  * Filter products according to category tabs from authentic TMUG catalog.
  */
-function getCategoryProducts(tabId: string): Product[] {
+function getCategoryProducts(tabId: string, allProducts: Product[]): Product[] {
   switch (tabId) {
     case "flower-teas":
-      return PRODUCTS.filter((p) => p.category === "herbal-flower" && p.id !== "lemongrass");
+      return allProducts.filter((p) => p.category === "herbal-flower" && p.id !== "lemongrass");
     case "chai":
-      return PRODUCTS.filter((p) => p.category === "chai");
+      return allProducts.filter((p) => p.category === "chai");
     case "green-tea":
-      return PRODUCTS.filter((p) => p.category === "green-tea" || p.id === "darjeeling-green");
+      return allProducts.filter((p) => p.category === "green-tea" || p.id === "darjeeling-green");
     case "herbal-fresh":
-      return PRODUCTS.filter((p) => p.category === "herbal-flower");
+      return allProducts.filter((p) => p.category === "herbal-flower");
     case "best-sellers":
-      return PRODUCTS.filter((p) => p.featured);
+      return allProducts.filter((p) => p.featured);
     case "all-teas":
     default:
-      return PRODUCTS;
+      return allProducts;
   }
 }
 
 export default function ShopCollections() {
+  const { controls } = useSiteControls();
+  const collSettings = controls?.sectionsVisual?.collections;
+
   const [activeTab, setActiveTab] = useState("all-teas");
   const sliderRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
-  const products = getCategoryProducts(activeTab);
+  const products = getCategoryProducts(activeTab, PRODUCTS);
 
   const checkScrollBounds = useCallback(() => {
     if (!sliderRef.current) return;
@@ -87,6 +91,11 @@ export default function ShopCollections() {
     <section
       id="collections"
       aria-label="Shop our collections"
+      style={{
+        backgroundColor: collSettings?.bgColor || undefined,
+        paddingTop: collSettings?.paddingTop !== undefined ? `${collSettings.paddingTop}px` : undefined,
+        paddingBottom: collSettings?.paddingBottom !== undefined ? `${collSettings.paddingBottom}px` : undefined,
+      }}
       className="relative overflow-hidden bg-gradient-to-b from-[#FFF7EF] via-[#FBE7DC]/40 to-[#FFF7EF] py-8 sm:py-12"
     >
       {/* Decorative subtle background accents */}
@@ -119,47 +128,59 @@ export default function ShopCollections() {
               <span className="h-2 w-2 rounded-full bg-[#FAA4B5]" />
               The TMUG Product Rail
             </span>
-            <h2 className="text-section mt-1.5 font-display font-black text-[#33243A]">
-              Shop Our <span className="text-[#FAA4B5]">Collections</span>
+            <h2
+              style={{ color: collSettings?.headingColor || undefined }}
+              className="text-section mt-1.5 font-display font-black text-[#33243A]"
+            >
+              {collSettings?.heading || (
+                <>
+                  Shop Our <span className="text-[#FAA4B5]">Collections</span>
+                </>
+              )}
             </h2>
-            <p className="mt-1 max-w-lg text-[13px] sm:text-[14px] text-[#3A3438]/80">
-              Whole flower herbal teas and authentic mountain estate chai, sealed fresh for your cup.
+            <p
+              style={{ color: collSettings?.textColor || undefined }}
+              className="mt-1 max-w-lg text-[13px] sm:text-[14px] text-[#3A3438]/80"
+            >
+              {collSettings?.subheading || "Whole flower herbal teas and authentic mountain estate chai, sealed fresh for your cup."}
             </p>
           </Reveal>
 
           {/* Top Desktop Carousel Controls */}
-          <div className="hidden sm:flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={() => scroll("left")}
-              disabled={!canScrollLeft}
-              aria-label="Previous products"
-              className={`flex h-10 w-10 items-center justify-center rounded-full border border-[#3A3438]/15 bg-white text-[#33243A] shadow-xs transition-all duration-200 ${
-                canScrollLeft
-                  ? "hover:bg-[#FFF183] hover:text-[#33243A] hover:scale-105 active:scale-95 cursor-pointer"
-                  : "opacity-30 cursor-not-allowed"
-              }`}
-            >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              onClick={() => scroll("right")}
-              disabled={!canScrollRight}
-              aria-label="Next products"
-              className={`flex h-10 w-10 items-center justify-center rounded-full border border-[#3A3438]/15 bg-white text-[#33243A] shadow-xs transition-all duration-200 ${
-                canScrollRight
-                  ? "hover:bg-[#FFF183] hover:text-[#33243A] hover:scale-105 active:scale-95 cursor-pointer"
-                  : "opacity-30 cursor-not-allowed"
-              }`}
-            >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
+          {collSettings?.showArrows !== false && (
+            <div className="hidden sm:flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => scroll("left")}
+                disabled={!canScrollLeft}
+                aria-label="Previous products"
+                className={`flex h-10 w-10 items-center justify-center rounded-full border border-[#3A3438]/15 bg-white text-[#33243A] shadow-xs transition-all duration-200 ${
+                  canScrollLeft
+                    ? "hover:bg-[#FFF183] hover:text-[#33243A] hover:scale-105 active:scale-95 cursor-pointer"
+                    : "opacity-30 cursor-not-allowed"
+                }`}
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                onClick={() => scroll("right")}
+                disabled={!canScrollRight}
+                aria-label="Next products"
+                className={`flex h-10 w-10 items-center justify-center rounded-full border border-[#3A3438]/15 bg-white text-[#33243A] shadow-xs transition-all duration-200 ${
+                  canScrollRight
+                    ? "hover:bg-[#FFF183] hover:text-[#33243A] hover:scale-105 active:scale-95 cursor-pointer"
+                    : "opacity-30 cursor-not-allowed"
+                }`}
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Category Filter Pills */}

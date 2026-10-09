@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { IconArrowRight } from "./icons";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 /**
  * Section: "Made for moments that linger."
@@ -14,9 +15,17 @@ import { IconArrowRight } from "./icons";
  * - Zero Green UI
  */
 export default function LifestyleGallery() {
+  const { controls } = useSiteControls();
+  const lg = controls?.sectionsVisual?.lifestyleGallery;
+
   return (
     <section
       aria-label="Made for moments that linger"
+      style={{
+        backgroundColor: lg?.bgColor || undefined,
+        paddingTop: lg?.paddingTop !== undefined ? `${lg.paddingTop}px` : undefined,
+        paddingBottom: lg?.paddingBottom !== undefined ? `${lg.paddingBottom}px` : undefined,
+      }}
       className="relative overflow-hidden bg-warm-ivory py-8 sm:py-12 md:py-14"
     >
       {/* Background organic gradients & decorative lines */}
@@ -165,26 +174,31 @@ export default function LifestyleGallery() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.55, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          style={{ color: lg?.headingColor || undefined }}
           className="mt-5 font-display text-4xl font-black tracking-tight text-charcoal sm:text-5xl md:text-6xl leading-[1.08]"
         >
-          Made for moments <br className="hidden sm:block" />
-          <span className="relative inline-block text-coral">
-            that linger.
-            {/* Playful hand-drawn underline SVG */}
-            <svg
-              className="absolute -bottom-2 left-0 w-full"
-              viewBox="0 0 250 12"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M 3 8 C 60 2, 180 11, 247 5"
-                stroke="#D9A441"
-                strokeWidth="3.5"
-                strokeLinecap="round"
-              />
-            </svg>
-          </span>
+          {lg?.heading || (
+            <>
+              Made for moments <br className="hidden sm:block" />
+              <span className="relative inline-block text-coral">
+                that linger.
+                {/* Playful hand-drawn underline SVG */}
+                <svg
+                  className="absolute -bottom-2 left-0 w-full"
+                  viewBox="0 0 250 12"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M 3 8 C 60 2, 180 11, 247 5"
+                    stroke="#D9A441"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>
+            </>
+          )}
         </motion.h2>
 
         {/* Supporting Editorial Copy */}
@@ -193,10 +207,10 @@ export default function LifestyleGallery() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.55, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+          style={{ color: lg?.textColor || undefined }}
           className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-charcoal/70 sm:text-lg"
         >
-          From slow solo mornings to late-night kitchen talks, discover real teas crafted to bring
-          more joy, aroma, and natural vibrancy to every pour.
+          {lg?.subheading || "From slow solo mornings to late-night kitchen talks, discover real teas crafted to bring more joy, aroma, and natural vibrancy to every pour."}
         </motion.p>
 
         {/* Mobile-Friendly Interactive Stickers Row */}

@@ -19,6 +19,7 @@ export default function AddToCartButton({
   variant,
   qty = 1,
   className = "",
+  style,
   openCart = false,
   onAdded,
 }: {
@@ -26,6 +27,7 @@ export default function AddToCartButton({
   variant: ProductVariant;
   qty?: number;
   className?: string;
+  style?: React.CSSProperties;
   /** Open the cart drawer after adding (used on product pages). */
   openCart?: boolean;
   /** Called right after the item is added to the cart. */
@@ -69,6 +71,7 @@ export default function AddToCartButton({
       type="button"
       onClick={handleClick}
       disabled={phase === "adding"}
+      style={style}
       aria-live="polite"
       aria-label={
         phase === "added"

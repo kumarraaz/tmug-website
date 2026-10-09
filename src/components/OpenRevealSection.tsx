@@ -11,6 +11,7 @@ import { formatINR } from "@/lib/format";
 import AddToCartButton from "./cart/AddToCartButton";
 import { IconArrowRight, IconSparkle, IconClose, IconCheck, IconStar } from "./icons";
 import Reveal from "./motion/Reveal";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 // Eligible verified products for dynamic/random unboxing
 const ELIGIBLE_BOX_IDS = [
@@ -23,6 +24,9 @@ const ELIGIBLE_BOX_IDS = [
 ];
 
 export default function OpenRevealSection() {
+  const { controls } = useSiteControls();
+  const openRevealSettings = controls?.sectionsVisual?.openReveal;
+
   const reduceMotion = useReducedMotion();
   const { lines, updateQty, removeLine, showToast } = useShop();
 
@@ -91,6 +95,11 @@ export default function OpenRevealSection() {
     <section
       id="open-reveal"
       aria-label="TMUG Interactive Box Reveal"
+      style={{
+        backgroundColor: openRevealSettings?.bgColor || undefined,
+        paddingTop: openRevealSettings?.paddingTop !== undefined ? `${openRevealSettings.paddingTop}px` : undefined,
+        paddingBottom: openRevealSettings?.paddingBottom !== undefined ? `${openRevealSettings.paddingBottom}px` : undefined,
+      }}
       className="relative overflow-hidden bg-gradient-to-b from-[#FFF7EF] via-[#FBE7DC]/60 to-[#FFF7EF] py-10 sm:py-14"
     >
       {/* ── Background Vibrant Decorative Gradients & Stickers ── */}
@@ -137,11 +146,21 @@ export default function OpenRevealSection() {
               <span className="h-2 w-2 rounded-full bg-[#FAA4B5] animate-ping" />
               Interactive Product Unboxing
             </span>
-            <h2 className="text-section mt-2 font-display font-black text-[#33243A]">
-              Open Your <span className="text-[#FAA4B5]">TMUG Box</span>
+            <h2
+              style={{ color: openRevealSettings?.headingColor || undefined }}
+              className="text-section mt-2 font-display font-black text-[#33243A]"
+            >
+              {openRevealSettings?.heading || (
+                <>
+                  Open Your <span className="text-[#FAA4B5]">TMUG Box</span>
+                </>
+              )}
             </h2>
-            <p className="mt-1.5 text-xs sm:text-sm text-[#3A3438]/80 max-w-lg mx-auto">
-              Tap the collector’s box to pop open whole botanicals and single-origin leaves sealed at origin for your daily ritual.
+            <p
+              style={{ color: openRevealSettings?.textColor || undefined }}
+              className="mt-1.5 text-xs sm:text-sm text-[#3A3438]/80 max-w-lg mx-auto"
+            >
+              {openRevealSettings?.subheading || "Tap the collector’s box to pop open whole botanicals and single-origin leaves sealed at origin for your daily ritual."}
             </p>
           </Reveal>
         </div>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Reveal from "./motion/Reveal";
 import { IconArrowRight, IconSparkle } from "./icons";
+import { useSiteControls } from "@/lib/site-controls-context";
 
 interface CreativeItem {
   id: string;
@@ -114,6 +115,9 @@ const RECIPE_ITEMS: CreativeItem[] = [
 ];
 
 export default function TeaRitualsAndRecipes() {
+  const { controls } = useSiteControls();
+  const rrSettings = controls?.sectionsVisual?.ritualsRecipes;
+
   const [tab, setTab] = useState<"rituals" | "recipes">("rituals");
   const items = tab === "rituals" ? RITUAL_ITEMS : RECIPE_ITEMS;
 
@@ -121,6 +125,11 @@ export default function TeaRitualsAndRecipes() {
     <section
       id="rituals-recipes"
       aria-label="TMUG Rituals and Creative Recipes"
+      style={{
+        backgroundColor: rrSettings?.bgColor || undefined,
+        paddingTop: rrSettings?.paddingTop !== undefined ? `${rrSettings.paddingTop}px` : undefined,
+        paddingBottom: rrSettings?.paddingBottom !== undefined ? `${rrSettings.paddingBottom}px` : undefined,
+      }}
       className="relative overflow-hidden bg-warm-ivory py-8 sm:py-12"
     >
       {/* Background Subtle Ambient Auras */}
@@ -137,11 +146,21 @@ export default function TeaRitualsAndRecipes() {
               <IconSparkle className="h-3 w-3 text-tea-gold" />
               Creative Tea Inspiration
             </span>
-            <h2 className="text-section mt-2 font-display font-black text-charcoal">
-              Rituals &amp; <span className="text-coral">Recipes</span>
+            <h2
+              style={{ color: rrSettings?.headingColor || undefined }}
+              className="text-section mt-2 font-display font-black text-charcoal"
+            >
+              {rrSettings?.heading || (
+                <>
+                  Rituals &amp; <span className="text-coral">Recipes</span>
+                </>
+              )}
             </h2>
-            <p className="mt-1 text-xs sm:text-sm text-charcoal/70">
-              Discover authentic ways our community brews, bakes, and creates colorful moments with whole botanicals.
+            <p
+              style={{ color: rrSettings?.textColor || undefined }}
+              className="mt-1 text-xs sm:text-sm text-charcoal/70"
+            >
+              {rrSettings?.subheading || "Discover authentic ways our community brews, bakes, and creates colorful moments with whole botanicals."}
             </p>
           </Reveal>
         </div>
