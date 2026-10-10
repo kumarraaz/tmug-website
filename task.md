@@ -181,5 +181,37 @@ This file tracks project tasks, component audits, homepage iterations, quality a
 - [x] **Production Build Validation**:
   - `npm run build` passes with exit code 0 across all 28 static and SSG routes
 
+---
+
+## Phase 6 — Homepage Hero Slider S1–S4 Master Replacement (Complete)
+
+- [x] **Asset Verification & Ingestion**:
+  - Located session-uploaded assets S1–S4 (`media_1791633131904.png`, `media_1791633131976.png`, `media_17916332055.png`, `media_1791633132111.png`) and high-resolution master sources (`s1.png`, `sl2.png`, `sl3.png`, `sl4.png`).
+  - Saved to `public/banners/s1.png` (1520×633, PNG, 1.34 MB), `public/banners/s2.png` (1520×633, PNG, 1.01 MB), `public/banners/s3.png` (1520×633, PNG, 1.40 MB), `public/banners/s4.png` (1944×809, PNG, 1.80 MB).
+- [x] **Exact Slide Order (S1 → S2 → S3 → S4)**:
+  - Slide 1 (S1): Butterfly Pea Flower Tea — *"Brew Something Beautiful. A little blue. A beautiful pause."* → `/products/butterfly-pea-flower-tea`
+  - Slide 2 (S2): Lemongrass Tea — *"Steeped in simple pleasures. A lovely addition to your tea ritual."* → `/products/lemongrass-tea`
+  - Slide 3 (S3): Chamomile Flower Tea — *"A cup of golden moments. Make room for your tea ritual."* → `/products/chamomile-flower-tea`
+  - Slide 4 (S4): TMUG Herbal Teas Lineup — *"sip happens. Pick your mood."* → `/#collections`
+- [x] **Purge of Previous Hero Images**:
+  - Removed all legacy banner references from `src/config/banners.ts`, `src/config/site-controls.ts`, and `data/site-controls.json` (both `published` and `draft` scopes).
+  - Recorded published revision snapshot in `data/site-controls.json` history.
+  - Zero old hero images remain in active slider runtime configuration.
+  - Non-hero images (product cards, collections, Best Sellers, etc.) preserved 100% untouched.
+- [x] **Component Modernization (`src/components/Hero.tsx`)**:
+  - Standardized container aspect ratio to native `aspect-[2.4/1]` across all breakpoints, matching source artwork aspect ratio.
+  - `Image` configured with `object-contain sm:object-cover object-center` — zero cropping, stretching, or pixelation.
+  - Removed redundant mobile gradient scrim and duplicate text overlay to preserve clean artwork typography and packaging presentation.
+  - Responsive navigation strip featuring `01 / 04` numeric indicator, 4-pill active pagination indicators, and direct action CTA button.
+  - Interactive next/previous arrow controls, autoplay with pause on hover/touch, and mobile touch swipe.
+- [x] **Browser Subagent Visual & Functional QA**:
+  - Verified slides 1–4 transition in exact order with correct counters (`01 / 04` to `04 / 04`), categories, and CTA links.
+  - Verified arrow navigation forwards and backwards.
+  - Verified direct pagination tab clicks.
+  - Verified mobile responsive layout at 390px viewport with clean uncropped banner scaling.
+- [x] **Build Verification**:
+  - `npm run build` completed with exit code 0 across all 28 routes in Turbopack.
+
+
 
 

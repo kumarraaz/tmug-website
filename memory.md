@@ -197,6 +197,45 @@ Under no circumstances should any developer or automated agent fabricate:
 - **Preserved Core Mechanics**: Authentic product catalog (`data/products.ts`), `ShopProvider` cart state, WhatsApp order generator, and SEO metadata remain 100% operational and non-destructively protected.
 - **Automated Validation**: End-to-end automated verification script (`scripts/verify-control-center.mjs`) validates login, draft isolation, publishing, rollback, and reset.
 
+---
+
+## 12. Active Homepage Hero Slider Configuration (S1–S4 Master Replacement)
+
+The homepage Hero Slider (`src/components/Hero.tsx`) runs exclusively the four user-supplied campaign banners in exact sequential order:
+
+1. **Slide 1 (S1)**: `public/banners/s1.png` (1520×633, PNG)
+   - Campaign: Butterfly Pea Flower Tea
+   - Headline: *"Brew Something Beautiful."*
+   - Subtitle: *"A little blue. A beautiful pause."*
+   - CTA: *"Shop Butterfly Pea"* → `/products/butterfly-pea-flower-tea`
+   - Category: Flower Tea
+2. **Slide 2 (S2)**: `public/banners/s2.png` (1520×633, PNG)
+   - Campaign: Lemongrass Tea
+   - Headline: *"Steeped in simple pleasures."*
+   - Subtitle: *"A lovely addition to your tea ritual."*
+   - CTA: *"Shop Lemongrass"* → `/products/lemongrass-tea`
+   - Category: Herbal & Fresh
+3. **Slide 3 (S3)**: `public/banners/s3.png` (1520×633, PNG)
+   - Campaign: Chamomile Flower Tea
+   - Headline: *"A cup of golden moments."*
+   - Subtitle: *"Make room for your tea ritual."*
+   - CTA: *"Shop Chamomile"* → `/products/chamomile-flower-tea`
+   - Category: Flower Tea
+4. **Slide 4 (S4)**: `public/banners/s4.png` (1944×809, PNG)
+   - Campaign: TMUG Herbal Teas Lineup
+   - Headline: *"sip happens."*
+   - Subtitle: *"Pick your mood."*
+   - CTA: *"Shop your sip"* → `/#collections`
+   - Category: The Tea Lineup
+
+### Architectural & Presentation Rules
+- **Aspect Ratio**: Native 2.4:1 container ratio (`aspect-[2.4/1]`) matching the source banner dimensions across all screen sizes.
+- **Display Mode**: `object-contain sm:object-cover object-center` ensuring no cropping, edge clipping, distortion, or blur.
+- **Artwork Preservation**: Mobile gradient scrims and duplicate HTML text overlays are omitted because artwork text, teacups, and pouches are directly integrated into the graphic design.
+- **Zero Legacy Images**: All previous hero banners have been purged from `src/config/banners.ts`, `src/config/site-controls.ts`, and `data/site-controls.json`.
+- **Non-Hero Isolation**: Non-hero assets (product cutouts, collections, best sellers) remain untouched.
+
+
 
 
 

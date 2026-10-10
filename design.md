@@ -223,3 +223,23 @@ The Control Center provides 4 distinct hover interaction presets for product car
 3. **`glow`**: Radiant soft halo glow wrapped behind the transparent packshot cutout.
 4. **`none`**: Modern flat editorial presentation without hover movement.
 
+---
+
+## 9. Hero Slider Design System (S1–S4 Master Specification)
+
+The homepage Hero Slider showcases four bespoke campaign banners:
+- **Aspect Ratio**: Standardized `aspect-[2.4/1]` container across desktop, tablet, and mobile viewports, matching the source assets' exact ~2.40:1 ratio.
+- **Image Scaling**: `object-contain sm:object-cover object-center` with smooth Framer Motion crossfade (`duration: 0.55s`).
+- **Clean Graphic Presentation**: Zero mobile gradient scrim or overlay typography; the high-resolution artwork includes native headlines, subtext, and packaging visuals.
+- **Navigation Strip**:
+  - Warm ivory backdrop (`bg-warm-ivory/95 backdrop-blur-md`) with fine gold border (`border-b border-tea-gold/20`).
+  - Slide counter: `01 / 04` formatted with bold typography.
+  - Category pill: Uppercase category badge (`FLOWER TEA`, `HERBAL & FRESH`, `THE TEA LINEUP`).
+  - Pagination indicators: 4 interactive tabs with expanding width for the active slide (`w-7 sm:w-10 bg-tea-gold`).
+  - CTA Button: Responsive pill button (`Shop Butterfly Pea →`, `Shop Lemongrass →`, `Shop Chamomile →`, `Shop your sip →`) with hover lift and arrow indicator.
+- **Controls & Gestures**:
+  - Desktop/tablet previous/next circular frosted buttons.
+  - Touch swipe support (`onTouchStart`, `onTouchMove`, `onTouchEnd` with 45px swipe threshold).
+  - Autoplay (5500ms) with pause on hover or touch, and `useReducedMotion()` fallback.
+
+

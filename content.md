@@ -28,39 +28,29 @@ Secondary Tagline:
 
 ## 3. Section Copy & Messaging Standards
 
-### Hero Banner Campaign Artwork & Messaging (Homepage V2)
-The hero slider runs full storefront campaign banners using authenticated brand artwork assets:
+### Hero Banner Campaign Artwork & Messaging (S1–S4 Master Replacement)
+The hero slider runs exclusively four user-supplied campaign banners in exact sequence:
 
-1. **Blue Tea Ritual** (`butterfly-pea-tea-ritual.png`):
-   - Headline: *"Meet Your Blue Tea Ritual."*
-   - Subtitle: *"Naturally vibrant butterfly pea flowers, brewed into a beautiful everyday cup."*
-   - Badges: `Floral • Caffeine-Free • Naturally Blue`
-   - Primary CTA: `"Shop Butterfly Pea Tea →"` (routes to `/products/butterfly-pea-flower-tea`)
-2. **Wellness 7 Herbal Teas** (`wellness-seven-herbal-teas.png`):
-   - Headline: *"Wellness, Wrapped in 7 Herbal Teas"*
-   - Subtitle: *"Pure flowers. Real flavour. A happier you, one cup at a time."*
-   - Badges: `Caffeine-Free • All Natural • Daily Wellness`
-   - Primary CTA: `"Explore Herbal Teas →"` (routes to `/#collections`)
-3. **Properly Kadak Chai** (`properly-kadak-chai-1.png`):
-   - Headline: *"Properly Kadak. Properly TMUG."*
-   - Subtitle: *"Bold everyday chai for mornings, breaks and everything in between."*
-   - Badges: `Rich Aroma • Bold Taste • Everyday Chai`
-   - Primary CTA: `"Shop Chai →"` (routes to `/#collections`)
-4. **Tea, But Make It Fun** (`modern-indian-tea-garden.png`):
-   - Headline: *"Tea, but make it fun."*
-   - Subtitle: *"Floral brews, fresh leaves & properly kadak chai — made for your everyday ritual."*
-   - Badges: `Modern Indian Tea Co.`
-   - Primary CTA: `"Shop Tea →"` (routes to `/#collections`)
-5. **Butterfly Pea In Bloom** (`blue-tea-ritual-in-bloom.png`):
-   - Headline: *"Butterfly Pea Flower Tea"*
-   - Subtitle: *"Naturally beautiful. Naturally you. Vibrant blue flowers for a refreshing cup."*
-   - Badges: `100% Natural Flowers • Rich in Antioxidants • Naturally Caffeine-Free`
-   - Primary CTA: `"Order Blue Tea →"` (routes to `/products/butterfly-pea-flower-tea`)
-6. **Morning Kadak Ritual** (`properly-kadak-chai-3.png`):
-   - Headline: *"Properly Kadak. Properly TMUG."*
-   - Subtitle: *"A rich Assam CTC & Orthodox blend crafted for an authentic Indian breakfast chai."*
-   - Badges: `Assam CTC & Orthodox • Rich Golden Liquor • 100% Pure`
-   - Primary CTA: `"Shop Kadak Chai →"` (routes to `/#collections`)
+1. **Slide 1 (S1) — Butterfly Pea Flower Tea** (`/banners/s1.png`):
+   - Artwork Headline: *"Brew Something Beautiful."*
+   - Subtitle: *"A little blue. A beautiful pause."*
+   - Packaging: Butterfly Pea Flower Tea 100g pouch, glass teacup with sapphire-blue liquor, fresh flowers.
+   - Quality Badges: `100% Natural • Caffeine Free • No Added Color`
+   - Primary CTA: `"Shop Butterfly Pea →"` (routes to `/products/butterfly-pea-flower-tea`)
+2. **Slide 2 (S2) — Lemongrass Tea** (`/banners/s2.png`):
+   - Artwork Headline: *"Steeped in simple pleasures."*
+   - Subtitle: *"A lovely addition to your tea ritual."*
+   - Packaging: Lemongrass Tea 100g pouch, teacup with golden herbal liquor, fresh cut lemongrass stalks.
+   - Primary CTA: `"Shop Lemongrass →"` (routes to `/products/lemongrass-tea`)
+3. **Slide 3 (S3) — Chamomile Flower Tea** (`/banners/s3.png`):
+   - Artwork Headline: *"A cup of golden moments."*
+   - Subtitle: *"Make room for your tea ritual."*
+   - Packaging: Chamomile Flower Tea 100g pouch, teacup with golden chamomile tea, white chamomile blossoms.
+   - Primary CTA: `"Shop Chamomile →"` (routes to `/products/chamomile-flower-tea`)
+4. **Slide 4 (S4) — TMUG Herbal Teas Lineup** (`/banners/s4.png`):
+   - Artwork Headline: *"sip happens. Pick your mood."*
+   - Lineup: Lemongrass, Butterfly Pea, Chamomile, and Hibiscus pouches side-by-side with individual brewed cups.
+   - Primary CTA: `"Shop your sip →"` (routes to `/#collections`)
 
 ### Shop by Product / Collections
 - **Section Heading**: *"Shop by Product"*

@@ -16,8 +16,8 @@ function mapToHeroBanner(b: any): HeroBanner {
     category: b.category || "Botanical Tea",
     cta: b.cta || b.ctaText || "Shop Collection",
     destination: b.destination || b.ctaLink || "/#shop",
-    image: b.image || b.desktopSrc || "/hero/butterfly-pea-100g-jar-front.png",
-    mobileImage: b.mobileImage || b.mobileSrc || b.image || b.desktopSrc || "/hero/butterfly-pea-100g-jar-front.png",
+    image: b.image || b.desktopSrc || "/banners/s1.png",
+    mobileImage: b.mobileImage || b.mobileSrc || b.image || b.desktopSrc || "/banners/s1.png",
     alt: b.alt || b.headline || b.title || "TMUG Tea",
   };
 }
@@ -121,15 +121,15 @@ export default function Hero() {
     >
       {/* Banner Stage Container */}
       <div className="relative mx-auto max-w-[1920px]">
-        {/* Banner Aspect Ratio Box: Wide Campaign format (2.35:1 desktop / responsive mobile) */}
-        <div className="relative aspect-[16/9] sm:aspect-[21/9] lg:aspect-[2.4/1] w-full overflow-hidden bg-[#272329]">
+        {/* Banner Aspect Ratio Box: Native 2.4:1 campaign banner ratio across all viewports */}
+        <div className="relative aspect-[2.4/1] w-full overflow-hidden bg-[#272329]">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={currentBanner.id}
-              initial={{ opacity: 0, scale: reduceMotion ? 1 : 1.02 }}
+              initial={{ opacity: 0, scale: reduceMotion ? 1 : 1.015 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.99 }}
-              transition={{ duration: reduceMotion ? 0.2 : 0.65, ease: [0.25, 0.1, 0.25, 1] }}
+              exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.995 }}
+              transition={{ duration: reduceMotion ? 0.2 : 0.55, ease: [0.25, 0.1, 0.25, 1] }}
               className="absolute inset-0"
             >
               {/* Entire Banner Click Destination */}
@@ -144,30 +144,9 @@ export default function Hero() {
                   alt={currentBanner.alt}
                   fill
                   priority={currentIndex === 0}
-                  sizes="100vw"
-                  className="object-cover object-center sm:object-contain lg:object-cover transition-transform duration-700 ease-out group-hover:scale-[1.01]"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1920px"
+                  className="object-contain sm:object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.008]"
                 />
-
-                {/* Subtle soft gradient scrim on mobile/small screens to ensure high contrast */}
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent sm:hidden"
-                />
-
-                {/* Mobile / Compact Screen Editorial Overlay Strip */}
-                <div className="absolute inset-x-0 bottom-0 p-4 sm:hidden">
-                  {currentBanner.campaign && (
-                    <span className="inline-block rounded-full bg-tea-gold/90 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-charcoal shadow-xs">
-                      {currentBanner.campaign}
-                    </span>
-                  )}
-                  <p className="mt-1 font-display text-lg font-black leading-tight text-white drop-shadow-md">
-                    {currentBanner.headline}
-                  </p>
-                  <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-1.5 text-xs font-black text-charcoal shadow-md">
-                    {currentBanner.cta} →
-                  </span>
-                </div>
               </Link>
             </motion.div>
           </AnimatePresence>
@@ -247,10 +226,10 @@ export default function Hero() {
             )}
 
             {/* Direct Action Link */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <Link
                 href={currentBanner.destination}
-                className="inline-flex items-center gap-1.5 rounded-full border border-charcoal/15 bg-white px-4 py-1.5 text-xs font-black text-charcoal transition-all hover:border-tea-gold hover:bg-tea-gold hover:text-charcoal hover:scale-105 active:scale-95"
+                className="inline-flex items-center gap-1.5 rounded-full border border-charcoal/15 bg-white px-3 sm:px-4 py-1 sm:py-1.5 text-[11px] sm:text-xs font-black text-charcoal transition-all hover:border-tea-gold hover:bg-tea-gold hover:text-charcoal hover:scale-105 active:scale-95"
               >
                 <span>{currentBanner.cta}</span>
                 <span className="text-coral">→</span>
