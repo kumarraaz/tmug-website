@@ -7,7 +7,8 @@ import { put, list } from "@vercel/blob";
  * BLOB_READ_WRITE_TOKEN is set we use Vercel Blob; otherwise (local dev) the
  * local filesystem. `durable` tells callers whether data survives a deploy.
  */
-export const hasBlob = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+/** Token auth, or Vercel OIDC (BLOB_STORE_ID + runtime OIDC token) — the SDK picks the credentials itself. */
+export const hasBlob = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID);
 
 const CONFIG_KEY = "tmug/site-controls.json";
 
@@ -56,7 +57,7 @@ export async function writeJson(
       persisted: true,
       durable: !process.env.VERCEL,
       note: process.env.VERCEL
-        ? "Not permanent: connect a Vercel Blob store (BLOB_READ_WRITE_TOKEN) to keep settings across deployments."
+        ? "Not permanent: connect a Vercel Blob store (BLOB_STORE_ID or BLOB_READ_WRITE_TOKEN) to keep settings across deployments."
         : undefined,
     };
   } catch (err) {
@@ -64,7 +65,7 @@ export async function writeJson(
       persisted: false,
       durable: false,
       note: process.env.VERCEL
-        ? "NOT SAVED: production storage is not configured. Connect a Vercel Blob store (BLOB_READ_WRITE_TOKEN) in Vercel → Storage."
+        ? "NOT SAVED: production storage is not configured. Connect a Vercel Blob store (BLOB_STORE_ID or BLOB_READ_WRITE_TOKEN) in Vercel → Storage."
         : `Not saved: ${(err as Error).message}`,
     };
   }
@@ -84,7 +85,7 @@ export async function saveUpload(
     return blob.url;
   }
   if (process.env.VERCEL) {
-    throw new Error("Uploads need a Vercel Blob store (BLOB_READ_WRITE_TOKEN) in production.");
+    throw new Error("Uploads need a Vercel Blob store (BLOB_STORE_ID or BLOB_READ_WRITE_TOKEN) in production.");
   }
   const dir = path.join(process.cwd(), "public", "uploads");
   await fs.mkdir(dir, { recursive: true });
