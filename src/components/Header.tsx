@@ -112,14 +112,6 @@ export function AnnouncementBar() {
         </>
       ),
     },
-    {
-      icon: "leaf",
-      content: (
-        <>
-          Get <strong className="font-extrabold">10% OFF</strong> on your first order
-        </>
-      ),
-    },
   ];
 
   // Quadruple items to ensure seamless infinite looping with -50% CSS keyframe

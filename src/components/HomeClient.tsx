@@ -15,7 +15,6 @@ import ImageOverrides from "./ImageOverrides";
 
 // TMUG Homepage Sequence (Hero → Collections → Best Sellers → Open/Reveal → Why TMUG → Brand/Story)
 import Hero from "./Hero"; // 03. Hero Banner Slider (Storefront Campaign Window)
-import TrustStrip from "./TrustStrip"; // 04. Trust / Highlights Strip
 import ShopCollections from "./ShopCollections"; // 05. Shop by Product / Collections (Product Slider)
 import BestSellers from "./BestSellers"; // 06. Best Sellers & Half-Screen 50/50 Showcase
 import OpenRevealSection from "./OpenRevealSection"; // 07. Open / Reveal Experience (3D Box & Flower Shower)
@@ -46,13 +45,6 @@ export default function HomeClient() {
         {sv?.hero?.enabled !== false && (
           <SectionStyle k="hero">
             <Hero />
-          </SectionStyle>
-        )}
-
-        {/* 04. Value-prop highlights strip */}
-        {sv?.trustStrip?.enabled !== false && (
-          <SectionStyle k="trustStrip">
-            <TrustStrip />
           </SectionStyle>
         )}
 

@@ -99,7 +99,7 @@ export default function ShopCollections() {
         paddingTop: collSettings?.paddingTop !== undefined ? `${collSettings.paddingTop}px` : undefined,
         paddingBottom: collSettings?.paddingBottom !== undefined ? `${collSettings.paddingBottom}px` : undefined,
       }}
-      className="relative overflow-hidden bg-gradient-to-b from-[#FFF7EF] via-[#FBE7DC]/40 to-[#FFF7EF] py-8 sm:py-12"
+      className="relative overflow-hidden bg-[#EEF4E2] py-8 sm:py-12"
     >
       {/* Decorative subtle background accents */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
