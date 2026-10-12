@@ -9,6 +9,29 @@ import { IconWhatsApp } from "./icons";
 import FloatingLogo from "./motion/FloatingLogo";
 import { useSiteControls } from "@/lib/site-controls-context";
 
+function SocialIcon({ name }: { name: "Instagram" | "Facebook" | "YouTube" }) {
+  const common = { className: "h-[18px] w-[18px]", viewBox: "0 0 24 24", "aria-hidden": true } as const;
+  if (name === "Instagram")
+    return (
+      <svg {...common} fill="none" stroke="currentColor" strokeWidth="1.8">
+        <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+      </svg>
+    );
+  if (name === "Facebook")
+    return (
+      <svg {...common} fill="currentColor">
+        <path d="M13.5 21v-7.2h2.4l.4-2.9h-2.8V9.1c0-.8.3-1.4 1.5-1.4h1.4V5.2c-.3 0-1.1-.1-2.1-.1-2.1 0-3.6 1.3-3.6 3.7v2.1H8.3v2.9h2.4V21h2.8z" />
+      </svg>
+    );
+  return (
+    <svg {...common} fill="currentColor">
+      <path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5.2 3L10 15z" />
+    </svg>
+  );
+}
+
 export default function Footer() {
   const { controls } = useSiteControls();
   const f = controls?.sectionsVisual?.footer;
@@ -55,26 +78,29 @@ export default function Footer() {
               href={whatsappLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4.5 py-2.5 text-[13px] font-extrabold text-white transition-transform duration-200 hover:scale-[1.03] active:scale-[0.97]"
+              aria-label="Chat with TMUG on WhatsApp"
+              className="mt-5 inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#25D366] text-white transition-transform duration-200 hover:scale-[1.03] active:scale-[0.97]"
             >
-              <IconWhatsApp className="h-4 w-4" /> {siteConfig.whatsapp.display}
+              <IconWhatsApp className="h-4 w-4" />
             </a>
             {f?.showSocials !== false && (
-              <div className="mt-5 flex gap-2">
+              <div className="mt-3 flex flex-wrap gap-2">
                 {[
-                  { label: "Instagram", href: siteConfig.socials.instagram },
-                  { label: "Facebook", href: siteConfig.socials.facebook },
-                  { label: "YouTube", href: siteConfig.socials.youtube },
-                ].map((s) => (
+                  { label: "Instagram" as const, href: siteConfig.socials.instagram },
+                  { label: "Facebook" as const, href: siteConfig.socials.facebook },
+                  { label: "YouTube" as const, href: siteConfig.socials.youtube },
+                ]
+                  .filter((s) => Boolean(s.href))
+                  .map((s) => (
                   <a
                     key={s.label}
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`TMUG on ${s.label}`}
-                    className="rounded-full border border-white/15 px-4 py-2 text-xs font-bold text-cream/70 transition-colors hover:border-gold hover:text-gold"
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-cream/70 transition-colors hover:border-gold hover:text-gold"
                   >
-                    {s.label}
+                    <SocialIcon name={s.label} />
                   </a>
                 ))}
               </div>
@@ -139,6 +165,7 @@ export default function Footer() {
           <p>© {year} TMUG. All rights reserved.</p>
           <p className="font-display font-bold tracking-wide">BREW BOLD · SIP HAPPY 🍵</p>
         </div>
+        <p className="mt-4 text-center text-[11px] tracking-wide text-cream/40">Design by Web Digital Development</p>
       </div>
     </footer>
   );
