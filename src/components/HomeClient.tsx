@@ -7,6 +7,10 @@ import Footer from "./Footer";
 import SiteOverlays from "./SiteOverlays";
 import SectionStyle from "./SectionStyle";
 import VideoSection from "./VideoSection";
+import NewArrivals from "./NewArrivals";
+import Testimonials from "./Testimonials";
+import OurStory from "./OurStory";
+import BlogSection from "./BlogSection";
 import ImageOverrides from "./ImageOverrides";
 
 // TMUG Homepage Sequence (Hero → Collections → Best Sellers → Open/Reveal → Why TMUG → Brand/Story)
@@ -61,6 +65,12 @@ export default function HomeClient() {
 
         {/* 05b. Brand video, directly below Shop by Product */}
         <VideoSection />
+
+        {/* 05c. New Arrivals → Testimonials → Our Story → Journal */}
+        <NewArrivals />
+        <Testimonials />
+        <OurStory />
+        <BlogSection />
 
         {/* 06. BEST SELLERS & HALF-SCREEN 50/50 EXPERIENCE */}
         {sv?.bestSellers?.enabled !== false && (

@@ -38,12 +38,12 @@ function wavePath(revealPx: number): string {
 export default function ShopProductCard({ product }: { product: Product }) {
   const { lines, updateQty, removeLine, showToast } = useShop();
   const media = SHOP_MEDIA[product.id];
-  // The 100g pouch is the primary variant for products that have pouch + poster artwork
+  // The pouch variant that has artwork is the primary variant for products that have pouch + poster artwork
   const [variantId, setVariantId] = useState(
-    (media && product.variants.find((v) => v.weight === "100g" && v.pack === "pouch")?.id) || product.variants[0].id,
+    (media && product.variants.find((v) => v.weight === media.weight && v.pack === "pouch")?.id) || product.variants[0].id,
   );
   const variant = getVariant(product, variantId);
-  const pouchMode = Boolean(media) && variant.weight === "100g" && variant.pack === "pouch";
+  const pouchMode = Boolean(media) && variant.weight === media.weight && variant.pack === "pouch";
   const front = pouchMode && media ? { src: media.pouch, alt: media.pouchAlt } : frontImage(variant);
   const back = pouchMode && media ? { src: media.poster } : variant.images.find((i) => i.kind === "back");
 
@@ -100,8 +100,9 @@ export default function ShopProductCard({ product }: { product: Product }) {
     >
       {/* Packshot stage */}
       <div
+        style={pouchMode ? { backgroundColor: media?.stageBg ?? "#FFFFFF" } : undefined}
         className={`relative aspect-square w-full overflow-hidden rounded-t-[1.35rem] ${
-          pouchMode ? "bg-white" : "bg-gradient-to-b from-[#FFF7EF] to-[#FBE7DC]/60"
+          pouchMode ? "" : "bg-gradient-to-b from-[#FFF7EF] to-[#FBE7DC]/60"
         }`}
       >
         <div className={`absolute inset-0 ${pouchMode ? "p-0" : "p-[9%]"}`}>
@@ -130,7 +131,7 @@ export default function ShopProductCard({ product }: { product: Product }) {
                 </linearGradient>
               </defs>
               <g clipPath={`url(#wave-${uid})`}>
-                <rect width="314" height="314" fill={pouchMode ? "#FFFFFF" : `url(#bg-${uid})`} />
+                <rect width="314" height="314" fill={pouchMode ? media?.stageBg ?? "#FFFFFF" : `url(#bg-${uid})`} />
                 <image
                   href={back.src}
                   x={pouchMode ? 0 : 28}
