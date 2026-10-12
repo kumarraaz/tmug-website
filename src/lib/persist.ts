@@ -13,7 +13,9 @@ export const hasBlob = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN || proces
 const CONFIG_KEY = "tmug/site-controls.json";
 
 export async function readJson(localPath: string): Promise<unknown | null> {
-  if (hasBlob()) {
+  // No network calls while prerendering at build time — use the bundled seed file; runtime reads hit Blob.
+  const building = process.env.NEXT_PHASE === "phase-production-build";
+  if (hasBlob() && !building) {
     try {
       const { blobs } = await list({ prefix: CONFIG_KEY, limit: 1 });
       if (blobs[0]) {
