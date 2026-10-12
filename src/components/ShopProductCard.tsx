@@ -13,11 +13,12 @@ import { VariantSelector } from "./ProductCard";
 
 /**
  * "Shop by Product" card: large square packshot stage on top, centered details below.
- * Hover (pointer devices only): the packshot smoothly enlarges inside its stage, never clipped;
- * touch devices simply show the normal state.
+ * Hover (mouse/pen only, driven by React state so it doesn't depend on CSS variants): the packshot smoothly
+ * enlarges inside its padded stage, never clipped; touch devices simply show the normal state.
  */
 export default function ShopProductCard({ product }: { product: Product }) {
   const { lines, updateQty, removeLine, showToast } = useShop();
+  const [zoom, setZoom] = useState(false);
   const [variantId, setVariantId] = useState(product.variants[0].id);
   const variant = getVariant(product, variantId);
   const front = frontImage(variant);
@@ -39,9 +40,21 @@ export default function ShopProductCard({ product }: { product: Product }) {
   return (
     <article className="group relative flex h-full flex-col rounded-[1.35rem] border border-[#3A3438]/10 bg-white shadow-[0_8px_24px_-12px_rgba(51,36,58,0.14)] transition-shadow duration-300 hover:z-10 hover:shadow-[0_20px_40px_-14px_rgba(51,36,58,0.22)]">
       {/* Packshot stage — padded so the enlarged product stays fully inside it */}
-      <div className="relative aspect-square w-full overflow-hidden rounded-t-[1.35rem] bg-gradient-to-b from-[#FFF7EF] to-[#FBE7DC]/60">
-        <div className="absolute inset-0 p-6 sm:p-7">
-          <div className="relative h-full w-full origin-center transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-[1.14]">
+      <div
+        onPointerEnter={(e) => e.pointerType !== "touch" && setZoom(true)}
+        onPointerLeave={() => setZoom(false)}
+        className="relative aspect-square w-full overflow-hidden rounded-t-[1.35rem] bg-gradient-to-b from-[#FFF7EF] to-[#FBE7DC]/60"
+      >
+        <div className="absolute inset-0 p-[9%]">
+          <div
+            className="relative h-full w-full"
+            style={{
+              transform: zoom ? "scale(1.16)" : "scale(1)",
+              transformOrigin: "center",
+              transition: "transform 500ms cubic-bezier(0.22, 1, 0.36, 1)",
+              willChange: "transform",
+            }}
+          >
             <Image
               src={front.src}
               alt={front.alt}
