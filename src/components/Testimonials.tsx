@@ -28,9 +28,16 @@ function perViewFor(width: number) {
   return width >= 1024 ? 3 : width >= 640 ? 2 : 1;
 }
 
+const N = ITEMS.length;
+const COPIES = 5; // enough clones for a seamless loop at any width
+const LOOP = Array.from({ length: COPIES }, (_, c) => ITEMS.map((t, i) => ({ t, key: `${c}-${i}` }))).flat();
+const START = N * 2;
+
 export default function Testimonials() {
   const [perView, setPerView] = useState(3);
-  const [index, setIndex] = useState(0);
+  const [pos, setPos] = useState(START); // index of the first visible card inside LOOP
+  const [animate, setAnimate] = useState(true);
+  const [paused, setPaused] = useState(false);
   const touchX = useRef<number | null>(null);
 
   useEffect(() => {
@@ -40,9 +47,44 @@ export default function Testimonials() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  const pages = Math.max(1, ITEMS.length - perView + 1);
-  const current = Math.min(index, pages - 1);
-  const go = useCallback((i: number) => setIndex(Math.max(0, Math.min(pages - 1, i))), [pages]);
+  const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const move = useCallback((delta: number) => {
+    if (N < 2) return;
+    setAnimate(true);
+    setPos((p) => p + delta);
+  }, []);
+
+  // After a slide settles on a clone, jump back to the equivalent card in the middle copy (no visible change).
+  const normalise = useCallback(() => {
+    setPos((p) => {
+      if (p >= N * 3) return p - N;
+      if (p < N * 2) return p + N;
+      return p;
+    });
+    setAnimate(false);
+  }, []);
+
+  useEffect(() => {
+    if ((pos >= N * 3 || pos < N * 2) && reduceMotion()) normalise(); // no transitionend when motion is reduced
+  }, [pos, normalise]);
+
+  // Gentle autoplay: pauses on hover/focus, and never runs with reduced motion
+  useEffect(() => {
+    if (N < 2 || paused) return;
+    const id = window.setInterval(() => {
+      if (!document.hidden && !reduceMotion()) move(1);
+    }, 6500);
+    return () => window.clearInterval(id);
+  }, [paused, move]);
+
+  const active = ((pos % N) + N) % N;
+  const goTo = (i: number) => {
+    let delta = i - active;
+    if (delta > N / 2) delta -= N;
+    if (delta < -N / 2) delta += N;
+    move(delta);
+  };
 
   const arrow =
     "absolute top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#144E25] shadow-md transition-all sm:flex";
@@ -79,13 +121,19 @@ export default function Testimonials() {
           <p className="mt-1.5 text-sm text-[#2B3A2E]/80 sm:text-[15px]">Stories brewed with love, from our happy customers.</p>
         </Reveal>
 
-        <div className="relative mt-8 sm:px-14">
+        <div
+          className="relative mt-8 sm:px-14"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onFocus={() => setPaused(true)}
+          onBlur={() => setPaused(false)}
+        >
           <button
             type="button"
             aria-label="Previous reviews"
-            onClick={() => go(current - 1)}
-            disabled={current === 0}
-            className={`${arrow} left-0 ${current === 0 ? "cursor-not-allowed opacity-40" : "cursor-pointer hover:bg-[#FBBF24]"}`}
+            onClick={() => move(-1)}
+            disabled={N < 2}
+            className={`${arrow} left-0 ${N < 2 ? "cursor-not-allowed opacity-40" : "cursor-pointer hover:bg-[#FBBF24]"}`}
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
@@ -94,9 +142,9 @@ export default function Testimonials() {
           <button
             type="button"
             aria-label="Next reviews"
-            onClick={() => go(current + 1)}
-            disabled={current >= pages - 1}
-            className={`${arrow} right-0 ${current >= pages - 1 ? "cursor-not-allowed opacity-40" : "cursor-pointer hover:bg-[#FBBF24]"}`}
+            onClick={() => move(1)}
+            disabled={N < 2}
+            className={`${arrow} right-0 ${N < 2 ? "cursor-not-allowed opacity-40" : "cursor-pointer hover:bg-[#FBBF24]"}`}
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
@@ -110,15 +158,21 @@ export default function Testimonials() {
               if (touchX.current === null) return;
               const dx = e.changedTouches[0].clientX - touchX.current;
               touchX.current = null;
-              if (Math.abs(dx) > 40) go(current + (dx < 0 ? 1 : -1));
+              if (Math.abs(dx) > 40) move(dx < 0 ? 1 : -1);
             }}
           >
             <ul
-              className="flex transition-transform duration-500 ease-out motion-reduce:transition-none"
-              style={{ transform: `translateX(-${(current * 100) / perView}%)` }}
+              onTransitionEnd={(e) => e.target === e.currentTarget && normalise()}
+              className={`flex ${animate ? "transition-transform duration-500 ease-out" : ""} motion-reduce:transition-none`}
+              style={{ transform: `translateX(-${(pos * 100) / perView}%)` }}
             >
-              {ITEMS.map((t, i) => (
-                <li key={`${t.name}-${i}`} className="shrink-0 px-2" style={{ width: `${100 / perView}%` }}>
+              {LOOP.map(({ t, key }, idx) => (
+                <li
+                  key={key}
+                  aria-hidden={idx < pos || idx >= pos + perView}
+                  className="shrink-0 px-2"
+                  style={{ width: `${100 / perView}%` }}
+                >
                   <figure className="relative flex h-full min-h-[150px] gap-4 rounded-2xl bg-[#FFFDF7] p-5 shadow-[0_10px_30px_-16px_rgba(20,78,37,0.35)]">
                     {t.photo ? (
                       <Image src={t.photo} alt={t.name} width={64} height={64} className="h-16 w-16 shrink-0 rounded-full object-cover" />
@@ -152,14 +206,14 @@ export default function Testimonials() {
           </div>
 
           <div className="mt-5 flex items-center justify-center gap-2" role="group" aria-label="Review pages">
-            {Array.from({ length: pages }, (_, i) => (
+            {Array.from({ length: N }, (_, i) => (
               <button
                 key={i}
                 type="button"
-                aria-label={`Show reviews ${i + 1} of ${pages}`}
-                aria-current={i === current}
-                onClick={() => go(i)}
-                className={`h-2.5 rounded-full transition-all cursor-pointer ${i === current ? "w-6 bg-[#144E25]" : "w-2.5 bg-[#144E25]/30"}`}
+                aria-label={`Show review ${i + 1} of ${N}`}
+                aria-current={i === active}
+                onClick={() => goTo(i)}
+                className={`h-2.5 rounded-full transition-all cursor-pointer ${i === active ? "w-6 bg-[#144E25]" : "w-2.5 bg-[#144E25]/30"}`}
               />
             ))}
           </div>
