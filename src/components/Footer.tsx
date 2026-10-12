@@ -4,12 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { COLLECTIONS } from "@/data/collections";
 import { PRODUCTS } from "@/data/products";
-import { siteConfig, whatsappLink } from "@/config/site";
-import { IconWhatsApp } from "./icons";
+import { siteConfig } from "@/config/site";
 import FloatingLogo from "./motion/FloatingLogo";
 import { useSiteControls } from "@/lib/site-controls-context";
 
-function SocialIcon({ name }: { name: "Instagram" | "Facebook" | "YouTube" }) {
+function SocialIcon({ name }: { name: "Instagram" | "Facebook" | "YouTube" | "LinkedIn" }) {
   const common = { className: "h-[18px] w-[18px]", viewBox: "0 0 24 24", "aria-hidden": true } as const;
   if (name === "Instagram")
     return (
@@ -17,6 +16,12 @@ function SocialIcon({ name }: { name: "Instagram" | "Facebook" | "YouTube" }) {
         <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
         <circle cx="12" cy="12" r="4" />
         <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+      </svg>
+    );
+  if (name === "LinkedIn")
+    return (
+      <svg {...common} fill="currentColor">
+        <path d="M6.9 8.9H3.8V20h3.1V8.9zM5.3 4a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6zM20.2 13.4c0-3-1.6-4.7-4.1-4.7-1.4 0-2.4.8-2.8 1.5V8.9h-3V20h3.1v-6c0-1.6.8-2.6 2.1-2.6s1.9.9 1.9 2.6V20h3.1l-.3-6.6z" />
       </svg>
     );
   if (name === "Facebook")
@@ -74,35 +79,33 @@ export default function Footer() {
               Whole-flower herbals, Darjeeling green and kadak CTC chai — packed fresh, shipped
               across India.
             </p>
-            <a
-              href={whatsappLink()}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Chat with TMUG on WhatsApp"
-              className="mt-5 inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#25D366] text-white transition-transform duration-200 hover:scale-[1.03] active:scale-[0.97]"
-            >
-              <IconWhatsApp className="h-4 w-4" />
-            </a>
             {f?.showSocials !== false && (
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div className="mt-5 flex flex-nowrap items-center gap-2.5">
                 {[
                   { label: "Instagram" as const, href: siteConfig.socials.instagram },
                   { label: "Facebook" as const, href: siteConfig.socials.facebook },
                   { label: "YouTube" as const, href: siteConfig.socials.youtube },
-                ]
-                  .filter((s) => Boolean(s.href))
-                  .map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`TMUG on ${s.label}`}
-                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-cream/70 transition-colors hover:border-gold hover:text-gold"
-                  >
-                    <SocialIcon name={s.label} />
-                  </a>
-                ))}
+                  { label: "LinkedIn" as const, href: siteConfig.socials.linkedin },
+                ].map((s) => {
+                  const cls =
+                    "flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15 text-cream/70 transition-colors";
+                  return s.href ? (
+                    <a
+                      key={s.label}
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`TMUG on ${s.label}`}
+                      className={`${cls} hover:border-gold hover:text-gold`}
+                    >
+                      <SocialIcon name={s.label} />
+                    </a>
+                  ) : (
+                    <span key={s.label} role="img" aria-label={`TMUG on ${s.label} (link coming soon)`} className={`${cls} opacity-60`}>
+                      <SocialIcon name={s.label} />
+                    </span>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -165,7 +168,16 @@ export default function Footer() {
           <p>© {year} TMUG. All rights reserved.</p>
           <p className="font-display font-bold tracking-wide">BREW BOLD · SIP HAPPY 🍵</p>
         </div>
-        <p className="mt-4 text-center text-[11px] tracking-wide text-cream/40">Design by Web Digital Development</p>
+        <p className="mt-4 text-center text-[11px] tracking-wide text-cream/40">
+          <a
+            href="https://webdigitaldevelopment.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-gold"
+          >
+            Design by Web Digital Development
+          </a>
+        </p>
       </div>
     </footer>
   );

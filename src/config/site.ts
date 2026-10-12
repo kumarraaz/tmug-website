@@ -60,6 +60,8 @@ export const siteConfig = {
     instagram: "https://instagram.com/",
     facebook: "https://facebook.com/",
     youtube: "https://youtube.com/",
+    /** Add the official LinkedIn company page URL here; until then the footer icon is shown without a link. */
+    linkedin: "",
   },
 
   /** Official TMUG Amazon Brand Store URL (Confirmed). */
