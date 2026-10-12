@@ -1,14 +1,20 @@
 "use client";
 
-import { TESTIMONIALS } from "@/data/testimonials";
-import { FEEDBACK_MESSAGE } from "@/data/reviews";
-import { whatsappLink } from "@/config/site";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { TESTIMONIALS, type Testimonial } from "@/data/testimonials";
+import { DEMO_REVIEWS } from "@/data/reviews";
 import Reveal from "./motion/Reveal";
 import { ButterflyPeaArt, HibiscusArt, LemongrassArt, TeaLeafArt } from "./BotanicalArt";
 
+const SERIF = { fontFamily: "Georgia, 'Times New Roman', serif" } as const;
+
+const ITEMS: Testimonial[] =
+  TESTIMONIALS.length > 0 ? TESTIMONIALS : DEMO_REVIEWS.map((r) => ({ ...r, placeholder: true }));
+
 function Stars({ n }: { n: number }) {
   return (
-    <div className="flex gap-0.5 text-[#D9A441]" role="img" aria-label={`${n} out of 5 stars`}>
+    <div className="flex gap-0.5 text-[#F2A900]" role="img" aria-label={`${n} out of 5 stars`}>
       {Array.from({ length: 5 }, (_, i) => (
         <svg key={i} viewBox="0 0 20 20" className="h-4 w-4" fill={i < n ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
           <path d="M10 1.8l2.4 5 5.4.7-4 3.8 1 5.4L10 14l-4.8 2.7 1-5.4-4-3.8 5.4-.7z" strokeLinejoin="round" />
@@ -18,62 +24,139 @@ function Stars({ n }: { n: number }) {
   );
 }
 
-/** "Loved by Tea Lovers": shows real testimonials from data/testimonials.ts, or a feedback invitation while none exist. */
+function perViewFor(width: number) {
+  return width >= 1024 ? 3 : width >= 640 ? 2 : 1;
+}
+
 export default function Testimonials() {
+  const [perView, setPerView] = useState(3);
+  const [index, setIndex] = useState(0);
+  const touchX = useRef<number | null>(null);
+
+  useEffect(() => {
+    const onResize = () => setPerView(perViewFor(window.innerWidth));
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  const pages = Math.max(1, ITEMS.length - perView + 1);
+  const current = Math.min(index, pages - 1);
+  const go = useCallback((i: number) => setIndex(Math.max(0, Math.min(pages - 1, i))), [pages]);
+
+  const arrow =
+    "absolute top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#144E25] shadow-md transition-all sm:flex";
+
   return (
     <section
       id="testimonials"
       aria-labelledby="testimonials-heading"
-      className="relative overflow-hidden bg-gradient-to-b from-[#FFFDF8] to-[#FBF3E6] py-14 sm:py-20"
+      className="relative overflow-hidden bg-[#E7EFD9] py-12 sm:py-16"
     >
-      {/* Subtle botanical line-art — edges only, low opacity, never behind the text column */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 text-[#144E25]">
-        <LemongrassArt className="absolute -left-4 bottom-0 hidden h-64 w-32 opacity-[0.09] sm:block lg:left-6 lg:h-80 lg:w-40" />
-        <HibiscusArt className="absolute -right-6 -top-6 h-36 w-36 opacity-[0.09] sm:h-48 sm:w-48 lg:right-8 lg:top-4" />
-        <ButterflyPeaArt className="absolute -bottom-6 -right-4 hidden h-40 w-40 opacity-[0.08] sm:block lg:right-10 lg:h-48 lg:w-48" />
-        <TeaLeafArt className="absolute -left-6 -top-4 h-32 w-32 opacity-[0.09] sm:h-44 sm:w-44 lg:left-8 lg:top-6" />
+      {/* Botanical line-art along the outer edges only, behind the content */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 text-[#2F6B3A]">
+        <HibiscusArt className="absolute -right-8 -top-4 h-40 w-40 opacity-[0.16] sm:h-56 sm:w-56" />
+        <TeaLeafArt className="absolute -left-6 -top-6 h-36 w-36 opacity-[0.16] sm:h-52 sm:w-52" />
+        <ButterflyPeaArt className="absolute -left-4 bottom-0 h-36 w-36 opacity-[0.15] sm:h-52 sm:w-52" />
+        <LemongrassArt className="absolute -right-2 bottom-0 h-44 w-24 opacity-[0.15] sm:h-64 sm:w-36" />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
         <Reveal className="text-center">
-          <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#144E25]">What our customers say</span>
-          <h2 id="testimonials-heading" className="text-section mt-1.5 font-display font-black text-[#33243A]">
-            Loved by Tea Lovers
+          <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#144E25]">
+            Real people. Real experiences.
+          </span>
+          <h2 id="testimonials-heading" style={SERIF} className="mt-1.5 text-3xl font-bold text-[#0F3D1F] sm:text-4xl">
+            What Our Tea Lovers Say
           </h2>
+          <p className="mt-1.5 text-sm text-[#2B3A2E]/80 sm:text-[15px]">Stories brewed with love, from our happy customers.</p>
         </Reveal>
 
-        {TESTIMONIALS.length > 0 ? (
-          <ul className="mt-9 grid grid-cols-1 gap-5 md:grid-cols-3">
-            {TESTIMONIALS.map((t, i) => (
-              <li
-                key={`${t.name}-${i}`}
-                className="flex h-full flex-col rounded-2xl border border-[#144E25]/10 bg-white/90 p-6 shadow-[0_10px_30px_-18px_rgba(51,36,58,0.3)]"
-              >
-                {t.rating ? <Stars n={Math.max(1, Math.min(5, Math.round(t.rating)))} /> : null}
-                <blockquote className="mt-3 flex-1 text-[15px] leading-relaxed text-[#33243A]">“{t.quote}”</blockquote>
-                <figcaption className="mt-4 text-sm font-bold text-[#144E25]">
-                  {t.name}
-                  {t.product && <span className="block text-xs font-medium text-[#3A3438]/60">{t.product}</span>}
-                </figcaption>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="mx-auto mt-9 max-w-2xl rounded-3xl border border-[#144E25]/10 bg-white/90 p-8 text-center shadow-[0_14px_40px_-22px_rgba(51,36,58,0.35)] sm:p-10">
-            <p className="font-display text-xl font-black text-[#33243A] sm:text-2xl">Tried a TMUG tea? We’d love to hear about it.</p>
-            <p className="mx-auto mt-2 max-w-md text-sm text-[#3A3438]/75">
-              Customer stories will appear here. Share your cup and your favourite blend with us on WhatsApp.
-            </p>
-            <a
-              href={whatsappLink(FEEDBACK_MESSAGE)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center justify-center rounded-full bg-[#144E25] px-7 py-3 text-sm font-black text-[#FBBF24] shadow-md transition-transform hover:scale-105 active:scale-95"
+        <div className="relative mt-8 sm:px-14">
+          <button
+            type="button"
+            aria-label="Previous reviews"
+            onClick={() => go(current - 1)}
+            disabled={current === 0}
+            className={`${arrow} left-0 ${current === 0 ? "cursor-not-allowed opacity-40" : "cursor-pointer hover:bg-[#FBBF24]"}`}
+          >
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label="Next reviews"
+            onClick={() => go(current + 1)}
+            disabled={current >= pages - 1}
+            className={`${arrow} right-0 ${current >= pages - 1 ? "cursor-not-allowed opacity-40" : "cursor-pointer hover:bg-[#FBBF24]"}`}
+          >
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <div
+            className="overflow-hidden py-2"
+            onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
+            onTouchEnd={(e) => {
+              if (touchX.current === null) return;
+              const dx = e.changedTouches[0].clientX - touchX.current;
+              touchX.current = null;
+              if (Math.abs(dx) > 40) go(current + (dx < 0 ? 1 : -1));
+            }}
+          >
+            <ul
+              className="flex transition-transform duration-500 ease-out motion-reduce:transition-none"
+              style={{ transform: `translateX(-${(current * 100) / perView}%)` }}
             >
-              Share your feedback
-            </a>
+              {ITEMS.map((t, i) => (
+                <li key={`${t.name}-${i}`} className="shrink-0 px-2" style={{ width: `${100 / perView}%` }}>
+                  <figure className="relative flex h-full min-h-[190px] gap-4 rounded-2xl bg-[#FFFDF7] p-5 shadow-[0_10px_30px_-16px_rgba(20,78,37,0.35)]">
+                    {t.photo ? (
+                      <Image src={t.photo} alt={t.name} width={64} height={64} className="h-16 w-16 shrink-0 rounded-full object-cover" />
+                    ) : (
+                      <div
+                        aria-hidden="true"
+                        className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#144E25] text-xl font-bold text-[#FBBF24]"
+                      >
+                        {t.name.trim().charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div className="flex min-w-0 flex-1 flex-col">
+                      {t.rating ? <Stars n={Math.max(1, Math.min(5, Math.round(t.rating)))} /> : null}
+                      <blockquote className="mt-1 text-[14px] leading-relaxed text-[#2B3A2E]">“{t.quote}”</blockquote>
+                      <figcaption className="mt-auto flex items-center gap-2 pb-1 pl-10 pt-3 text-sm font-bold text-[#0F3D1F]">
+                        {t.name}
+                        {t.placeholder && (
+                          <span className="rounded-full bg-[#E7EFD9] px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#144E25]">
+                            Sample
+                          </span>
+                        )}
+                      </figcaption>
+                    </div>
+                    <span aria-hidden="true" style={SERIF} className="pointer-events-none absolute bottom-0 left-5 text-6xl font-bold leading-none text-[#144E25]/15">
+                      ”
+                    </span>
+                  </figure>
+                </li>
+              ))}
+            </ul>
           </div>
-        )}
+
+          <div className="mt-5 flex items-center justify-center gap-2" role="group" aria-label="Review pages">
+            {Array.from({ length: pages }, (_, i) => (
+              <button
+                key={i}
+                type="button"
+                aria-label={`Show reviews ${i + 1} of ${pages}`}
+                aria-current={i === current}
+                onClick={() => go(i)}
+                className={`h-2.5 rounded-full transition-all cursor-pointer ${i === current ? "w-6 bg-[#144E25]" : "w-2.5 bg-[#144E25]/30"}`}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
