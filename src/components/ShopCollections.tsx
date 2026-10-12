@@ -7,6 +7,7 @@ import { AnimatePresence } from "framer-motion";
 import { PRODUCTS } from "@/data/products";
 import type { Product } from "@/types";
 import ShopProductCard from "./ShopProductCard";
+import { SHOP_MEDIA } from "@/data/shop-media";
 import Reveal from "./motion/Reveal";
 import { IconArrowRight } from "./icons";
 import { useSiteControls } from "@/lib/site-controls-context";
@@ -50,7 +51,9 @@ export default function ShopCollections() {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
-  const products = getCategoryProducts(activeTab, PRODUCTS);
+  // The four 100g pouch products lead the rail; every other product keeps its existing order after them
+  const filtered = getCategoryProducts(activeTab, PRODUCTS);
+  const products = [...filtered.filter((p) => SHOP_MEDIA[p.id]), ...filtered.filter((p) => !SHOP_MEDIA[p.id])];
 
   const checkScrollBounds = useCallback(() => {
     if (!sliderRef.current) return;

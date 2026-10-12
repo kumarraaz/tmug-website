@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types";
 import { frontImage, getVariant } from "@/data/products";
+import { SHOP_MEDIA } from "@/data/shop-media";
 import { useShop } from "@/lib/store";
 import { formatINR } from "@/lib/format";
 import { IconStar, IconCheck, IconTrash } from "./icons";
@@ -36,10 +37,15 @@ function wavePath(revealPx: number): string {
  */
 export default function ShopProductCard({ product }: { product: Product }) {
   const { lines, updateQty, removeLine, showToast } = useShop();
-  const [variantId, setVariantId] = useState(product.variants[0].id);
+  const media = SHOP_MEDIA[product.id];
+  // The 100g pouch is the primary variant for products that have pouch + poster artwork
+  const [variantId, setVariantId] = useState(
+    (media && product.variants.find((v) => v.weight === "100g" && v.pack === "pouch")?.id) || product.variants[0].id,
+  );
   const variant = getVariant(product, variantId);
-  const front = frontImage(variant);
-  const back = variant.images.find((i) => i.kind === "back");
+  const pouchMode = Boolean(media) && variant.weight === "100g" && variant.pack === "pouch";
+  const front = pouchMode && media ? { src: media.pouch, alt: media.pouchAlt } : frontImage(variant);
+  const back = pouchMode && media ? { src: media.poster } : variant.images.find((i) => i.kind === "back");
 
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
   const pathRef = useRef<SVGPathElement>(null);
@@ -93,8 +99,12 @@ export default function ShopProductCard({ product }: { product: Product }) {
       className="group relative flex h-full flex-col rounded-[1.35rem] border border-[#3A3438]/10 bg-white shadow-[0_8px_24px_-12px_rgba(51,36,58,0.14)] transition-shadow duration-300 hover:shadow-[0_20px_40px_-14px_rgba(51,36,58,0.22)]"
     >
       {/* Packshot stage */}
-      <div className="relative aspect-square w-full overflow-hidden rounded-t-[1.35rem] bg-gradient-to-b from-[#FFF7EF] to-[#FBE7DC]/60">
-        <div className="absolute inset-0 p-[9%]">
+      <div
+        className={`relative aspect-square w-full overflow-hidden rounded-t-[1.35rem] ${
+          pouchMode ? "bg-white" : "bg-gradient-to-b from-[#FFF7EF] to-[#FBE7DC]/60"
+        }`}
+      >
+        <div className={`absolute inset-0 ${pouchMode ? "p-0" : "p-[9%]"}`}>
           <div className="relative h-full w-full">
             <Image
               src={front.src}
@@ -120,8 +130,15 @@ export default function ShopProductCard({ product }: { product: Product }) {
                 </linearGradient>
               </defs>
               <g clipPath={`url(#wave-${uid})`}>
-                <rect width="314" height="314" fill={`url(#bg-${uid})`} />
-                <image href={back.src} x="28" y="28" width="258" height="258" preserveAspectRatio="xMidYMid meet" />
+                <rect width="314" height="314" fill={pouchMode ? "#FFFFFF" : `url(#bg-${uid})`} />
+                <image
+                  href={back.src}
+                  x={pouchMode ? 0 : 28}
+                  y={pouchMode ? 0 : 28}
+                  width={pouchMode ? 314 : 258}
+                  height={pouchMode ? 314 : 258}
+                  preserveAspectRatio="xMidYMid meet"
+                />
               </g>
             </svg>
           </div>
