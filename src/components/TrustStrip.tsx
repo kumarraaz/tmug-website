@@ -16,11 +16,6 @@ const TRUST_POINTS = [
     subtitle: "Never dust, never fannings",
   },
   {
-    icon: "/assets/stickers/badge-natural.svg",
-    title: "Fresh Small Batches",
-    subtitle: "Aroma-locked glass jars & pouches",
-  },
-  {
     icon: "/assets/stickers/sparkle.svg",
     title: "Ships Across India",
     subtitle: "Safe pan-India delivery",
@@ -49,7 +44,7 @@ export default function TrustStrip() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Desktop / Tablet Grid */}
-        <div className="hidden lg:grid grid-cols-5 gap-4 items-center">
+        <div className="hidden lg:grid grid-cols-4 gap-4 items-center">
           {TRUST_POINTS.map((item, i) => (
             <motion.div
               key={item.title}

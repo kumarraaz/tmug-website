@@ -5,6 +5,7 @@ import { AnnouncementBar } from "./Header";
 import Header from "./Header";
 import Footer from "./Footer";
 import SiteOverlays from "./SiteOverlays";
+import TrustStrip from "./TrustStrip"; // 04. Trust / Highlights Strip
 import SectionStyle from "./SectionStyle";
 import VideoSection from "./VideoSection";
 import NewArrivals from "./NewArrivals";
@@ -45,6 +46,13 @@ export default function HomeClient() {
         {sv?.hero?.enabled !== false && (
           <SectionStyle k="hero">
             <Hero />
+          </SectionStyle>
+        )}
+
+        {/* 04. Value-prop highlights strip */}
+        {sv?.trustStrip?.enabled !== false && (
+          <SectionStyle k="trustStrip">
+            <TrustStrip />
           </SectionStyle>
         )}
 
