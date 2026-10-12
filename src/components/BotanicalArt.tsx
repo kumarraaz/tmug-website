@@ -56,3 +56,64 @@ export function TeaLeafArt({ className = "" }: { className?: string }) {
     </svg>
   );
 }
+
+/* ── Filled, full-colour botanicals (decorative, aria-hidden) ── */
+
+export function ColorLeaf({ className = "", tone = "#4E8F3F" }: { className?: string; tone?: string }) {
+  return (
+    <svg viewBox="0 0 60 120" aria-hidden="true" className={className}>
+      <path d="M30 2C58 30 58 86 30 118C2 86 2 30 30 2Z" fill={tone} />
+      <path d="M30 14V112M30 40L44 28M30 62L46 48M30 84L44 72M30 50L16 38M30 72L14 60" stroke="#FFFFFF" strokeOpacity="0.45" strokeWidth="1.6" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+}
+
+export function ColorButterflyPea({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 120" aria-hidden="true" className={className}>
+      <path d="M60 64C26 62 8 36 26 14C46 4 62 30 60 64Z" fill="#2E3BC9" />
+      <path d="M60 64C94 62 112 36 94 14C74 4 58 30 60 64Z" fill="#3A4BDB" />
+      <path d="M60 64C42 74 38 100 52 112C70 108 74 84 60 64Z" fill="#2630A8" />
+      <path d="M60 64C48 56 40 44 44 30C54 34 62 48 60 64Z" fill="#6F86FF" opacity="0.8" />
+      <ellipse cx="60" cy="62" rx="10" ry="8" fill="#F4F1FF" />
+      <ellipse cx="60" cy="62" rx="4" ry="3" fill="#F2C94C" />
+    </svg>
+  );
+}
+
+export function ColorChamomile({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 120" aria-hidden="true" className={className}>
+      {Array.from({ length: 12 }, (_, i) => (
+        <ellipse key={i} cx="60" cy="24" rx="9" ry="22" fill="#FFFFFF" stroke="#E7E2D3" strokeWidth="1" transform={`rotate(${i * 30} 60 60)`} />
+      ))}
+      <circle cx="60" cy="60" r="15" fill="#F2B705" />
+      <circle cx="60" cy="60" r="15" fill="none" stroke="#D99A00" strokeWidth="2" />
+    </svg>
+  );
+}
+
+export function ColorHibiscus({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 140 140" aria-hidden="true" className={className}>
+      {[0, 72, 144, 216, 288].map((a) => (
+        <path key={a} transform={`rotate(${a} 70 70)`} d="M70 70C40 58 30 24 48 10C66 2 90 14 90 36C90 52 80 64 70 70Z" fill="#D8283C" />
+      ))}
+      <circle cx="70" cy="70" r="10" fill="#8E0F26" />
+      <path d="M70 70C82 54 94 44 108 40" stroke="#F4C542" strokeWidth="3" strokeLinecap="round" fill="none" />
+      <circle cx="109" cy="40" r="4" fill="#F4C542" />
+    </svg>
+  );
+}
+
+export function ColorLemongrass({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 200" aria-hidden="true" className={className}>
+      <path d="M60 200C58 150 52 100 30 14C50 70 62 120 64 200Z" fill="#8DB84A" />
+      <path d="M64 200C68 140 82 90 108 26C94 84 76 140 68 200Z" fill="#6E9A32" />
+      <path d="M60 200C54 160 36 118 8 78C34 108 54 150 64 200Z" fill="#A5CB62" />
+      <path d="M66 200C74 162 96 130 118 112C98 134 80 166 70 200Z" fill="#7FAE3E" />
+      <rect x="54" y="150" width="20" height="50" rx="4" fill="#E9E4B8" />
+    </svg>
+  );
+}

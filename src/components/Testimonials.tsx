@@ -5,7 +5,7 @@ import Image from "next/image";
 import { TESTIMONIALS, type Testimonial } from "@/data/testimonials";
 import { DEMO_REVIEWS } from "@/data/reviews";
 import Reveal from "./motion/Reveal";
-import { ButterflyPeaArt, HibiscusArt, LemongrassArt, TeaLeafArt } from "./BotanicalArt";
+import { ColorButterflyPea, ColorChamomile, ColorHibiscus, ColorLeaf, ColorLemongrass } from "./BotanicalArt";
 
 const SERIF = { fontFamily: "Georgia, 'Times New Roman', serif" } as const;
 
@@ -51,14 +51,20 @@ export default function Testimonials() {
     <section
       id="testimonials"
       aria-labelledby="testimonials-heading"
-      className="relative overflow-hidden bg-[#E7EFD9] py-12 sm:py-16"
+      className="relative overflow-hidden bg-[#EAF2DF] py-10 sm:py-12"
     >
-      {/* Botanical line-art along the outer edges only, behind the content */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 text-[#2F6B3A]">
-        <HibiscusArt className="absolute -right-8 -top-4 h-40 w-40 opacity-[0.16] sm:h-56 sm:w-56" />
-        <TeaLeafArt className="absolute -left-6 -top-6 h-36 w-36 opacity-[0.16] sm:h-52 sm:w-52" />
-        <ButterflyPeaArt className="absolute -left-4 bottom-0 h-36 w-36 opacity-[0.15] sm:h-52 sm:w-52" />
-        <LemongrassArt className="absolute -right-2 bottom-0 h-44 w-24 opacity-[0.15] sm:h-64 sm:w-36" />
+      {/* Full-colour botanicals around the outer edges only, behind the content */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden md:block">
+        <ColorButterflyPea className="absolute -left-2 top-2 h-24 w-24 -rotate-12 lg:left-[2%] lg:h-28 lg:w-28" />
+        <ColorChamomile className="absolute left-[11%] top-1 h-14 w-14 lg:h-[4.5rem] lg:w-[4.5rem]" />
+        <ColorLeaf tone="#6FA84A" className="absolute left-[17%] top-6 h-12 w-6 -rotate-[70deg] lg:h-14 lg:w-7" />
+        <ColorLeaf tone="#4E8F3F" className="absolute left-[19%] top-14 h-10 w-5 -rotate-[100deg] lg:h-12 lg:w-6" />
+        <ColorLeaf tone="#4E8F3F" className="absolute -left-3 bottom-4 h-28 w-14 rotate-[20deg] lg:left-0 lg:h-36 lg:w-[4.5rem]" />
+        <ColorLeaf tone="#6FA84A" className="absolute left-6 bottom-0 h-20 w-10 rotate-[-25deg] lg:left-[3%] lg:h-24 lg:w-12" />
+        <ColorLeaf tone="#6FA84A" className="absolute right-[18%] top-4 h-14 w-7 rotate-[60deg] lg:h-16 lg:w-8" />
+        <ColorHibiscus className="absolute -right-2 -top-2 h-28 w-28 lg:right-[2%] lg:h-32 lg:w-32" />
+        <ColorChamomile className="absolute right-[10%] top-8 h-14 w-14 lg:h-[4.5rem] lg:w-[4.5rem]" />
+        <ColorLemongrass className="absolute -right-1 bottom-0 h-40 w-24 lg:right-[1%] lg:h-48 lg:w-28" />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
@@ -68,6 +74,7 @@ export default function Testimonials() {
           </span>
           <h2 id="testimonials-heading" style={SERIF} className="mt-1.5 text-3xl font-bold text-[#0F3D1F] sm:text-4xl">
             What Our Tea Lovers Say
+            <ColorLeaf tone="#4E8F3F" className="ml-2 inline-block h-6 w-3 rotate-[35deg] align-top" />
           </h2>
           <p className="mt-1.5 text-sm text-[#2B3A2E]/80 sm:text-[15px]">Stories brewed with love, from our happy customers.</p>
         </Reveal>
@@ -112,13 +119,13 @@ export default function Testimonials() {
             >
               {ITEMS.map((t, i) => (
                 <li key={`${t.name}-${i}`} className="shrink-0 px-2" style={{ width: `${100 / perView}%` }}>
-                  <figure className="relative flex h-full min-h-[190px] gap-4 rounded-2xl bg-[#FFFDF7] p-5 shadow-[0_10px_30px_-16px_rgba(20,78,37,0.35)]">
+                  <figure className="relative flex h-full min-h-[150px] gap-4 rounded-2xl bg-[#FFFDF7] p-5 shadow-[0_10px_30px_-16px_rgba(20,78,37,0.35)]">
                     {t.photo ? (
                       <Image src={t.photo} alt={t.name} width={64} height={64} className="h-16 w-16 shrink-0 rounded-full object-cover" />
                     ) : (
                       <div
                         aria-hidden="true"
-                        className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#144E25] text-xl font-bold text-[#FBBF24]"
+                        className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#B9D4A5] text-xl font-bold text-[#144E25]"
                       >
                         {t.name.trim().charAt(0).toUpperCase()}
                       </div>
