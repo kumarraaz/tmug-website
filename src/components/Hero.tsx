@@ -121,8 +121,8 @@ export default function Hero() {
     >
       {/* Banner Stage Container */}
       <div className="relative mx-auto max-w-[1920px]">
-        {/* Banner Aspect Ratio Box: Native 2.4:1 campaign banner ratio across all viewports */}
-        <div className="relative aspect-[2.4/1] w-full overflow-hidden bg-[#272329]">
+        {/* Banner Aspect Ratio Box: Native 3:1 (1500×500) campaign banner ratio across all viewports */}
+        <div className="relative aspect-[3/1] w-full overflow-hidden bg-[#272329]">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={currentBanner.id}
@@ -145,7 +145,7 @@ export default function Hero() {
                   fill
                   priority={currentIndex === 0}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1920px"
-                  className="object-contain sm:object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.008]"
+                  className="object-contain object-center transition-transform duration-700 ease-out group-hover:scale-[1.008]"
                 />
               </Link>
             </motion.div>

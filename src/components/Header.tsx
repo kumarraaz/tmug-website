@@ -255,7 +255,7 @@ function BestsellerDropdown({
                 </p>
               </div>
               <Link
-                href="/#shop"
+                href="/#best-sellers"
                 onClick={onClose}
                 className="text-xs font-bold text-[#FBBF24] hover:underline"
               >
@@ -420,6 +420,19 @@ function AccountPopover({
 
 // ── Main Header Navbar ──────────────────────────────────────────────────────
 
+/** Main navigation, in display order. Every href points at an existing section or page. */
+const NAV_LINKS: { label: string; href: string }[] = [
+  { label: "Build Your Own Box", href: "/build-your-own-box" },
+  { label: "Shop by Product", href: "/#collections" },
+  { label: "Best Sellers", href: "/#best-sellers" },
+  { label: "Special Combos", href: "/build-your-own-box" },
+  { label: "New Arrivals", href: "/collections" },
+  { label: "About Us", href: "/about" },
+  { label: "Gift Options", href: "/contact?topic=corporate" },
+  { label: "FAQ", href: "/faq" },
+  { label: "Contact", href: "/contact" },
+];
+
 export default function Header() {
   const { count, setCartOpen } = useShop();
   const [mounted, setMounted] = useState(false);
@@ -481,91 +494,57 @@ export default function Header() {
             </div>
 
             {/* ── Middle: Exact Navigation Links (Desktop) ─────────────── */}
-            <div className="hidden lg:flex items-center gap-5 xl:gap-8 text-[12px] xl:text-[13px] font-bold uppercase tracking-[0.08em]">
-              {/* BESTSELLER with active indicator and dropdown */}
-              <div
-                className="relative"
-                onMouseEnter={handleBestsellerEnter}
-                onMouseLeave={handleBestsellerLeave}
-              >
-                <button
-                  type="button"
-                  onClick={() => setBestsellerOpen((v) => !v)}
-                  aria-expanded={bestsellerOpen}
-                  aria-haspopup="true"
-                  className="flex items-center gap-1 text-[#FBBF24] hover:text-[#FDE047] transition-colors cursor-pointer py-1"
-                >
-                  <span>BESTSELLER</span>
-                  <svg
-                    className={`h-3.5 w-3.5 transition-transform duration-200 ${
-                      bestsellerOpen ? "rotate-180" : ""
-                    }`}
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+            <div className="hidden xl:flex items-center gap-4 2xl:gap-6 text-[13px] font-bold">
+              {NAV_LINKS.map((item, i) =>
+                item.label === "Best Sellers" ? (
+                  <div
+                    key={item.label}
+                    className="relative"
+                    onMouseEnter={handleBestsellerEnter}
+                    onMouseLeave={handleBestsellerLeave}
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-                {/* Active Underline matching reference */}
-                <div className="h-[2.5px] w-full bg-[#FBBF24] rounded-full mt-0.5" />
-
-                <BestsellerDropdown
-                  isOpen={bestsellerOpen}
-                  onClose={() => setBestsellerOpen(false)}
-                />
-              </div>
-
-              {/* NEW ARRIVALS */}
-              <Link
-                href="/collections"
-                className="text-white hover:text-[#FBBF24] transition-colors py-1"
-              >
-                NEW ARRIVALS
-              </Link>
-
-              {/* COMBO */}
-              <Link
-                href="/#shop"
-                className="text-white hover:text-[#FBBF24] transition-colors py-1"
-              >
-                COMBO
-              </Link>
-
-              {/* CORPORATE GIFTING */}
-              <Link
-                href="/contact?topic=corporate"
-                className="text-white hover:text-[#FBBF24] transition-colors py-1"
-              >
-                CORPORATE GIFTING
-              </Link>
-
-              {/* ABOUT US */}
-              <Link
-                href="/about"
-                className="text-white hover:text-[#FBBF24] transition-colors py-1"
-              >
-                ABOUT US
-              </Link>
-
-              {/* BLOG */}
-              <Link
-                href="/about#story"
-                className="text-white hover:text-[#FBBF24] transition-colors py-1"
-              >
-                BLOG
-              </Link>
-
-              {/* CONTACT */}
-              <Link
-                href="/contact"
-                className="text-white hover:text-[#FBBF24] transition-colors py-1"
-              >
-                CONTACT
-              </Link>
+                    <div className="flex items-center gap-1">
+                      <Link
+                        href={item.href}
+                        className="whitespace-nowrap py-1 text-white transition-colors hover:text-[#FBBF24]"
+                      >
+                        {item.label}
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => setBestsellerOpen((v) => !v)}
+                        aria-expanded={bestsellerOpen}
+                        aria-haspopup="true"
+                        aria-label="Show best sellers"
+                        className="cursor-pointer text-white hover:text-[#FBBF24]"
+                      >
+                        <svg
+                          className={`h-3.5 w-3.5 transition-transform duration-200 ${bestsellerOpen ? "rotate-180" : ""}`}
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <BestsellerDropdown isOpen={bestsellerOpen} onClose={() => setBestsellerOpen(false)} />
+                  </div>
+                ) : (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className={`whitespace-nowrap py-1 transition-colors hover:text-[#FDE047] ${
+                      i === 0 ? "text-[#FBBF24]" : "text-white hover:text-[#FBBF24]"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                ),
+              )}
             </div>
 
             {/* ── Right: Actions in Exact Order ───────────────────────── */}
@@ -616,12 +595,12 @@ export default function Header() {
               </div>
 
               {/* 4. Thin Vertical Separator */}
-              <div className="hidden sm:block h-5 w-px bg-white/30 select-none" aria-hidden="true" />
+              <div className="hidden 2xl:block h-5 w-px bg-white/30 select-none" aria-hidden="true" />
 
               {/* 5. SHOP ALL Yellow Pill Button */}
               <Link
                 href="/#shop"
-                className="hidden sm:inline-flex items-center justify-center rounded-full bg-[#FBBF24] hover:bg-[#F59E0B] px-5 py-2 text-xs font-black tracking-wider uppercase text-[#144E25] shadow-sm transition-transform hover:scale-105 active:scale-95 whitespace-nowrap"
+                className="hidden 2xl:inline-flex items-center justify-center rounded-full bg-[#FBBF24] hover:bg-[#F59E0B] px-5 py-2 text-xs font-black tracking-wider uppercase text-[#144E25] shadow-sm transition-transform hover:scale-105 active:scale-95 whitespace-nowrap"
               >
                 SHOP ALL
               </Link>
@@ -631,7 +610,7 @@ export default function Header() {
                 type="button"
                 onClick={() => setMenuOpen((v) => !v)}
                 aria-label={menuOpen ? "Close menu" : "Open menu"}
-                className="text-white hover:text-[#FBBF24] p-1 lg:hidden cursor-pointer"
+                className="text-white hover:text-[#FBBF24] p-1 xl:hidden cursor-pointer"
               >
                 {menuOpen ? <IconClose className="h-6 w-6" /> : <IconMenu className="h-6 w-6" />}
               </button>
@@ -650,7 +629,7 @@ export default function Header() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               onClick={() => setMenuOpen(false)}
-              className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs lg:hidden"
+              className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs xl:hidden"
             />
             <motion.nav
               aria-label="Mobile Navigation"
@@ -658,7 +637,7 @@ export default function Header() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ duration: 0.28, ease: "easeOut" }}
-              className="fixed right-0 top-0 z-50 flex h-dvh w-[85%] max-w-sm flex-col bg-[#144E25] text-white shadow-2xl lg:hidden"
+              className="fixed right-0 top-0 z-50 flex h-dvh w-[85%] max-w-sm flex-col bg-[#144E25] text-white shadow-2xl xl:hidden"
             >
               <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
                 <Image
@@ -679,94 +658,18 @@ export default function Header() {
               </div>
 
               <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
-                {/* Mobile BESTSELLER Accordion */}
-                <div className="rounded-xl border border-white/10 bg-black/15 p-3">
-                  <button
-                    type="button"
-                    onClick={() => setMobileBestsellerAccordion((v) => !v)}
-                    className="flex w-full items-center justify-between text-left text-sm font-black uppercase text-[#FBBF24]"
+                {NAV_LINKS.map((item, i) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`block rounded-lg px-3 py-2.5 text-sm font-bold hover:bg-white/10 hover:text-[#FBBF24] ${
+                      i === 0 ? "text-[#FBBF24]" : "text-white"
+                    }`}
                   >
-                    <span>BESTSELLER</span>
-                    <svg
-                      className={`h-4 w-4 transition-transform ${
-                        mobileBestsellerAccordion ? "rotate-180" : ""
-                      }`}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  {mobileBestsellerAccordion && (
-                    <div className="mt-3 space-y-2 pt-2 border-t border-white/10">
-                      {BESTSELLER_PRODUCTS.map((item) => (
-                        <Link
-                          key={item.id}
-                          href={`/products/${item.slug}`}
-                          onClick={() => setMenuOpen(false)}
-                          className="flex items-center gap-3 rounded-lg bg-white/10 p-2 text-white hover:bg-white/20"
-                        >
-                          <div className="relative h-10 w-10 shrink-0">
-                            <Image src={item.image} alt={item.name} fill className="object-contain" />
-                          </div>
-                          <div className="min-w-0">
-                            <p className="truncate text-xs font-bold text-white">{item.name}</p>
-                            <p className="text-[10px] text-[#FBBF24]">₹{item.price}</p>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <Link
-                  href="/collections"
-                  onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-sm font-bold uppercase tracking-wider text-white hover:bg-white/10 hover:text-[#FBBF24]"
-                >
-                  NEW ARRIVALS
-                </Link>
-
-                <Link
-                  href="/#shop"
-                  onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-sm font-bold uppercase tracking-wider text-white hover:bg-white/10 hover:text-[#FBBF24]"
-                >
-                  COMBO
-                </Link>
-
-                <Link
-                  href="/contact?topic=corporate"
-                  onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-sm font-bold uppercase tracking-wider text-white hover:bg-white/10 hover:text-[#FBBF24]"
-                >
-                  CORPORATE GIFTING
-                </Link>
-
-                <Link
-                  href="/about"
-                  onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-sm font-bold uppercase tracking-wider text-white hover:bg-white/10 hover:text-[#FBBF24]"
-                >
-                  ABOUT US
-                </Link>
-
-                <Link
-                  href="/about#story"
-                  onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-sm font-bold uppercase tracking-wider text-white hover:bg-white/10 hover:text-[#FBBF24]"
-                >
-                  BLOG
-                </Link>
-
-                <Link
-                  href="/contact"
-                  onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-sm font-bold uppercase tracking-wider text-white hover:bg-white/10 hover:text-[#FBBF24]"
-                >
-                  CONTACT
-                </Link>
+                    {item.label}
+                  </Link>
+                ))}
 
                 <div className="pt-2">
                   <button
