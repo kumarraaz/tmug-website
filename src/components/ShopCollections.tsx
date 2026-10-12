@@ -6,7 +6,7 @@ import Link from "next/link";
 import { AnimatePresence } from "framer-motion";
 import { PRODUCTS } from "@/data/products";
 import type { Product } from "@/types";
-import ProductCard from "./ProductCard";
+import ShopProductCard from "./ShopProductCard";
 import Reveal from "./motion/Reveal";
 import { IconArrowRight } from "./icons";
 import { useSiteControls } from "@/lib/site-controls-context";
@@ -233,12 +233,12 @@ export default function ShopCollections() {
             }}
           >
             <AnimatePresence mode="popLayout">
-              {products.map((product, index) => (
+              {products.map((product) => (
                 <div
                   key={product.id}
-                  className="flex-none w-[78vw] max-w-[275px] min-w-[230px] snap-center sm:snap-start sm:w-[calc(50%-12px)] md:w-[calc(33.333%-14px)] lg:w-[calc(25%-14px)] xl:w-[calc(20%-14px)] 2xl:w-[calc(16.666%-14px)]"
+                  className="flex-none w-[72vw] max-w-[340px] min-w-[230px] snap-center sm:snap-start sm:w-[calc(50%-8px)] sm:max-w-none md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)] xl:w-[calc(25%-12px)] 2xl:w-[calc(20%-13px)]"
                 >
-                  <ProductCard product={product} index={index} />
+                  <ShopProductCard product={product} />
                 </div>
               ))}
             </AnimatePresence>
