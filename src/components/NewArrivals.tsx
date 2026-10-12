@@ -6,12 +6,23 @@ import type { Product } from "@/types";
 import ShopProductCard from "./ShopProductCard";
 import Reveal from "./motion/Reveal";
 
-/** Products featured here, in order. No launch dates are implied — edit this list to change the selection. */
-const NEW_ARRIVAL_IDS = ["premium-tea", "gold-tea", "lemongrass", "hibiscus", "chamomile", "butterfly-pea"];
+/**
+ * Products featured here, in order: 2 jars + 4 pouches. `variant` is the pack the card opens on.
+ * No launch dates are implied — edit this list to change the selection.
+ */
+const NEW_ARRIVALS: { id: string; variant: string }[] = [
+  { id: "butterfly-pea", variant: "butterfly-pea-50g-jar" },
+  { id: "lemongrass", variant: "lemongrass-50g-jar" },
+  { id: "premium-tea", variant: "premium-tea-500g-pouch" },
+  { id: "gold-tea", variant: "gold-tea-500g-pouch" },
+  { id: "chamomile", variant: "chamomile-100g-pouch" },
+  { id: "hibiscus", variant: "hibiscus-100g-pouch" },
+];
 
-const PICKS: Product[] = NEW_ARRIVAL_IDS.map((id) => PRODUCTS.find((p) => p.id === id)).filter(
-  (p): p is Product => Boolean(p),
-);
+const PICKS: { product: Product; variant: string }[] = NEW_ARRIVALS.flatMap(({ id, variant }) => {
+  const product = PRODUCTS.find((p) => p.id === id);
+  return product ? [{ product, variant }] : [];
+});
 
 export default function NewArrivals() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -89,12 +100,12 @@ export default function NewArrivals() {
           className="no-scrollbar mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-1 pb-4 pt-1"
           style={{ scrollbarWidth: "none" }}
         >
-          {PICKS.map((product) => (
+          {PICKS.map(({ product, variant }) => (
             <div
               key={product.id}
               className="w-[72vw] max-w-[340px] min-w-[230px] flex-none snap-start sm:w-[calc(50%-10px)] sm:max-w-none md:w-[calc(33.333%-14px)] lg:w-[calc(25%-15px)]"
             >
-              <ShopProductCard product={product} />
+              <ShopProductCard product={product} defaultVariantId={variant} />
             </div>
           ))}
         </div>

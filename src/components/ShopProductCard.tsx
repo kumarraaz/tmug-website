@@ -35,12 +35,13 @@ function wavePath(revealPx: number): string {
  * "Shop by Product" card: large square packshot stage on top, centered details below.
  * Desktop hover/focus reveals the pack's back view through a rising wave mask (no hover needed on touch/mobile).
  */
-export default function ShopProductCard({ product }: { product: Product }) {
+export default function ShopProductCard({ product, defaultVariantId }: { product: Product; defaultVariantId?: string }) {
   const { lines, updateQty, removeLine, showToast } = useShop();
   const media = SHOP_MEDIA[product.id];
   // The pouch variant that has artwork is the primary variant for products that have pouch + poster artwork
   const [variantId, setVariantId] = useState(
-    (media && product.variants.find((v) => v.weight === media.weight && v.pack === "pouch")?.id) || product.variants[0].id,
+    (defaultVariantId && product.variants.some((v) => v.id === defaultVariantId) ? defaultVariantId : undefined) ||
+      (media && product.variants.find((v) => v.weight === media.weight && v.pack === "pouch")?.id) || product.variants[0].id,
   );
   const variant = getVariant(product, variantId);
   const pouchMode = Boolean(media) && variant.weight === media.weight && variant.pack === "pouch";
