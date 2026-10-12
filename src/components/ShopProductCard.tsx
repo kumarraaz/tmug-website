@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types";
@@ -11,17 +11,64 @@ import { IconStar, IconCheck, IconTrash } from "./icons";
 import AddToCartButton from "./cart/AddToCartButton";
 import { VariantSelector } from "./ProductCard";
 
+// Hover reveal modelled on drinkolipop.com "Shop our collections": on desktop, entering a card raises a
+// wave-edged mask (700ms, ease-out-cubic) that reveals a second image; leaving lowers it again.
+const WAVE_SIZE = 314;
+const WAVE_MS = 700;
+const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+function wavePath(revealPx: number): string {
+  const reveal = clamp(revealPx, 0, WAVE_SIZE);
+  const offset = WAVE_SIZE - reveal;
+  const flat = easeOutCubic(clamp((reveal / WAVE_SIZE - 0.84) / 0.16, 0, 1)); // crest flattens near the top
+  const y = (v: number) => lerp(v + offset, offset, flat);
+  return (
+    `M314 314H0.000422459L0.00012756 ${y(4.4565)}C-0.0456402 ${y(4.41899)} 62.4 ${y(-13.1434)} 157 ${y(26.0583)}` +
+    `C251.6 ${y(65.2601)} 314 ${y(0.456482)} 314 ${y(0.456482)}V314Z`
+  );
+}
+
 /**
  * "Shop by Product" card: large square packshot stage on top, centered details below.
- * Hover (mouse/pen only, driven by React state so it doesn't depend on CSS variants): the packshot smoothly
- * enlarges inside its padded stage, never clipped; touch devices simply show the normal state.
+ * Desktop hover/focus reveals the pack's back view through a rising wave mask (no hover needed on touch/mobile).
  */
 export default function ShopProductCard({ product }: { product: Product }) {
   const { lines, updateQty, removeLine, showToast } = useShop();
-  const [zoom, setZoom] = useState(false);
   const [variantId, setVariantId] = useState(product.variants[0].id);
   const variant = getVariant(product, variantId);
   const front = frontImage(variant);
+  const back = variant.images.find((i) => i.kind === "back");
+
+  const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
+  const pathRef = useRef<SVGPathElement>(null);
+  const revealRef = useRef(0);
+  const rafRef = useRef(0);
+
+  const animateTo = useCallback((target: number) => {
+    const path = pathRef.current;
+    if (!path) return;
+    cancelAnimationFrame(rafRef.current);
+    const from = revealRef.current;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      revealRef.current = target;
+      path.setAttribute("d", wavePath(target));
+      return;
+    }
+    const start = performance.now();
+    const step = (now: number) => {
+      const t = clamp((now - start) / WAVE_MS, 0, 1);
+      const r = lerp(from, target, easeOutCubic(t));
+      revealRef.current = r;
+      path.setAttribute("d", wavePath(r));
+      if (t < 1) rafRef.current = requestAnimationFrame(step);
+    };
+    rafRef.current = requestAnimationFrame(step);
+  }, []);
+  useEffect(() => () => cancelAnimationFrame(rafRef.current), []);
+
+  const canReveal = () => window.matchMedia("(min-width:1024px) and (hover:hover)").matches;
 
   const cartItem = lines.find((l) => l.variantId === variant.id);
   const compareAt = variant.compareAtPrice;
@@ -38,23 +85,17 @@ export default function ShopProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <article className="group relative flex h-full flex-col rounded-[1.35rem] border border-[#3A3438]/10 bg-white shadow-[0_8px_24px_-12px_rgba(51,36,58,0.14)] transition-shadow duration-300 hover:z-10 hover:shadow-[0_20px_40px_-14px_rgba(51,36,58,0.22)]">
-      {/* Packshot stage — padded so the enlarged product stays fully inside it */}
-      <div
-        onPointerEnter={(e) => e.pointerType !== "touch" && setZoom(true)}
-        onPointerLeave={() => setZoom(false)}
-        className="relative aspect-square w-full overflow-hidden rounded-t-[1.35rem] bg-gradient-to-b from-[#FFF7EF] to-[#FBE7DC]/60"
-      >
+    <article
+      onPointerEnter={(e) => e.pointerType !== "touch" && canReveal() && animateTo(WAVE_SIZE)}
+      onPointerLeave={() => animateTo(0)}
+      onFocus={() => canReveal() && animateTo(WAVE_SIZE)}
+      onBlur={(e) => !e.currentTarget.contains(e.relatedTarget as Node | null) && animateTo(0)}
+      className="group relative flex h-full flex-col rounded-[1.35rem] border border-[#3A3438]/10 bg-white shadow-[0_8px_24px_-12px_rgba(51,36,58,0.14)] transition-shadow duration-300 hover:shadow-[0_20px_40px_-14px_rgba(51,36,58,0.22)]"
+    >
+      {/* Packshot stage */}
+      <div className="relative aspect-square w-full overflow-hidden rounded-t-[1.35rem] bg-gradient-to-b from-[#FFF7EF] to-[#FBE7DC]/60">
         <div className="absolute inset-0 p-[9%]">
-          <div
-            className="relative h-full w-full"
-            style={{
-              transform: zoom ? "scale(1.16)" : "scale(1)",
-              transformOrigin: "center",
-              transition: "transform 500ms cubic-bezier(0.22, 1, 0.36, 1)",
-              willChange: "transform",
-            }}
-          >
+          <div className="relative h-full w-full">
             <Image
               src={front.src}
               alt={front.alt}
@@ -65,6 +106,26 @@ export default function ShopProductCard({ product }: { product: Product }) {
             />
           </div>
         </div>
+
+        {back && (
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-[5] hidden lg:block">
+            <svg viewBox="0 0 314 314" preserveAspectRatio="xMidYMid meet" className="h-full w-full">
+              <defs>
+                <clipPath id={`wave-${uid}`} clipPathUnits="userSpaceOnUse">
+                  <path ref={pathRef} d={wavePath(0)} />
+                </clipPath>
+                <linearGradient id={`bg-${uid}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stopColor="#FFF7EF" />
+                  <stop offset="1" stopColor="#FBE7DC" />
+                </linearGradient>
+              </defs>
+              <g clipPath={`url(#wave-${uid})`}>
+                <rect width="314" height="314" fill={`url(#bg-${uid})`} />
+                <image href={back.src} x="28" y="28" width="258" height="258" preserveAspectRatio="xMidYMid meet" />
+              </g>
+            </svg>
+          </div>
+        )}
 
         {product.featured && (
           <span className="absolute left-3 top-3 z-20 inline-flex items-center gap-1 rounded-full border border-[#F8B77C] bg-[#FFF183] px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#33243A] shadow-xs">
