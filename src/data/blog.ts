@@ -18,7 +18,7 @@ export const BLOG_POSTS: BlogPost[] = [
     title: "Ways to Enjoy Butterfly Pea Tea",
     excerpt: "Hot, iced or with a squeeze of lemon — a few simple ways to make your blue cup your own.",
     category: "Recipes",
-    image: "/recipes/butterfly-pea-ways-to-enjoy.jpg",
+    image: "/blog/butterfly-pea.png",
     published: false,
   },
   {
@@ -26,7 +26,15 @@ export const BLOG_POSTS: BlogPost[] = [
     title: "Chamomile Latte Panna Cotta",
     excerpt: "A soft, creamy dessert idea for a calm evening, made with chamomile tea.",
     category: "Recipes",
-    image: "/recipes/chamomile-latte-panna-cotta.png",
+    image: "/blog/chamomile.png",
+    published: false,
+  },
+  {
+    slug: "lemongrass-ginger-chai-soup",
+    title: "Lemongrass Ginger Chai Soup",
+    excerpt: "A warming idea that pairs lemongrass with ginger and a little chai spice.",
+    category: "Recipes",
+    image: "/blog/lemongrass.png",
     published: false,
   },
   {
@@ -35,14 +43,6 @@ export const BLOG_POSTS: BlogPost[] = [
     excerpt: "Turn a pot of ruby hibiscus tea into a cool, tangy treat for warm afternoons.",
     category: "Recipes",
     image: "/recipes/hibiscus-sorbet-ice-pops.png",
-    published: false,
-  },
-  {
-    slug: "lemongrass-ginger-chai-soup",
-    title: "Lemongrass Ginger Chai Soup",
-    excerpt: "A warming idea that pairs lemongrass with ginger and a little chai spice.",
-    category: "Recipes",
-    image: "/recipes/lemongrass-ginger-chai-soup.png",
     published: false,
   },
 ];

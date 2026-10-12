@@ -39,7 +39,7 @@ export function BlogCard({ post }: { post: BlogPost }) {
 /** Homepage journal teaser: first four posts from data/blog.ts, plus a link to the full journal page. */
 export default function BlogSection() {
   return (
-    <section id="journal" aria-labelledby="journal-heading" className="bg-[#FEFCF7] py-10 sm:py-14">
+    <section id="journal" aria-labelledby="journal-heading" className="bg-white py-10 sm:py-14">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <Reveal>
