@@ -20,9 +20,11 @@ import ColorField from "./components/ColorField";
 import TypographyField from "./components/TypographyField";
 import HoverEffectField from "./components/HoverEffectField";
 import LivePreviewPane from "./components/LivePreviewPane";
+import PageBuilder from "./components/PageBuilder";
 
 type NavigationCategory =
   | "dashboard"
+  | "page-builder"
   | "global-colors"
   | "global-typography"
   | "global-spacing"
@@ -133,7 +135,8 @@ export default function AdminControlCenter() {
       if (!res.ok) {
         setErrorMsg(data.error || "Failed to save draft.");
       } else {
-        setToastMsg("Draft saved! Ready to preview or publish. ✓");
+        if (data.persisted === false) setErrorMsg(data.note || "Draft was NOT saved permanently.");
+        else setToastMsg("Draft saved! Ready to preview or publish. ✓" + (data.note ? " " + data.note : ""));
         setTimeout(() => setToastMsg(""), 4000);
       }
     } catch {
@@ -161,7 +164,8 @@ export default function AdminControlCenter() {
         setErrorMsg(data.error || "Publish failed.");
       } else {
         setPublishedControls(JSON.parse(JSON.stringify(controls)));
-        setToastMsg("🚀 Live site updated! All changes are now published.");
+        if (data.persisted === false) setErrorMsg(data.note || "Publish was NOT saved permanently.");
+        else setToastMsg("🚀 Live site updated! All changes are now published." + (data.note ? " " + data.note : ""));
         setTimeout(() => setToastMsg(""), 5000);
 
         // Refresh history
@@ -362,6 +366,20 @@ export default function AdminControlCenter() {
                 <span className="ml-auto rounded-full bg-tea-gold px-1.5 py-0.2 text-[9px] font-black text-charcoal">
                   Live
                 </span>
+              </button>
+            </div>
+
+            <div className="pt-3">
+              <button
+                type="button"
+                onClick={() => setActiveTab("page-builder")}
+                className={`flex w-full items-center gap-2.5 rounded-2xl px-3 py-2 text-xs font-black transition-all cursor-pointer ${
+                  activeTab === "page-builder"
+                    ? "bg-charcoal text-white shadow-xs"
+                    : "bg-tea-gold/40 text-charcoal hover:bg-tea-gold/70"
+                }`}
+              >
+                <span>🧱 Page Builder (any section)</span>
               </button>
             </div>
 
@@ -627,6 +645,14 @@ export default function AdminControlCenter() {
           {/* ═════════════════════════════════════════════════════════ */}
           {/* TAB: DASHBOARD                                            */}
           {/* ═════════════════════════════════════════════════════════ */}
+          {activeTab === "page-builder" && (
+            <PageBuilder
+              controls={controls}
+              setControls={(fn) => setControls((c) => (c ? fn(c) : c))}
+              onMessage={(m, kind) => (kind === "error" ? setErrorMsg(m) : setToastMsg(m))}
+            />
+          )}
+
           {activeTab === "dashboard" && (
             <div className="space-y-6">
               <div className="rounded-3xl border border-charcoal/10 bg-white p-6 shadow-xs">

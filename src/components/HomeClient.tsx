@@ -5,6 +5,8 @@ import { AnnouncementBar } from "./Header";
 import Header from "./Header";
 import Footer from "./Footer";
 import SiteOverlays from "./SiteOverlays";
+import SectionStyle from "./SectionStyle";
+import ImageOverrides from "./ImageOverrides";
 
 // TMUG Homepage Sequence (Hero → Collections → Best Sellers → Open/Reveal → Why TMUG → Brand/Story)
 import Hero from "./Hero"; // 03. Hero Banner Slider (Storefront Campaign Window)
@@ -36,53 +38,114 @@ export default function HomeClient() {
 
       <main className="relative">
         {/* 03. HERO BANNER SLIDER (Large Promotional Storefront Campaign Window) */}
-        {sv?.hero?.enabled !== false && <Hero />}
+        {sv?.hero?.enabled !== false && (
+          <SectionStyle k="hero">
+            <Hero />
+          </SectionStyle>
+        )}
 
         {/* 04. Value-prop highlights strip */}
-        {sv?.trustStrip?.enabled !== false && <TrustStrip />}
+        {sv?.trustStrip?.enabled !== false && (
+          <SectionStyle k="trustStrip">
+            <TrustStrip />
+          </SectionStyle>
+        )}
 
         {/* 05. SHOP BY PRODUCT / COLLECTIONS (Horizontal Product Carousel) */}
-        {sv?.collections?.enabled !== false && <ShopCollections />}
+        {sv?.collections?.enabled !== false && (
+          <SectionStyle k="collections">
+            <ShopCollections />
+          </SectionStyle>
+        )}
 
         {/* 06. BEST SELLERS & HALF-SCREEN 50/50 EXPERIENCE */}
-        {sv?.bestSellers?.enabled !== false && <BestSellers />}
+        {sv?.bestSellers?.enabled !== false && (
+          <SectionStyle k="bestSellers">
+            <BestSellers />
+          </SectionStyle>
+        )}
 
         {/* 07. OPEN / REVEAL EXPERIENCE (3D Box, Flower Shower, Emoji Feedback) */}
-        {sv?.openReveal?.enabled !== false && <OpenRevealSection />}
+        {sv?.openReveal?.enabled !== false && (
+          <SectionStyle k="openReveal">
+            <OpenRevealSection />
+          </SectionStyle>
+        )}
 
         {/* 08. WHY TMUG? (Redesigned, large packs, flower watermark, zero green UI) */}
-        {sv?.whyTmug?.enabled !== false && <WhyTmug />}
+        {sv?.whyTmug?.enabled !== false && (
+          <SectionStyle k="whyTmug">
+            <WhyTmug />
+          </SectionStyle>
+        )}
 
         {/* 09. Made with real tea / real botanical ingredients */}
-        {sv?.madeWithRealTea?.enabled !== false && <MadeWithRealTea />}
+        {sv?.madeWithRealTea?.enabled !== false && (
+          <SectionStyle k="madeWithRealTea">
+            <MadeWithRealTea />
+          </SectionStyle>
+        )}
 
         {/* 10. Product / Tea story rituals */}
-        {sv?.teaStory?.enabled !== false && <TeaStory />}
+        {sv?.teaStory?.enabled !== false && (
+          <SectionStyle k="teaStory">
+            <TeaStory />
+          </SectionStyle>
+        )}
 
         {/* 11. Community rituals & creative recipe showcase */}
-        {sv?.ritualsRecipes?.enabled !== false && <TeaRitualsAndRecipes />}
+        {sv?.ritualsRecipes?.enabled !== false && (
+          <SectionStyle k="ritualsRecipes">
+            <TeaRitualsAndRecipes />
+          </SectionStyle>
+        )}
 
         {/* 12. Lifestyle Gallery ("Made for moments that linger") */}
-        {sv?.lifestyleGallery?.enabled !== false && <LifestyleGallery />}
+        {sv?.lifestyleGallery?.enabled !== false && (
+          <SectionStyle k="lifestyleGallery">
+            <LifestyleGallery />
+          </SectionStyle>
+        )}
 
         {/* 13. Honest Quality / Social proof */}
-        {sv?.brandProof?.enabled !== false && <BrandProof />}
+        {sv?.brandProof?.enabled !== false && (
+          <SectionStyle k="brandProof">
+            <BrandProof />
+          </SectionStyle>
+        )}
 
         {/* 14. Customer love / reviews */}
-        {sv?.customerLove?.enabled !== false && <CustomerLove />}
+        {sv?.customerLove?.enabled !== false && (
+          <SectionStyle k="customerLove">
+            <CustomerLove />
+          </SectionStyle>
+        )}
 
         {/* 15. Available where you shop (Amazon Brand Store & WhatsApp Concierge) */}
-        {sv?.availableInStores?.enabled !== false && <AvailableInStores />}
+        {sv?.availableInStores?.enabled !== false && (
+          <SectionStyle k="availableInStores">
+            <AvailableInStores />
+          </SectionStyle>
+        )}
 
         {/* 16. Final conversion CTA */}
-        {sv?.finalCta?.enabled !== false && <FinalCta />}
+        {sv?.finalCta?.enabled !== false && (
+          <SectionStyle k="finalCta">
+            <FinalCta />
+          </SectionStyle>
+        )}
       </main>
 
       {/* 17. Footer */}
-      {sv?.footer?.enabled !== false && <Footer />}
+      {sv?.footer?.enabled !== false && (
+        <SectionStyle k="footer">
+          <Footer />
+        </SectionStyle>
+      )}
 
       {/* 18. Existing functional overlays: CartDrawer, SearchOverlay, PromoModal, WhatsAppButton */}
       <SiteOverlays />
+      <ImageOverrides />
     </>
   );
 }

@@ -281,7 +281,79 @@ export interface SectionControl {
   order: number;
 }
 
+/** Per-section visual overrides. Empty / undefined = keep the section's built-in design. */
+export interface SectionStyle {
+  // layout
+  maxWidth?: number;        // px
+  minHeight?: number;       // px
+  maxHeight?: number;       // px
+  minHeightTablet?: number; // px
+  minHeightMobile?: number; // px
+  padTop?: number;          // px extra
+  padBottom?: number;       // px extra
+  padX?: number;            // px extra
+  align?: "left" | "center" | "right";
+  vAlign?: "top" | "center" | "bottom";
+  // background
+  bgColor?: string;
+  gradient?: string;        // e.g. "linear-gradient(180deg,#fff,#eee)"
+  bgImage?: string;
+  bgSize?: "cover" | "contain" | "auto";
+  bgPosition?: string;
+  bgRepeat?: "no-repeat" | "repeat";
+  overlayColor?: string;
+  overlayOpacity?: number;  // 0-100
+  // border
+  borderColor?: string;
+  borderWidth?: number;
+  radius?: number;
+  shadow?: "none" | "sm" | "md" | "lg";
+  // typography
+  headingFont?: string;
+  headingColor?: string;
+  headingSize?: number;       // px desktop
+  headingSizeTablet?: number;
+  headingSizeMobile?: number;
+  headingWeight?: number;
+  bodyFont?: string;
+  bodyColor?: string;
+  bodySize?: number;
+  bodySizeMobile?: number;
+  lineHeight?: number;
+  letterSpacing?: number;     // em * 100
+  textTransform?: "none" | "uppercase" | "capitalize";
+  // images
+  imageFit?: "contain" | "cover" | "fill";
+  imagePosition?: string;
+  imageRadius?: number;
+  imageMaxHeight?: number;
+  // buttons
+  buttonBg?: string;
+  buttonText?: string;
+  buttonRadius?: number;
+  buttonSize?: number;
+  // effects
+  reveal?: "none" | "fade" | "slide";
+  hoverImageZoom?: boolean;
+  hoverCardLift?: boolean;
+}
+
+/** Replace one rendered image (keyed by its original src) site-wide, with presentation tweaks. */
+export interface ImageOverride {
+  src?: string;       // new image URL
+  mobileSrc?: string; // shown <768px
+  alt?: string;
+  hidden?: boolean;
+  fit?: "contain" | "cover" | "fill";
+  position?: string;
+  radius?: number;
+  maxWidth?: number;
+  maxHeight?: number;
+}
+
 export interface SiteControls {
+  sectionStyles?: Record<string, SectionStyle>;
+  imageOverrides?: Record<string, ImageOverride>;
   // Global design system
   global: GlobalDesignSettings;
   // Header and navigation

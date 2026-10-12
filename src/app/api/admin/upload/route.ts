@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import fs from "fs/promises";
+import { saveUpload, listUploads } from "@/lib/persist";
 import path from "path";
 
 const COOKIE = "tmug-admin";
@@ -41,16 +41,8 @@ export async function POST(req: Request) {
     const timestamp = Date.now();
     const safeFilename = `${rawName}-${timestamp}${ext}`;
 
-    const uploadsDir = path.join(process.cwd(), "public", "uploads");
-    await fs.mkdir(uploadsDir, { recursive: true });
-
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const destinationPath = path.join(uploadsDir, safeFilename);
-
-    await fs.writeFile(destinationPath, buffer);
-
-    const relativeUrl = `/uploads/${safeFilename}`;
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const relativeUrl = await saveUpload(safeFilename, buffer, file.type || "image/" + ext.slice(1));
 
     return NextResponse.json({
       ok: true,
@@ -65,8 +57,15 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("Admin file upload error:", error);
     return NextResponse.json(
-      { error: "Failed to upload and save image to server storage." },
+      { error: (error as Error).message || "Failed to upload and save image to server storage." },
       { status: 500 }
     );
   }
+}
+
+export async function GET() {
+  if (!(await isAuthed())) {
+    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+  }
+  return NextResponse.json({ files: await listUploads() });
 }

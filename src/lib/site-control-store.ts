@@ -1,6 +1,6 @@
-import fs from "node:fs/promises";
 import path from "node:path";
 import type { SiteControls, SiteControlsStoreState, SiteControlsHistoryItem } from "@/types";
+import { readJson, writeJson, hasBlob } from "@/lib/persist";
 import { DEFAULT_SITE_CONTROLS } from "@/config/site-controls";
 
 export { DEFAULT_SITE_CONTROLS };
@@ -27,50 +27,34 @@ function deepMerge<T extends Record<string, any>>(target: T, source: Partial<T> 
 let cachedState: SiteControlsStoreState | null = null;
 
 async function loadFromDisk(): Promise<SiteControlsStoreState> {
-  if (cachedState) return cachedState;
+  // Blob mode: always read fresh (serverless instances don't share memory)
+  if (cachedState && !hasBlob()) return cachedState;
 
-  try {
-    const raw = await fs.readFile(DATA_PATH, "utf-8");
-    const parsed = JSON.parse(raw);
-
-    if (parsed.published && parsed.draft) {
-      cachedState = {
-        published: deepMerge(DEFAULT_SITE_CONTROLS, parsed.published),
-        draft: deepMerge(DEFAULT_SITE_CONTROLS, parsed.draft),
-        history: Array.isArray(parsed.history) ? parsed.history : [],
-      };
-    } else {
-      // Legacy single SiteControls object
-      const merged = deepMerge(DEFAULT_SITE_CONTROLS, parsed);
-      cachedState = {
-        published: merged,
-        draft: JSON.parse(JSON.stringify(merged)),
-        history: [],
-      };
-    }
-  } catch {
+  const parsed = (await readJson(DATA_PATH)) as any;
+  if (parsed && parsed.published && parsed.draft) {
+    cachedState = {
+      published: deepMerge(DEFAULT_SITE_CONTROLS, parsed.published),
+      draft: deepMerge(DEFAULT_SITE_CONTROLS, parsed.draft),
+      history: Array.isArray(parsed.history) ? parsed.history : [],
+    };
+  } else if (parsed) {
+    const merged = deepMerge(DEFAULT_SITE_CONTROLS, parsed);
+    cachedState = { published: merged, draft: JSON.parse(JSON.stringify(merged)), history: [] };
+  } else {
     cachedState = {
       published: JSON.parse(JSON.stringify(DEFAULT_SITE_CONTROLS)),
       draft: JSON.parse(JSON.stringify(DEFAULT_SITE_CONTROLS)),
       history: [],
     };
   }
-
   return cachedState!;
 }
 
-async function persistToDisk(state: SiteControlsStoreState): Promise<{ persisted: boolean; note?: string }> {
+async function persistToDisk(
+  state: SiteControlsStoreState,
+): Promise<{ persisted: boolean; durable?: boolean; note?: string }> {
   cachedState = state;
-  try {
-    await fs.mkdir(path.dirname(DATA_PATH), { recursive: true });
-    await fs.writeFile(DATA_PATH, JSON.stringify(state, null, 2), "utf-8");
-    return { persisted: true };
-  } catch (err) {
-    return {
-      persisted: false,
-      note: `Saved in memory only: ${(err as Error).message}`,
-    };
-  }
+  return writeJson(DATA_PATH, state);
 }
 
 export const siteControlStore = {
@@ -101,14 +85,14 @@ export const siteControlStore = {
   },
 
   /** Save working changes to draft */
-  async saveDraft(controls: SiteControls): Promise<{ persisted: boolean; note?: string }> {
+  async saveDraft(controls: SiteControls): Promise<{ persisted: boolean; durable?: boolean; note?: string }> {
     const state = await loadFromDisk();
     state.draft = deepMerge(DEFAULT_SITE_CONTROLS, controls);
     return persistToDisk(state);
   },
 
   /** Publish draft (or provided controls) to live site */
-  async publish(controls?: SiteControls): Promise<{ persisted: boolean; note?: string }> {
+  async publish(controls?: SiteControls): Promise<{ persisted: boolean; durable?: boolean; note?: string }> {
     const state = await loadFromDisk();
     const toPublish = controls ? deepMerge(DEFAULT_SITE_CONTROLS, controls) : state.draft;
     state.published = JSON.parse(JSON.stringify(toPublish));
@@ -131,14 +115,14 @@ export const siteControlStore = {
   },
 
   /** Discard draft changes and restore to published */
-  async discardDraft(): Promise<{ persisted: boolean; note?: string }> {
+  async discardDraft(): Promise<{ persisted: boolean; durable?: boolean; note?: string }> {
     const state = await loadFromDisk();
     state.draft = JSON.parse(JSON.stringify(state.published));
     return persistToDisk(state);
   },
 
   /** Restore default site controls */
-  async resetDefaults(): Promise<{ persisted: boolean; note?: string }> {
+  async resetDefaults(): Promise<{ persisted: boolean; durable?: boolean; note?: string }> {
     const state = await loadFromDisk();
     state.draft = JSON.parse(JSON.stringify(DEFAULT_SITE_CONTROLS));
     return persistToDisk(state);
@@ -158,7 +142,7 @@ export const siteControlStore = {
   },
 
   /** Backward-compatible save method used by existing legacy callers */
-  async save(controls: SiteControls): Promise<{ persisted: boolean; note?: string }> {
+  async save(controls: SiteControls): Promise<{ persisted: boolean; durable?: boolean; note?: string }> {
     return this.publish(controls);
   },
 };
