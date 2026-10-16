@@ -8,7 +8,7 @@ import { TaxConfigError, discountForPercent, priceOrder, type PricingResult } fr
 import { query, tx } from "./db";
 import { BusinessRuleError, CheckoutBlockedError, PriceChangedError, type CheckoutIssue } from "./errors";
 import { logEvent } from "./order-core";
-import { GatewayError, PaymentsNotConfiguredError, createGatewayOrder, credentials, isPaymentConfigured } from "./razorpay";
+import { GatewayError, PaymentsNotConfiguredError, createGatewayOrder, credentials, getGatewayStatus, isPaymentConfigured } from "./razorpay";
 import { getSettings, taxSettingsOf, type StoreSettings } from "./settings";
 
 /**
@@ -214,6 +214,8 @@ export async function createOrder(input: CheckoutInput): Promise<CreatedOrder> {
   const { settings } = quote;
   const billing = input.billingSameAsShipping || !input.billing ? input.shipping : input.billing;
   const publicToken = randomBytes(18).toString("base64url");
+  // Test keys (rzp_test_…) move no real money, so such orders must never be counted as sales.
+  const testMode = getGatewayStatus().mode === "test";
 
   const created = await tx(async (db) => {
     const order = await db.queryOne<{ id: string; order_number: string }>(
@@ -222,8 +224,8 @@ export async function createOrder(input: CheckoutInput): Promise<CreatedOrder> {
          shipping_name, shipping_phone, shipping_line1, shipping_line2, shipping_city, shipping_state, shipping_pincode,
          billing_name, billing_phone, billing_line1, billing_line2, billing_city, billing_state, billing_pincode,
          customer_note, coupon_code, subtotal_paise, discount_paise, shipping_paise, tax_paise, total_paise,
-         gst_enabled, prices_include_gst, seller_gstin, seller_state, gateway)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,'razorpay')
+         gst_enabled, prices_include_gst, seller_gstin, seller_state, test_mode, gateway)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,'razorpay')
        RETURNING id, order_number`,
       [
         publicToken, input.customer.name, input.customer.email, input.customer.phone,
@@ -231,6 +233,7 @@ export async function createOrder(input: CheckoutInput): Promise<CreatedOrder> {
         billing.name, billing.phone, billing.line1, billing.line2, billing.city, billing.state, billing.pincode,
         input.note, quote.coupon?.code ?? null, pricing.subtotalPaise, pricing.discountPaise, pricing.shippingPaise, pricing.taxPaise, pricing.totalPaise,
         settings.gst.enabled, settings.gst.pricesIncludeGst, settings.gst.gstin || null, settings.gst.businessState || null,
+        testMode,
       ],
     );
     if (!order) throw new Error("Order insert returned no row");

@@ -109,6 +109,8 @@ export interface OrderListRow {
   invoiceNumber: string | null;
   /** Cancelled after payment but not (fully) refunded yet. */
   needsRefund: boolean;
+  /** Placed with Razorpay test keys: kept for reference, never counted in sales or reports. */
+  testMode: boolean;
 }
 
 export async function listOrders(f: OrderListFilters): Promise<{ rows: OrderListRow[]; total: number }> {
@@ -143,11 +145,11 @@ export async function listOrders(f: OrderListFilters): Promise<{ rows: OrderList
   const rows = await query<{
     id: string; order_number: string; created_at: Date; customer_name: string; customer_email: string; customer_phone: string;
     item_count: number; total_paise: number; refunded_paise: number; payment_status: PaymentStatus; fulfilment_status: FulfilmentStatus;
-    payment_method: string | null; invoice_number: string | null;
+    payment_method: string | null; invoice_number: string | null; test_mode: boolean;
   }>(
     `SELECT o.id, o.order_number, o.created_at, o.customer_name, o.customer_email, o.customer_phone,
             COALESCE((SELECT SUM(qty) FROM order_items i WHERE i.order_id = o.id), 0)::int AS item_count,
-            o.total_paise, o.refunded_paise, o.payment_status, o.fulfilment_status, o.payment_method, o.invoice_number
+            o.total_paise, o.refunded_paise, o.payment_status, o.fulfilment_status, o.payment_method, o.invoice_number, o.test_mode
        FROM orders o ${whereSql}
       ORDER BY o.created_at DESC, o.order_number DESC
       LIMIT ${limit} OFFSET ${offset}`,
@@ -171,6 +173,7 @@ export async function listOrders(f: OrderListFilters): Promise<{ rows: OrderList
       paymentMethod: r.payment_method,
       invoiceNumber: r.invoice_number,
       needsRefund: r.fulfilment_status === "cancelled" && (r.payment_status === "paid" || r.payment_status === "partially_refunded") && r.refunded_paise < r.total_paise,
+      testMode: r.test_mode,
     })),
   };
 }
@@ -208,6 +211,7 @@ export interface OrderDetail {
   invoiceDate: string | null;
   adminNote: string;
   gatewayOrderId: string | null;
+  testMode: boolean;
   items: {
     id: string; productId: string | null; name: string; label: string; sku: string; hsnCode: string | null; image: string; qty: number;
     unitPricePaise: number; grossPaise: number; discountPaise: number; gstApplied: boolean; gstRateBp: number | null;
@@ -233,7 +237,7 @@ interface OrderDbRow {
   fulfilment_status: FulfilmentStatus; payment_status: PaymentStatus; payment_method: string | null;
   paid_at: Date | null; refunded_paise: number; cancelled_at: Date | null; cancel_reason: string | null;
   shipped_at: Date | null; delivered_at: Date | null; tracking_reference: string | null;
-  invoice_number: string | null; invoice_date: string | null; admin_note: string; gateway_order_id: string | null;
+  invoice_number: string | null; invoice_date: string | null; admin_note: string; gateway_order_id: string | null; test_mode: boolean;
 }
 interface OrderItemDbRow {
   id: string; product_id: string | null; product_name: string; variant_label: string; sku: string; hsn_code: string | null; image: string; qty: number;
@@ -291,6 +295,7 @@ export async function getOrderDetail(id: string): Promise<OrderDetail | null> {
     invoiceDate: o.invoice_date,
     adminNote: o.admin_note,
     gatewayOrderId: o.gateway_order_id,
+    testMode: o.test_mode,
     items: items.map((i) => ({
       id: i.id, productId: i.product_id, name: i.product_name, label: i.variant_label, sku: i.sku, hsnCode: i.hsn_code, image: i.image, qty: i.qty,
       unitPricePaise: i.unit_price_paise, grossPaise: i.gross_paise, discountPaise: i.discount_paise, gstApplied: i.gst_applied, gstRateBp: i.gst_rate_bp,
@@ -328,12 +333,14 @@ export interface PaymentRow {
   paidAt: Date | null;
   createdAt: Date;
   verifiedVia: string | null;
+  testMode: boolean;
 }
 
 export async function listPayments(f: PaymentListFilters): Promise<{
   rows: PaymentRow[];
   total: number;
-  totals: { receivedPaise: number; refundedPaise: number };
+  /** Money totals leave out test-key payments; `testPayments` says how many such rows are in this view. */
+  totals: { receivedPaise: number; refundedPaise: number; testPayments: number };
 }> {
   const where: string[] = [];
   const params: unknown[] = [];
@@ -349,11 +356,12 @@ export async function listPayments(f: PaymentListFilters): Promise<{
   if (f.method && f.method !== "all") add("p.method = ?", f.method);
   const whereSql = where.length ? `WHERE ${where.join(" AND ")}` : "";
 
-  const agg = await queryOne<{ n: number; received: number; refunded: number }>(
+  const agg = await queryOne<{ n: number; received: number; refunded: number; test: number }>(
     `SELECT COUNT(*)::int AS n,
-            COALESCE(SUM(p.amount_paise) FILTER (WHERE p.status IN ('captured','partially_refunded','refunded')), 0)::bigint AS received,
-            COALESCE(SUM(p.refunded_paise) FILTER (WHERE p.status IN ('captured','partially_refunded','refunded')), 0)::bigint AS refunded
-       FROM payments p ${whereSql}`,
+            COUNT(*) FILTER (WHERE o.test_mode)::int AS test,
+            COALESCE(SUM(p.amount_paise) FILTER (WHERE NOT o.test_mode AND p.status IN ('captured','partially_refunded','refunded')), 0)::bigint AS received,
+            COALESCE(SUM(p.refunded_paise) FILTER (WHERE NOT o.test_mode AND p.status IN ('captured','partially_refunded','refunded')), 0)::bigint AS refunded
+       FROM payments p JOIN orders o ON o.id = p.order_id ${whereSql}`,
     params,
   );
 
@@ -361,10 +369,10 @@ export async function listPayments(f: PaymentListFilters): Promise<{
   const offset = Math.max(0, (f.page - 1) * limit);
   const rows = await query<{
     id: string; order_id: string; order_number: string; customer_name: string; gateway_payment_id: string | null; method: string | null;
-    status: string; amount_paise: number; refunded_paise: number; paid_at: Date | null; created_at: Date; verified_via: string | null;
+    status: string; amount_paise: number; refunded_paise: number; paid_at: Date | null; created_at: Date; verified_via: string | null; test_mode: boolean;
   }>(
     `SELECT p.id, p.order_id, o.order_number, o.customer_name, p.gateway_payment_id, p.method, p.status, p.amount_paise,
-            p.refunded_paise, p.paid_at, p.created_at, p.verified_via
+            p.refunded_paise, p.paid_at, p.created_at, p.verified_via, o.test_mode
        FROM payments p JOIN orders o ON o.id = p.order_id ${whereSql}
       ORDER BY COALESCE(p.paid_at, p.created_at) DESC, p.id
       LIMIT ${limit} OFFSET ${offset}`,
@@ -373,7 +381,7 @@ export async function listPayments(f: PaymentListFilters): Promise<{
 
   return {
     total: agg?.n ?? 0,
-    totals: { receivedPaise: agg?.received ?? 0, refundedPaise: agg?.refunded ?? 0 },
+    totals: { receivedPaise: agg?.received ?? 0, refundedPaise: agg?.refunded ?? 0, testPayments: agg?.test ?? 0 },
     rows: rows.map((r) => ({
       id: r.id,
       orderId: r.order_id,
@@ -387,6 +395,7 @@ export async function listPayments(f: PaymentListFilters): Promise<{
       paidAt: r.paid_at,
       createdAt: r.created_at,
       verifiedVia: r.verified_via,
+      testMode: r.test_mode,
     })),
   };
 }

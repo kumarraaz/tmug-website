@@ -120,6 +120,15 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
             <Notice tone="warn">This month is still in progress — the report will change as more orders and refunds are recorded. Download it again after month-end.</Notice>
           </div>
         )}
+        {(report.input.testOrdersExcluded ?? 0) > 0 && (
+          <div className="mb-3">
+            <Notice tone="info" title="Test orders left out">
+              <p>
+                {report.input.testOrdersExcluded} order{report.input.testOrdersExcluded === 1 ? "" : "s"} in this month {report.input.testOrdersExcluded === 1 ? "was" : "were"} placed with Razorpay test keys (no real money) and {report.input.testOrdersExcluded === 1 ? "is" : "are"} not in this report.
+              </p>
+            </Notice>
+          </div>
+        )}
         {bad.length > 0 && (
           <div className="mb-3">
             <Notice tone="bad" title="Some totals do not reconcile">

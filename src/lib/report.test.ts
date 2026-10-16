@@ -107,6 +107,17 @@ test("empty month: zeros, no crash, all checks OK", () => {
   assert.equal(r.sheets.orders.rows.length, 0);
 });
 
+test("test-key orders are mentioned in the header only when there are some, and change no figure", () => {
+  const none = buildReport(baseInput([]));
+  assert.ok(!none.sheets.summary.heading.join(" ").includes("test order"));
+
+  const one = buildReport({ ...baseInput([]), testOrdersExcluded: 1 });
+  const two = buildReport({ ...baseInput([]), testOrdersExcluded: 2 });
+  assert.match(one.sheets.summary.heading.join(" "), /1 test order placed with Razorpay test keys \(no real money\) is not included/);
+  assert.match(two.sheets.summary.heading.join(" "), /2 test orders placed with Razorpay test keys \(no real money\) are not included/);
+  assert.equal(two.summary.netSalesPaise, none.summary.netSalesPaise);
+});
+
 test("only paid orders count as sales; unpaid and cancelled-unpaid are listed but excluded", () => {
   const paid = mk({ lines: [PEA], payment: "paid" });
   const awaiting = mk({ lines: [GOLD], payment: "pending" });

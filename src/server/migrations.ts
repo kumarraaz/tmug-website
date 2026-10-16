@@ -279,7 +279,14 @@ async function seedCatalog(client: PoolClient): Promise<void> {
   }
 }
 
+/**
+ * Orders placed while the gateway runs on Razorpay TEST keys involve no real money. They are kept
+ * (and shown, marked TEST) but flagged so they never count in sales totals or in the CA report.
+ */
+const ORDERS_TEST_MODE = `ALTER TABLE orders ADD COLUMN IF NOT EXISTS test_mode boolean NOT NULL DEFAULT false`;
+
 export const MIGRATIONS: Migration[] = [
   { id: "001_schema", run: async (client) => void (await client.query(SCHEMA_V1)) },
   { id: "002_seed_catalog", run: seedCatalog },
+  { id: "003_orders_test_mode", run: async (client) => void (await client.query(ORDERS_TEST_MODE)) },
 ];

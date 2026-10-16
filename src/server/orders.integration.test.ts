@@ -21,6 +21,7 @@ const skip = !TEST_DB;
 
 // Throw-away secrets that exist only for this test run.
 const KEY_ID = "rzp_test_integration";
+const LIVE_KEY_ID = "rzp_live_integration";
 const KEY_SECRET = "integration_key_secret";
 const WEBHOOK_SECRET = "integration_webhook_secret";
 
@@ -44,7 +45,8 @@ function startStub(): Promise<string> {
       res.end(JSON.stringify(body));
     };
     const auth = req.headers.authorization ?? "";
-    if (auth !== `Basic ${Buffer.from(`${KEY_ID}:${KEY_SECRET}`).toString("base64")}`) return send(401, { error: { description: "bad auth" } });
+    const accepted = [KEY_ID, LIVE_KEY_ID].map((k) => `Basic ${Buffer.from(`${k}:${KEY_SECRET}`).toString("base64")}`);
+    if (!accepted.includes(auth)) return send(401, { error: { description: "bad auth" } });
     let body = "";
     req.on("data", (c) => (body += c));
     req.on("end", () => {
@@ -447,4 +449,64 @@ test("the public confirmation view exposes no private data beyond the order toke
   assert.ok(!JSON.stringify(view).includes("asha@example.com"));
   assert.ok(!JSON.stringify(view).includes("9876543210"));
   assert.equal(await reads.getPublicOrder("not-a-real-token-123456"), null);
+});
+
+test("orders taken with Razorpay TEST keys are flagged and never counted; live-key orders are", { skip }, async () => {
+  const { getDashboard } = await import("./dashboard");
+  const { loadReportInput } = await import("./report-data");
+  const { buildReport } = await import("@/lib/report");
+  const { fyStartYearOf, istParts, resolveRange } = await import("@/lib/dates");
+  const now = new Date();
+  const range = resolveRange("this-month", now);
+  const ist = istParts(now);
+  const fy = fyStartYearOf(now);
+
+  const flag = async (id: string) => (await db.queryOne<{ test_mode: boolean }>("SELECT test_mode FROM orders WHERE id = $1", [id]))?.test_mode;
+  const payFor = async (o: Awaited<ReturnType<typeof place>>) => {
+    const pay = stubPay(o.gatewayOrderId, o.totalPaise);
+    const r = await payments.verifyCheckoutPayment({ publicToken: o.publicToken, gatewayOrderId: o.gatewayOrderId, paymentId: pay.id, signature: checkoutSignature(o.gatewayOrderId, pay.id, KEY_SECRET) });
+    assert.equal(r.status, "paid");
+  };
+
+  // 1) a paid order placed with the TEST key
+  const t = await place([{ variantId: V_PEA_50, qty: 1 }]);
+  assert.equal(await flag(t.orderId), true);
+  await payFor(t);
+  let dash = await getDashboard(range, now);
+  assert.equal(dash.totalSalesPaise, 0, "a test payment is not a sale");
+  assert.equal(dash.salesOrders, 0);
+  assert.ok(dash.testOrders >= 1);
+  assert.equal(dash.paymentMethods.length, 0);
+  let input = await loadReportInput(fy, ist.month, now);
+  assert.equal(input.orders.length, 0, "test orders are not in the CA report");
+  assert.ok((input.testOrdersExcluded ?? 0) >= 1);
+  assert.match(buildReport(input).sheets.summary.heading.join(" "), /test orders? placed with Razorpay test keys/);
+  const ledger = await reads.listPayments({ range, page: 1, pageSize: 50 });
+  assert.equal(ledger.totals.receivedPaise, 0, "payment totals leave test money out");
+  assert.ok(ledger.totals.testPayments >= 1);
+  assert.ok(ledger.rows.some((r) => r.orderId === t.orderId && r.testMode), "…but the row is still listed, marked as a test");
+  const listed = await reads.listOrders({ range, page: 1, pageSize: 100 });
+  assert.ok(listed.rows.some((r) => r.id === t.orderId && r.testMode), "the order stays visible in Orders");
+
+  // 2) the same flow with a LIVE key is counted
+  process.env.RAZORPAY_KEY_ID = LIVE_KEY_ID;
+  try {
+    const l = await place([{ variantId: V_GOLD_250, qty: 1 }]);
+    assert.equal(l.keyId, LIVE_KEY_ID);
+    assert.equal(await flag(l.orderId), false);
+    await payFor(l);
+    dash = await getDashboard(range, now);
+    assert.equal(dash.totalSalesPaise, l.totalPaise);
+    assert.equal(dash.salesOrders, 1);
+    assert.ok(dash.testOrders >= 1, "the notice still reports the test orders");
+    input = await loadReportInput(fy, ist.month, now);
+    assert.deepEqual(input.orders.map((o) => o.orderNumber), [l.orderNumber]);
+    const report = buildReport(input);
+    assert.equal(report.summary.grossSalesPaise, 39900);
+    assert.ok(report.checks.every((c) => c.ok), "the report still reconciles");
+    const ledger2 = await reads.listPayments({ range, page: 1, pageSize: 50 });
+    assert.equal(ledger2.totals.receivedPaise, l.totalPaise);
+  } finally {
+    process.env.RAZORPAY_KEY_ID = KEY_ID;
+  }
 });

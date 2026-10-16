@@ -64,6 +64,17 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         )}
       </div>
 
+      {d.testOrders > 0 && (
+        <div className="mb-5">
+          <Notice tone="info" title="Test orders are not counted">
+            <p>
+              {d.testOrders} order{d.testOrders === 1 ? "" : "s"} in this period {d.testOrders === 1 ? "was" : "were"} placed while Razorpay was on test keys (no real money). {d.testOrders === 1 ? "It is" : "They are"} listed under{" "}
+              <Link href="/admin/orders" className="font-bold underline">Orders</Link> but left out of every number on this page and out of the CA report.
+            </p>
+          </Notice>
+        </div>
+      )}
+
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatTile label="Total sales" value={formatPaise(d.totalSalesPaise)} hint={`${d.salesOrders} order${d.salesOrders === 1 ? "" : "s"} with payment received · incl. shipping & GST`} tone="good" />
         <StatTile label="Net revenue" value={formatPaise(d.netRevenuePaise)} hint="Sales minus refunds" />

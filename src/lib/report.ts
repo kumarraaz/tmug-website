@@ -102,6 +102,8 @@ export interface ReportInput {
   generatedAt: Date;
   store: ReportStore;
   orders: RawOrder[];
+  /** Orders in the period that were placed with Razorpay TEST keys (no real money). They are left out of every figure. */
+  testOrdersExcluded?: number;
 }
 
 /* ----------------------------- sheet structure ----------------------------- */
@@ -361,7 +363,10 @@ function buildSummarySheet(input: ReportInput, s: ReportSummary, checks: Reconci
       `Reporting period: ${input.periodLabel}  (${input.fromStr} to ${input.toStr}, IST)  •  Financial year ${input.fyLabel}`,
       `Business: ${store.legalName || store.storeName}  •  GSTIN: ${store.gstin || "not configured"}  •  Business state: ${store.businessState || "not configured"}`,
       `Generated: ${formatDateTimeIst(input.generatedAt)} IST  •  Currency: INR (₹)`,
-      "Basis: orders are selected by order date; sales are orders for which payment was received; refunds are those recorded up to the generation time.",
+      "Basis: orders are selected by order date; sales are orders for which payment was received; refunds are those recorded up to the generation time." +
+        (input.testOrdersExcluded
+          ? ` ${input.testOrdersExcluded} test order${input.testOrdersExcluded === 1 ? "" : "s"} placed with Razorpay test keys (no real money) ${input.testOrdersExcluded === 1 ? "is" : "are"} not included.`
+          : ""),
       DISCLAIMER,
     ],
     columns: [

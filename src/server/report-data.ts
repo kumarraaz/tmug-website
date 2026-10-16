@@ -38,7 +38,11 @@ export async function loadReportInput(fyStartYear: number, month: number, now = 
   const settings = await getSettings();
 
   const orderRows = await query<OrderRow>(
-    "SELECT * FROM orders WHERE created_at >= $1 AND created_at < $2 ORDER BY created_at, order_number",
+    "SELECT * FROM orders WHERE NOT test_mode AND created_at >= $1 AND created_at < $2 ORDER BY created_at, order_number",
+    [range.start, range.endExclusive],
+  );
+  const testRow = await query<{ n: number }>(
+    "SELECT COUNT(*)::int AS n FROM orders WHERE test_mode AND created_at >= $1 AND created_at < $2",
     [range.start, range.endExclusive],
   );
   const ids = orderRows.map((o) => o.id);
@@ -97,12 +101,13 @@ export async function loadReportInput(fyStartYear: number, month: number, now = 
       address: settings.address,
     },
     orders,
+    testOrdersExcluded: testRow[0]?.n ?? 0,
   };
 }
 
 /** Earliest and latest financial years that could hold data (for the picker). */
 export async function reportYearBounds(): Promise<{ first: number | null }> {
-  const row = await query<{ first: Date | null }>("SELECT MIN(created_at) AS first FROM orders");
+  const row = await query<{ first: Date | null }>("SELECT MIN(created_at) AS first FROM orders WHERE NOT test_mode");
   const first = row[0]?.first;
   if (!first) return { first: null };
   const ist = new Date(first.getTime() + 330 * 60 * 1000);

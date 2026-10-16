@@ -5,7 +5,7 @@ import { requireAdminPage } from "@/server/auth";
 import { isDatabaseConfigured } from "@/server/db";
 import { FULFILMENT_LABEL, FULFILMENT_STATUSES, PAYMENT_LABEL, PAYMENT_STATUSES, type FulfilmentStatus, type PaymentStatus } from "@/server/order-core";
 import { listOrders } from "@/server/orders-read";
-import { FulfilmentBadge, PaymentBadge } from "../../_components/badges";
+import { FulfilmentBadge, PaymentBadge, TestBadge } from "../../_components/badges";
 import { RangeFilter, rangeFromParams } from "../../_components/range";
 import { Badge, DatabaseNotConfigured, EmptyState, PageHeader, Pagination, btnSecondary, inputClass, tableClass, tdClass, thClass } from "../../_components/ui";
 
@@ -106,6 +106,11 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                     <Link href={`/admin/orders/${o.id}`} className="font-extrabold text-deep-plum hover:underline">
                       {o.orderNumber}
                     </Link>
+                    {o.testMode && (
+                      <span className="ml-2 align-middle">
+                        <TestBadge />
+                      </span>
+                    )}
                   </td>
                   <td className={`${tdClass} whitespace-nowrap text-xs`}>{formatDateTimeIst(o.createdAt)}</td>
                   <td className={tdClass}>

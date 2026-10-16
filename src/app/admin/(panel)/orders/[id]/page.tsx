@@ -7,7 +7,7 @@ import { requireAdminPage } from "@/server/auth";
 import { isDatabaseConfigured } from "@/server/db";
 import { FULFILMENT_LABEL } from "@/server/order-core";
 import { getOrderDetail } from "@/server/orders-read";
-import { FulfilmentBadge, PaymentBadge } from "../../../_components/badges";
+import { FulfilmentBadge, PaymentBadge, TestBadge } from "../../../_components/badges";
 import { CancelCard, InvoiceCard, RefundCard, StatusCard } from "../../../_components/OrderActions";
 import { Badge, Card, DatabaseNotConfigured, Notice, PageHeader, tableClass, tdClass, thClass } from "../../../_components/ui";
 
@@ -76,7 +76,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
         title={o.orderNumber}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
-            Placed {formatDateTimeIst(o.createdAt)} IST <PaymentBadge status={o.paymentStatus} /> <FulfilmentBadge status={o.fulfilmentStatus} />
+            Placed {formatDateTimeIst(o.createdAt)} IST <PaymentBadge status={o.paymentStatus} /> <FulfilmentBadge status={o.fulfilmentStatus} />{o.testMode && <TestBadge />}
           </span>
         }
         actions={
@@ -87,6 +87,11 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
       />
 
       <div className="mb-4 space-y-2">
+        {o.testMode && (
+          <Notice tone="info" title="Test order">
+            <p>Placed while the payment gateway was on Razorpay test keys, so no real money moved. It is kept for reference but is not counted in the dashboard, payment totals or the CA report.</p>
+          </Notice>
+        )}
         {cancelled && moneyReceived && refundable > 0 && (
           <Notice tone="bad" title="Cancelled — refund due">
             Payment of {formatPaise(o.totalPaise)} was received. {formatPaise(refundable)} has not been recorded as refunded yet.

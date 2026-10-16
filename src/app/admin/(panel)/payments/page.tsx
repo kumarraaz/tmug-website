@@ -6,6 +6,7 @@ import { requireAdminPage } from "@/server/auth";
 import { isDatabaseConfigured } from "@/server/db";
 import { listPayments, paymentMethods } from "@/server/orders-read";
 import { getGatewayStatus } from "@/server/razorpay";
+import { TestBadge } from "../../_components/badges";
 import { GatewayStatusCard } from "../../_components/GatewayStatus";
 import { RangeFilter, rangeFromParams } from "../../_components/range";
 import { Badge, DatabaseNotConfigured, EmptyState, PageHeader, Pagination, StatTile, btnSecondary, inputClass, tableClass, tdClass, thClass } from "../../_components/ui";
@@ -54,7 +55,7 @@ export default async function PaymentsPage({ searchParams }: { searchParams: Pro
       <PageHeader title="Payments" subtitle="Every payment attempt from the payment gateway. A payment is shown as Captured only after it was verified on the server." />
 
       <div className="mb-4 grid gap-3 sm:grid-cols-3">
-        <StatTile label="Received" value={formatPaise(totals.receivedPaise)} hint="Captured payments in this view" tone="good" />
+        <StatTile label="Received" value={formatPaise(totals.receivedPaise)} hint={totals.testPayments > 0 ? `Real payments only · ${totals.testPayments} test payment${totals.testPayments === 1 ? "" : "s"} not counted` : "Captured payments in this view"} tone="good" />
         <StatTile label="Refunded" value={formatPaise(totals.refundedPaise)} hint="Against those payments" tone={totals.refundedPaise > 0 ? "bad" : "default"} />
         <StatTile label="Net collected" value={formatPaise(totals.receivedPaise - totals.refundedPaise)} hint={`${total} payment record${total === 1 ? "" : "s"}`} />
       </div>
@@ -116,6 +117,11 @@ export default async function PaymentsPage({ searchParams }: { searchParams: Pro
                     <Link href={`/admin/orders/${p.orderId}`} className="font-extrabold text-deep-plum hover:underline">
                       {p.orderNumber}
                     </Link>
+                    {p.testMode && (
+                      <span className="ml-2 align-middle">
+                        <TestBadge />
+                      </span>
+                    )}
                     <p className="text-xs text-charcoal/60">{p.customerName}</p>
                   </td>
                   <td className={`${tdClass} font-mono text-xs`}>{p.gatewayPaymentId ?? "—"}</td>
