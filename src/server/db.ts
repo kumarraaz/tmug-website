@@ -25,8 +25,19 @@ export class DatabaseNotConfiguredError extends Error {
   }
 }
 
+/**
+ * DATABASE_URL, or POSTGRES_URL. Vercel's Neon / Postgres integrations may add a custom prefix
+ * (e.g. STORAGE_DATABASE_URL), so a prefixed pooled URL is accepted too. Unpooled / non-pooling
+ * variants are ignored.
+ */
 export function getDatabaseUrl(): string | null {
-  return process.env.DATABASE_URL || process.env.POSTGRES_URL || null;
+  const direct = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+  if (direct) return direct;
+  for (const suffix of ["_DATABASE_URL", "_POSTGRES_URL"]) {
+    const key = Object.keys(process.env).sort().find((k) => k.endsWith(suffix) && process.env[k]);
+    if (key) return process.env[key] ?? null;
+  }
+  return null;
 }
 
 export const isDatabaseConfigured = (): boolean => getDatabaseUrl() !== null;
