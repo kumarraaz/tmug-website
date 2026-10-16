@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence } from "framer-motion";
-import { PRODUCTS } from "@/data/products";
+import { useCatalog } from "@/lib/catalog-context";
 import type { Product } from "@/types";
 import ShopProductCard from "./ShopProductCard";
 import { SHOP_MEDIA } from "@/data/shop-media";
@@ -37,22 +37,36 @@ function getCategoryProducts(tabId: string, allProducts: Product[]): Product[] {
     case "best-sellers":
       return allProducts.filter((p) => p.featured);
     case "all-teas":
-    default:
       return allProducts;
+    default:
+      // Categories created in the admin get their own tab.
+      return allProducts.filter((p) => p.category === tabId);
   }
 }
+
+const BUILT_IN_CATEGORIES = new Set(["herbal-flower", "green-tea", "chai"]);
 
 export default function ShopCollections() {
   const { controls } = useSiteControls();
   const collSettings = controls?.sectionsVisual?.collections;
 
-  const [activeTab, setActiveTab] = useState("all-teas");
+  const { products: allProducts } = useCatalog();
+  const [selectedTab, setActiveTab] = useState("all-teas");
   const sliderRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
+  const tabs = useMemo(() => {
+    const custom = new Map<string, string>();
+    for (const p of allProducts) {
+      if (!BUILT_IN_CATEGORIES.has(p.category) && !custom.has(p.category)) custom.set(p.category, p.categoryName || p.category);
+    }
+    return [...CATEGORY_TABS, ...[...custom].map(([id, label]) => ({ id, label }))];
+  }, [allProducts]);
+  const activeTab = tabs.some((t) => t.id === selectedTab) ? selectedTab : "all-teas";
+
   // The four 100g pouch products lead the rail; every other product keeps its existing order after them
-  const filtered = getCategoryProducts(activeTab, PRODUCTS);
+  const filtered = getCategoryProducts(activeTab, allProducts);
   const products = [...filtered.filter((p) => SHOP_MEDIA[p.id]), ...filtered.filter((p) => !SHOP_MEDIA[p.id])];
 
   const checkScrollBounds = useCallback(() => {
@@ -188,7 +202,7 @@ export default function ShopCollections() {
 
         {/* Category Filter Pills */}
         <div className="no-scrollbar mt-5 flex snap-x snap-mandatory justify-start gap-2 overflow-x-auto px-1 pb-1">
-          {CATEGORY_TABS.map((tab) => {
+          {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
               <button

@@ -1,6 +1,5 @@
 import type { Collection } from "@/types";
 import type { Product } from "@/types";
-import { PRODUCTS } from "./products";
 
 /**
  * Collection catalog — the single source of truth for collection pages,
@@ -101,9 +100,15 @@ export function getCollection(idOrSlug: string): Collection | undefined {
   return COLLECTIONS.find((c) => c.id === idOrSlug || c.slug === idOrSlug);
 }
 
-export function collectionProducts(c: Collection): Product[] {
+/**
+ * Products of a collection, resolved against the LIVE catalogue (so deleted /
+ * inactive products simply drop out). "All Teas" always shows everything, so
+ * products added in the admin appear there automatically.
+ */
+export function collectionProducts(c: Collection, products: Product[]): Product[] {
+  if (c.id === "all-teas") return products;
   return c.productIds
-    .map((id) => PRODUCTS.find((p) => p.id === id))
+    .map((id) => products.find((p) => p.id === id))
     .filter((p): p is Product => Boolean(p));
 }
 

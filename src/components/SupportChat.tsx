@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { siteConfig, whatsappLink } from "@/config/site";
-import { PRODUCTS } from "@/data/products";
+import { useCatalog } from "@/lib/catalog-context";
 import { formatINR } from "@/lib/format";
 import { IconChat, IconClose, IconWhatsApp } from "./icons";
 
@@ -19,6 +19,7 @@ const WHATSAPP_ESCALATION =
 
 /** Lightweight FAQ support bot (rule-based, no AI API). Honest about what it is. */
 export default function SupportChat() {
+  const { products: PRODUCTS, checkoutEnabled } = useCatalog();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -49,13 +50,15 @@ export default function SupportChat() {
     if (/(premium|gold|ctc|chai|kadak)/.test(q))
       return "For kadak chai: TMUG Premium Tea is the everyday CTC workhorse, and TMUG Gold Tea is the bolder Assam-style blend. Both in 250g & 500g pouches.";
     if (/(tea|product|flavour|flavor|range|menu)/.test(q))
-      return "We have 7 teas: Butterfly Pea, Chamomile, Hibiscus, Lemongrass (all caffeine-free herbals), Darjeeling Green Tea, plus Premium & Gold CTC chai. Scroll to “Shop All Teas” to see every pack.";
+      return `We have ${PRODUCTS.length} teas: ${PRODUCTS.map((p) => p.name).join(", ")}. Scroll to “Shop All Teas” to see every pack.`;
     if (/(brew|how.*(make|prepare)|steep|brewing)/.test(q))
       return "Easy rule: 1 tsp per 200ml cup. Herbals — 85–90°C, 3–5 min. Darjeeling green — 80–85°C, 2–3 min. CTC chai — boil with water, add milk, simmer 2–3 min.";
     if (/(choose|which|suggest|recommend|best)/.test(q))
       return "Quick guide: want colourful & fun? Butterfly Pea. Tangy iced? Hibiscus. Calm evenings? Chamomile. Fresh daily? Lemongrass or Darjeeling Green. Strong doodh chai? Premium or Gold.";
     if (/(order|cart|buy|payment|checkout)/.test(q))
-      return "Add teas to your cart, then tap “Order on WhatsApp” — your order details go straight to our team. Online checkout is coming soon.";
+      return checkoutEnabled
+        ? "Add teas to your cart, then check out online — or tap “Order on WhatsApp” and your order details go straight to our team."
+        : "Add teas to your cart, then tap “Order on WhatsApp” — your order details go straight to our team. Online checkout is coming soon.";
     if (/(ship|deliver|dispatch)/.test(q))
       return "We ship across India. Shipping is calculated when you confirm your order on WhatsApp.";
     if (/(price|cost|kitna|discount|offer|promo|coupon)/.test(q)) {

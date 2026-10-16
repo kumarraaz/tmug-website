@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { PRODUCTS, frontImage, getVariant } from "@/data/products";
+import { frontImage, getVariant } from "@/data/products";
+import { useCatalog } from "@/lib/catalog-context";
 import type { Product } from "@/types";
 import { useShop } from "@/lib/store";
 import { formatINR } from "@/lib/format";
@@ -15,24 +16,22 @@ import { useSiteControls } from "@/lib/site-controls-context";
 
 // Verified Best Seller IDs from catalog
 const BEST_SELLER_IDS = ["butterfly-pea", "hibiscus", "darjeeling-green", "gold-tea"];
-const BEST_SELLER_PRODUCTS: Product[] = BEST_SELLER_IDS.map((id) =>
-  PRODUCTS.find((p) => p.id === id)!
-).filter(Boolean);
 
 export default function BestSellers() {
   const { controls } = useSiteControls();
   const bsSettings = controls?.sectionsVisual?.bestSellers;
 
   const { lines, updateQty, removeLine, showToast } = useShop();
+  const { products } = useCatalog();
 
-  // Selected variant state per product
-  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>(() => {
-    const initial: Record<string, string> = {};
-    BEST_SELLER_PRODUCTS.forEach((p) => {
-      initial[p.id] = p.variants[0].id;
-    });
-    return initial;
-  });
+  // Resolved from the live catalogue; a removed / deactivated product simply drops out.
+  const bestSellers = useMemo(
+    () => BEST_SELLER_IDS.map((id) => products.find((p) => p.id === id)).filter((p): p is Product => Boolean(p)),
+    [products],
+  );
+
+  // Selected variant per product (defaults to the first variant)
+  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
 
   const handleSelectVariant = (productId: string, variantId: string) => {
     setSelectedVariants((prev) => ({ ...prev, [productId]: variantId }));
@@ -55,6 +54,8 @@ export default function BestSellers() {
       updateQty(variantId, qty);
     }
   };
+
+  if (bestSellers.length === 0) return null;
 
   return (
     <section
@@ -111,7 +112,7 @@ export default function BestSellers() {
 
         {/* ── Product Grid ── */}
         <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          {BEST_SELLER_PRODUCTS.map((product, idx) => {
+          {bestSellers.map((product, idx) => {
             const currentVariantId = selectedVariants[product.id] || product.variants[0].id;
             const currentVariant = getVariant(product, currentVariantId);
             const packImg = frontImage(currentVariant);

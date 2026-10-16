@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { collectionProducts, getCollection } from "@/data/collections";
+import { useCatalog } from "@/lib/catalog-context";
 import Reveal, { Stagger, RevealItem } from "./motion/Reveal";
 import { IconArrowRight } from "./icons";
 
@@ -10,6 +11,7 @@ import { IconArrowRight } from "./icons";
 const HOME_COLLECTIONS = ["all-teas", "flower-teas", "green-tea", "chai"];
 
 export default function CollectionsShowcase() {
+  const { products } = useCatalog();
   const cards = HOME_COLLECTIONS.map((id) => getCollection(id)!).filter(Boolean);
 
   return (
@@ -34,7 +36,7 @@ export default function CollectionsShowcase() {
 
         <Stagger className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4" gap={0.07}>
           {cards.map((c) => {
-            const count = collectionProducts(c).length;
+            const count = collectionProducts(c, products).length;
             return (
               <RevealItem key={c.id}>
                 <Link

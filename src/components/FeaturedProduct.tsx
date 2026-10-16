@@ -3,7 +3,9 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getProduct, getVariant } from "@/data/products";
+import { getVariant } from "@/data/products";
+import { useCatalog } from "@/lib/catalog-context";
+import type { Product } from "@/types";
 import { whatsappProductLink } from "@/config/site";
 import { formatINR } from "@/lib/format";
 import { VariantSelector, QuantitySelector } from "./ProductCard";
@@ -16,7 +18,14 @@ import { IconWhatsApp, IconArrowRight } from "./icons";
  * story + purchase controls right. No giant colour blocks.
  */
 export default function FeaturedProduct() {
-  const product = getProduct("hibiscus")!;
+  const { getProduct } = useCatalog();
+  const product = getProduct("hibiscus");
+  // The spotlight tea may have been removed or deactivated in the admin.
+  if (!product) return null;
+  return <FeaturedProductInner key={product.id} product={product} />;
+}
+
+function FeaturedProductInner({ product }: { product: Product }) {
   const [variantId, setVariantId] = useState(product.variants[0].id);
   const [qty, setQty] = useState(1);
   const variant = getVariant(product, variantId);

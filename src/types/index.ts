@@ -12,19 +12,19 @@ export interface ProductVariant {
   sku: string;
   label: string; // e.g. "50g Jar"
   weight: string; // e.g. "50g"
-  pack: "jar" | "pouch";
-  /** PLACEHOLDER price in INR — see siteConfig.pricesAreReal */
+  /** Pack type, e.g. "jar" or "pouch". */
+  pack: string;
+  /** Current selling price in INR (the sale price while a sale is active). */
   price: number;
-  /** PLACEHOLDER compare-at price in INR (optional) */
+  /** Regular price in INR, present only while a sale price is active (shown struck through). */
   compareAtPrice?: number;
   images: ProductImage[];
+  /** false when the variant is marked unavailable or tracked stock has run out. */
   inStock: boolean;
 }
 
-export type ProductCategory =
-  | "herbal-flower"
-  | "green-tea"
-  | "chai";
+/** Category slug. Built-in: "herbal-flower", "green-tea", "chai"; admins can add more. */
+export type ProductCategory = string;
 
 export interface Product {
   id: string;
@@ -32,6 +32,8 @@ export interface Product {
   name: string;
   tagline: string;
   category: ProductCategory;
+  /** Display name of the category (set for database-backed products). */
+  categoryName?: string;
   description: string;
   brewGuide: string;
   ingredients: string;
@@ -68,6 +70,8 @@ export interface CartLine {
   image: string;
   imageAlt: string;
   qty: number;
+  /** Set when the live catalogue says this pack is currently out of stock / unavailable. */
+  unavailable?: boolean;
 }
 
 export interface SeoSettings {

@@ -1,6 +1,6 @@
 import path from "node:path";
-import type { SiteControls, SiteControlsStoreState, SiteControlsHistoryItem } from "@/types";
-import { readJson, writeJson, hasBlob } from "@/lib/persist";
+import type { SiteControls, SiteControlsStoreState } from "@/types";
+import { readJson, hasBlob } from "@/lib/persist";
 import { DEFAULT_SITE_CONTROLS } from "@/config/site-controls";
 
 export { DEFAULT_SITE_CONTROLS };
@@ -50,99 +50,10 @@ async function loadFromDisk(): Promise<SiteControlsStoreState> {
   return cachedState!;
 }
 
-async function persistToDisk(
-  state: SiteControlsStoreState,
-): Promise<{ persisted: boolean; durable?: boolean; note?: string }> {
-  cachedState = state;
-  return writeJson(DATA_PATH, state);
-}
-
 export const siteControlStore = {
-  /**
-   * Get active site controls. Default mode is 'published' for public visitors,
-   * or 'draft' for preview and admin controls.
-   */
-  async get(mode: "published" | "draft" = "published"): Promise<SiteControls> {
+  /** The published storefront appearance settings (read-only; the visual editor was removed). */
+  async get(): Promise<SiteControls> {
     const state = await loadFromDisk();
-    return mode === "draft" ? state.draft : state.published;
-  },
-
-  /** Get complete state including published, draft, history, and status flags */
-  async getState(): Promise<{
-    published: SiteControls;
-    draft: SiteControls;
-    history: SiteControlsHistoryItem[];
-    hasDraftChanges: boolean;
-  }> {
-    const state = await loadFromDisk();
-    const hasDraftChanges = JSON.stringify(state.published) !== JSON.stringify(state.draft);
-    return {
-      published: state.published,
-      draft: state.draft,
-      history: state.history,
-      hasDraftChanges,
-    };
-  },
-
-  /** Save working changes to draft */
-  async saveDraft(controls: SiteControls): Promise<{ persisted: boolean; durable?: boolean; note?: string }> {
-    const state = await loadFromDisk();
-    state.draft = deepMerge(DEFAULT_SITE_CONTROLS, controls);
-    return persistToDisk(state);
-  },
-
-  /** Publish draft (or provided controls) to live site */
-  async publish(controls?: SiteControls): Promise<{ persisted: boolean; durable?: boolean; note?: string }> {
-    const state = await loadFromDisk();
-    const toPublish = controls ? deepMerge(DEFAULT_SITE_CONTROLS, controls) : state.draft;
-    state.published = JSON.parse(JSON.stringify(toPublish));
-    state.draft = JSON.parse(JSON.stringify(toPublish));
-
-    const historyItem: SiteControlsHistoryItem = {
-      id: `rev-${Date.now()}`,
-      timestamp: new Date().toISOString(),
-      label: `Published revision on ${new Date().toLocaleDateString("en-IN", {
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      })}`,
-      controls: JSON.parse(JSON.stringify(toPublish)),
-    };
-
-    state.history = [historyItem, ...(state.history || [])].slice(0, 10); // Keep last 10 snapshots
-    return persistToDisk(state);
-  },
-
-  /** Discard draft changes and restore to published */
-  async discardDraft(): Promise<{ persisted: boolean; durable?: boolean; note?: string }> {
-    const state = await loadFromDisk();
-    state.draft = JSON.parse(JSON.stringify(state.published));
-    return persistToDisk(state);
-  },
-
-  /** Restore default site controls */
-  async resetDefaults(): Promise<{ persisted: boolean; durable?: boolean; note?: string }> {
-    const state = await loadFromDisk();
-    state.draft = JSON.parse(JSON.stringify(DEFAULT_SITE_CONTROLS));
-    return persistToDisk(state);
-  },
-
-  /** Rollback to a historical snapshot */
-  async rollback(historyId: string): Promise<{ success: boolean; persisted: boolean; note?: string }> {
-    const state = await loadFromDisk();
-    const found = state.history.find((h) => h.id === historyId);
-    if (!found) {
-      return { success: false, persisted: false, note: "History revision not found." };
-    }
-    state.draft = JSON.parse(JSON.stringify(found.controls));
-    state.published = JSON.parse(JSON.stringify(found.controls));
-    const result = await persistToDisk(state);
-    return { success: true, ...result };
-  },
-
-  /** Backward-compatible save method used by existing legacy callers */
-  async save(controls: SiteControls): Promise<{ persisted: boolean; durable?: boolean; note?: string }> {
-    return this.publish(controls);
+    return state.published;
   },
 };

@@ -4,7 +4,8 @@ import { useState, useEffect, useId } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { PRODUCTS, frontImage, getVariant } from "@/data/products";
+import { frontImage, getVariant } from "@/data/products";
+import { useCatalog } from "@/lib/catalog-context";
 import type { Product } from "@/types";
 import { useShop } from "@/lib/store";
 import { formatINR } from "@/lib/format";
@@ -29,11 +30,12 @@ export default function OpenRevealSection() {
 
   const reduceMotion = useReducedMotion();
   const { lines, updateQty, removeLine, showToast } = useShop();
+  const { products: PRODUCTS } = useCatalog();
 
-  // Eligible products list
-  const eligibleProducts: Product[] = ELIGIBLE_BOX_IDS.map(
-    (id) => PRODUCTS.find((p) => p.id === id)!
-  ).filter(Boolean);
+  // Eligible products list (from the live catalogue; removed / inactive products drop out)
+  const eligibleProducts: Product[] = ELIGIBLE_BOX_IDS.map((id) => PRODUCTS.find((p) => p.id === id)).filter(
+    (p): p is Product => Boolean(p),
+  );
 
   // Random product initialization on client mount to prevent SSR hydration mismatch
   const [selectedProductId, setSelectedProductId] = useState<string>("butterfly-pea");
@@ -49,8 +51,9 @@ export default function OpenRevealSection() {
     }
   }, [hasRandomized, eligibleProducts.length]);
 
-  const currentProduct =
+  const currentProduct: Product | undefined =
     PRODUCTS.find((p) => p.id === selectedProductId) || eligibleProducts[0] || PRODUCTS[0];
+  if (!currentProduct) return null;
   const currentVariant =
     currentProduct.variants[selectedVariantIdx] || currentProduct.variants[0];
   const packImage = frontImage(currentVariant);

@@ -1,10 +1,14 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
-import { PRODUCTS } from "@/data/products";
+import { getCatalog } from "@/server/catalog";
 import { COLLECTIONS } from "@/data/collections";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+/** Rebuilt at most hourly even if an admin-triggered refresh was missed; product changes also refresh it immediately. */
+export const revalidate = 3600;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const PRODUCTS = await getCatalog();
   return [
     {
       url: siteConfig.url,

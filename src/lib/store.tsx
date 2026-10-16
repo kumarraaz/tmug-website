@@ -6,12 +6,14 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
 import type { CartLine, Product, ProductVariant } from "@/types";
 import { siteConfig } from "@/config/site";
 import { roundPaise } from "@/lib/format";
+import { useCatalog } from "@/lib/catalog-context";
 
 const STORAGE_KEY = "tmug-cart-v1";
 const COUPON_KEY = "tmug-coupon-v1";
@@ -101,6 +103,12 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   const [fly, setFly] = useState<FlyPayload | null>(null);
   const [cartPulse, setCartPulse] = useState(0);
   const [toast, setToast] = useState<{ message: string; key: number } | null>(null);
+  const { products } = useCatalog();
+  // Latest cart lines for the catalogue-sync effect below (which must run only when the catalogue changes).
+  const linesRef = useRef(lines);
+  useEffect(() => {
+    linesRef.current = lines;
+  }, [lines]);
 
   const showToast = useCallback((message: string) => {
     setToast({ message, key: Date.now() });
@@ -113,6 +121,42 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const clearFly = useCallback(() => setFly(null), []);
+
+  // Keep the persisted cart in sync with the live catalogue: current prices, names and images,
+  // availability flags, and removal of products that no longer exist. (Checkout re-prices on the
+  // server regardless, so this only keeps what the shopper SEES accurate.)
+  useEffect(() => {
+    const current = linesRef.current;
+    if (current.length === 0) return;
+    let removed = 0;
+    const next = current.flatMap((l) => {
+      const product = products.find((p) => p.id === l.productId);
+      const variant = product?.variants.find((v) => v.id === l.variantId);
+      if (!product || !variant) {
+        removed += 1;
+        return [];
+      }
+      const image = variant.images[0];
+      return [
+        {
+          ...l,
+          productName: product.name,
+          variantLabel: variant.label,
+          price: variant.price,
+          image: image?.src ?? l.image,
+          imageAlt: image?.alt ?? product.name,
+          unavailable: !variant.inStock,
+        },
+      ];
+    });
+    if (JSON.stringify(next) !== JSON.stringify(current)) setLines(next);
+    if (removed > 0) {
+      setToast({
+        message: removed === 1 ? "An item in your cart is no longer available and was removed." : `${removed} items in your cart are no longer available and were removed.`,
+        key: Date.now(),
+      });
+    }
+  }, [products]);
 
   // Persist cart + coupon on every change
   useEffect(() => {

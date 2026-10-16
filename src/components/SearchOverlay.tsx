@@ -4,7 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { PRODUCTS, frontImage } from "@/data/products";
+import { frontImage } from "@/data/products";
+import { useCatalog } from "@/lib/catalog-context";
 import { useShop } from "@/lib/store";
 import { formatINR } from "@/lib/format";
 import { IconClose, IconSearch } from "./icons";
@@ -15,6 +16,7 @@ import { IconClose, IconSearch } from "./icons";
  */
 function SearchPanel({ onClose }: { onClose: () => void }) {
   const { setQuickViewId } = useShop();
+  const { products: PRODUCTS } = useCatalog();
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -33,7 +35,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
         p.description.toLowerCase().includes(q) ||
         p.profile.toLowerCase().includes(q),
     );
-  }, [query]);
+  }, [query, PRODUCTS]);
 
   return (
     <motion.div

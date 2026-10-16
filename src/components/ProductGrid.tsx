@@ -1,11 +1,16 @@
 "use client";
 
-import { PRODUCTS } from "@/data/products";
+import { useCatalog } from "@/lib/catalog-context";
 import ProductCard from "./ProductCard";
 import Reveal, { Stagger, RevealItem } from "./motion/Reveal";
 
+const WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty"];
+const countWord = (n: number) => WORDS[n] ?? String(n);
+
 /** Full product grid — "Shop All Teas". Collection filtering lives on /collections. */
 export default function ProductGrid() {
+  const { products: PRODUCTS } = useCatalog();
+  const packs = PRODUCTS.reduce((n, p) => n + p.variants.length, 0);
   return (
     <section id="shop" className="scroll-mt-24 bg-cream py-10 sm:py-14">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -17,7 +22,8 @@ export default function ProductGrid() {
             Shop all <span className="text-tea-green">teas</span>
           </h2>
           <p className="mx-auto mt-2.5 max-w-xl text-[15px] text-ink-soft">
-            Seven teas, thirteen packs. Whole flowers, long leaves and kadak chai —
+            {countWord(PRODUCTS.length)} {PRODUCTS.length === 1 ? "tea" : "teas"}, {countWord(packs).toLowerCase()}{" "}
+            {packs === 1 ? "pack" : "packs"}. Whole flowers, long leaves and kadak chai —
             pick your ritual.
           </p>
         </Reveal>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { PRODUCTS } from "@/data/products";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCatalog } from "@/lib/catalog-context";
 import type { Product } from "@/types";
 import ShopProductCard from "./ShopProductCard";
 import Reveal from "./motion/Reveal";
@@ -19,12 +19,17 @@ const NEW_ARRIVALS: { id: string; variant: string }[] = [
   { id: "hibiscus", variant: "hibiscus-100g-pouch" },
 ];
 
-const PICKS: { product: Product; variant: string }[] = NEW_ARRIVALS.flatMap(({ id, variant }) => {
-  const product = PRODUCTS.find((p) => p.id === id);
-  return product ? [{ product, variant }] : [];
-});
-
 export default function NewArrivals() {
+  const { products } = useCatalog();
+  // Resolved from the live catalogue; a removed / inactive product simply drops out.
+  const PICKS: { product: Product; variant: string }[] = useMemo(
+    () =>
+      NEW_ARRIVALS.flatMap(({ id, variant }) => {
+        const product = products.find((p) => p.id === id);
+        return product ? [{ product, variant }] : [];
+      }),
+    [products],
+  );
   const trackRef = useRef<HTMLDivElement>(null);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);

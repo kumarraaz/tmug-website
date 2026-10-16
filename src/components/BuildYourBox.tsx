@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { PRODUCTS, frontImage, getVariant } from "@/data/products";
+import { frontImage, getVariant } from "@/data/products";
+import { useCatalog } from "@/lib/catalog-context";
 import { useShop } from "@/lib/store";
 import { formatINR } from "@/lib/format";
 
@@ -12,6 +13,7 @@ import { formatINR } from "@/lib/format";
  */
 export default function BuildYourBox() {
   const { addToCart, setCartOpen, showToast } = useShop();
+  const { products: PRODUCTS } = useCatalog();
   const [variantIds, setVariantIds] = useState<Record<string, string>>({});
   const [qtys, setQtys] = useState<Record<string, number>>({}); // keyed by variant id
 
@@ -87,6 +89,7 @@ export default function BuildYourBox() {
                 )}
 
                 <p className="mt-2 text-center font-display text-lg font-black text-charcoal">{formatINR(variant.price)}</p>
+                {!variant.inStock && <p className="text-center text-xs font-bold text-berry">Out of stock</p>}
 
                 <div className="mt-auto flex items-center justify-center pt-3">
                   <div className="inline-flex items-center rounded-full border-2 border-charcoal/20 bg-white p-0.5">
@@ -103,8 +106,9 @@ export default function BuildYourBox() {
                     <button
                       type="button"
                       aria-label={`Add one ${product.name} ${variant.label}`}
+                      disabled={!variant.inStock}
                       onClick={() => setQty(variant.id, qty + 1)}
-                      className="flex h-9 w-9 items-center justify-center rounded-full text-lg font-black text-charcoal hover:bg-warm-surface cursor-pointer"
+                      className="flex h-9 w-9 items-center justify-center rounded-full text-lg font-black text-charcoal hover:bg-warm-surface disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                     >
                       +
                     </button>

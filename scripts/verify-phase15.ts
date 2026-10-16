@@ -51,12 +51,12 @@ for (const s of slugs) {
 // 5. Collections integrity
 check("8 collections", COLLECTIONS.length === 8, `got ${COLLECTIONS.length}`);
 for (const c of COLLECTIONS) {
-  const prods = collectionProducts(c);
+  const prods = collectionProducts(c, PRODUCTS);
   check(`collection ${c.id} resolves ${prods.length} products`, prods.length === c.productIds.length);
   check(`collection ${c.id} has accent`, /^#[0-9A-Fa-f]{6}$/.test(c.accent));
 }
 for (const c of COLLECTIONS) {
-  const prods = collectionProducts(c);
+  const prods = collectionProducts(c, PRODUCTS);
   check(
     `collection ${c.id} products all in dropdown`,
     prods.every((p) =>

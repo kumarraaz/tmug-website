@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { COLLECTIONS, collectionProducts, getCollection } from "@/data/collections";
+import { useCatalog } from "@/lib/catalog-context";
 import ProductCard from "@/components/ProductCard";
 import Reveal, { Stagger, RevealItem } from "@/components/motion/Reveal";
 import { IconArrowRight } from "@/components/icons";
@@ -13,9 +14,10 @@ import { IconArrowRight } from "@/components/icons";
 /** Visual catalog with category tabs + animated grid. */
 function CollectionsInner() {
   const params = useSearchParams();
+  const { products: catalog } = useCatalog();
   const activeId = params.get("c") ?? "all-teas";
   const active = getCollection(activeId) ?? COLLECTIONS[0];
-  const products = collectionProducts(active);
+  const products = collectionProducts(active, catalog);
 
   return (
     <div className="bg-cream-light pb-16 sm:pb-24">
@@ -127,7 +129,7 @@ function CollectionsInner() {
                   <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between p-3.5">
                     <div>
                       <p className="font-display text-[15px] font-bold text-white">{c.name}</p>
-                      <p className="text-[11px] font-bold text-white/75">{collectionProducts(c).length} teas</p>
+                      <p className="text-[11px] font-bold text-white/75">{collectionProducts(c, catalog).length} teas</p>
                     </div>
                     <span
                       className="flex h-8 w-8 items-center justify-center rounded-full text-white transition-transform duration-300 group-hover:translate-x-1"

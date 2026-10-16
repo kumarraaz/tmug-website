@@ -1,13 +1,15 @@
 import HomeClient from "@/components/HomeClient";
-import { PRODUCTS } from "@/data/products";
+import { getCatalog } from "@/server/catalog";
 import { siteConfig } from "@/config/site";
+import { jsonLdString } from "@/lib/json-ld";
 
 /**
  * One-page TMUG storefront.
  * Prices in structured data are included only when siteConfig.pricesAreReal
  * is true (real MRP confirmed). Never fabricate ratings/reviews.
  */
-export default function Home() {
+export default async function Home() {
+  const PRODUCTS = await getCatalog();
   const includePrices = siteConfig.pricesAreReal;
 
   const itemList = {
@@ -32,7 +34,7 @@ export default function Home() {
                   "@type": "Offer",
                   priceCurrency: "INR",
                   price: v.price,
-                  availability: "https://schema.org/InStock",
+                  availability: v.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
                   url: `${siteConfig.url}/#shop`,
                 },
               }
@@ -46,7 +48,7 @@ export default function Home() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdString(itemList) }}
       />
       <HomeClient />
     </>

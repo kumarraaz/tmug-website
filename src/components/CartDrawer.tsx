@@ -4,7 +4,9 @@ import { useEffect, useState, useSyncExternalStore, type ReactNode } from "react
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
 import { useShop } from "@/lib/store";
+import { useCatalog } from "@/lib/catalog-context";
 import { formatINR, formatMoney } from "@/lib/format";
 import { siteConfig, whatsappOrderLink } from "@/config/site";
 import { IconClose, IconTrash, IconWhatsApp } from "./icons";
@@ -98,6 +100,8 @@ export default function CartDrawer() {
   const { cartOpen, setCartOpen, lines, updateQty, removeLine, subtotal, discount, total, coupon, count } = useShop();
   const [checkoutNote, setCheckoutNote] = useState(false);
   const isMobile = useIsMobile();
+  const { checkoutEnabled } = useCatalog();
+  const hasUnavailable = lines.some((l) => l.unavailable);
 
   useEffect(() => {
     if (!cartOpen) return;
@@ -222,6 +226,7 @@ export default function CartDrawer() {
                             <div className="min-w-0">
                               <p className="truncate text-sm font-extrabold text-charcoal">{l.productName}</p>
                               <p className="text-xs font-semibold text-charcoal/60">{l.variantLabel}</p>
+                              {l.unavailable && <p className="text-xs font-extrabold text-berry">Currently unavailable</p>}
                             </div>
                             <button
                               type="button"
@@ -278,26 +283,46 @@ export default function CartDrawer() {
                   >
                     <IconWhatsApp className="h-5 w-5" /> Order on WhatsApp
                   </a>
-                  <button
-                    type="button"
-                    onClick={() => setCheckoutNote((v) => !v)}
-                    className="w-full rounded-full border-2 border-ink/15 px-6 py-3 text-sm font-bold text-ink transition-colors hover:border-ink/30"
-                  >
-                    Checkout
-                  </button>
-                  <AnimatePresence>
-                    {checkoutNote && (
-                      <motion.p
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="overflow-hidden text-center text-xs leading-relaxed text-ink-soft"
+                  {checkoutEnabled ? (
+                    <>
+                      {hasUnavailable ? (
+                        <p role="alert" className="text-center text-xs font-bold text-berry">
+                          Remove the unavailable item(s) to check out.
+                        </p>
+                      ) : (
+                        <Link
+                          href="/checkout"
+                          onClick={() => setCartOpen(false)}
+                          className="block w-full rounded-full bg-charcoal px-6 py-3.5 text-center text-sm font-extrabold text-white transition-colors hover:bg-tea-gold hover:text-charcoal"
+                        >
+                          Checkout securely
+                        </Link>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => setCheckoutNote((v) => !v)}
+                        className="w-full rounded-full border-2 border-ink/15 px-6 py-3 text-sm font-bold text-ink transition-colors hover:border-ink/30"
                       >
-                        Online checkout is coming soon — for now, place your order instantly on
-                        WhatsApp at {siteConfig.whatsapp.display}.
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
+                        Checkout
+                      </button>
+                      <AnimatePresence>
+                        {checkoutNote && (
+                          <motion.p
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden text-center text-xs leading-relaxed text-ink-soft"
+                          >
+                            Online checkout is coming soon — for now, place your order instantly on
+                            WhatsApp at {siteConfig.whatsapp.display}.
+                          </motion.p>
+                        )}
+                      </AnimatePresence>
+                    </>
+                  )}
                 </div>
               </>
             )}

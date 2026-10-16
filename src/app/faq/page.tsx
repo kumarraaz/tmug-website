@@ -4,6 +4,7 @@ import { siteConfig } from "@/config/site";
 import PageShell from "@/components/PageShell";
 import PageHero from "@/components/PageHero";
 import Reveal, { Stagger, RevealItem } from "@/components/motion/Reveal";
+import { jsonLdString } from "@/lib/json-ld";
 
 export const metadata: Metadata = {
   title: "FAQ",
@@ -137,7 +138,7 @@ export default function FaqPage() {
 
   return (
     <PageShell>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(faqLd) }} />
       <PageHero
         eyebrow="FAQ"
         title={<>Questions?<br /><span className="text-tea-green">Answered.</span></>}

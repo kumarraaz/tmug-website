@@ -1,71 +1,88 @@
-import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { saveUpload, listUploads } from "@/lib/persist";
-import path from "path";
+import { randomBytes } from "node:crypto";
+import { adminGuard } from "@/server/auth";
+import { json, jsonError } from "@/server/http";
+import { listUploads, saveUpload } from "@/lib/persist";
 
-const COOKIE = "tmug-admin";
-const SESSION_VALUE = "ok";
+/**
+ * Admin image upload.
+ *
+ * Safety measures:
+ *  - admin session + Origin check (adminGuard)
+ *  - the file TYPE is decided by sniffing the file's magic bytes, never by the
+ *    client-supplied name or Content-Type (so a renamed .html/.svg/.exe is refused)
+ *  - only PNG, JPEG and WebP are accepted (no SVG: it can carry scripts)
+ *  - size limit of 4 MB (Vercel's request body limit is 4.5 MB)
+ *  - the stored name is generated here (sanitised base + random suffix): user input
+ *    can never choose a path, and an upload can never overwrite another file
+ */
 
-async function isAuthed(): Promise<boolean> {
-  const store = await cookies();
-  return store.get(COOKIE)?.value === SESSION_VALUE;
+const MAX_BYTES = 4 * 1024 * 1024;
+
+type Sniffed = { ext: "png" | "jpg" | "webp"; mime: string };
+
+function sniffImage(buf: Buffer): Sniffed | null {
+  if (buf.length >= 12) {
+    if (buf.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
+      return { ext: "png", mime: "image/png" };
+    }
+    if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) {
+      return { ext: "jpg", mime: "image/jpeg" };
+    }
+    if (buf.subarray(0, 4).toString("ascii") === "RIFF" && buf.subarray(8, 12).toString("ascii") === "WEBP") {
+      return { ext: "webp", mime: "image/webp" };
+    }
+  }
+  return null;
 }
 
 export async function POST(req: Request) {
-  const authed = await isAuthed();
-  if (!authed) {
-    return NextResponse.json({ error: "Unauthorized. Please log in as admin." }, { status: 401 });
+  const denied = await adminGuard(req);
+  if (denied) return denied;
+
+  const declared = Number(req.headers.get("content-length") ?? 0);
+  if (declared > MAX_BYTES + 512 * 1024) {
+    return jsonError("Image is too large. The maximum size is 4 MB.", 413);
   }
 
   try {
-    const formData = await req.formData();
-    const file = formData.get("file") as File | null;
-    const slotType = (formData.get("slotType") as string) || "general";
-
-    if (!file) {
-      return NextResponse.json({ error: "No file was provided in the upload request." }, { status: 400 });
-    }
-
-    // Supported formats check: PNG, JPG, JPEG, WEBP
-    const allowedExtensions = [".png", ".jpg", ".jpeg", ".webp"];
-    const ext = path.extname(file.name).toLowerCase();
-    if (!allowedExtensions.includes(ext)) {
-      return NextResponse.json(
-        { error: `Unsupported file extension (${ext}). Allowed: PNG, JPG, JPEG, WEBP.` },
-        { status: 400 }
-      );
-    }
-
-    // Sanitize file base name
-    const rawName = path.basename(file.name, ext).replace(/[^a-zA-Z0-9_-]/g, "-").toLowerCase();
-    const timestamp = Date.now();
-    const safeFilename = `${rawName}-${timestamp}${ext}`;
+    const form = await req.formData();
+    const file = form.get("file");
+    if (!(file instanceof File)) return jsonError("No file was provided.", 400);
+    if (file.size === 0) return jsonError("The file is empty.", 400);
+    if (file.size > MAX_BYTES) return jsonError("Image is too large. The maximum size is 4 MB.", 413);
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const relativeUrl = await saveUpload(safeFilename, buffer, file.type || "image/" + ext.slice(1));
+    const kind = sniffImage(buffer);
+    if (!kind) return jsonError("Unsupported file. Upload a PNG, JPG or WebP image.", 415);
 
-    return NextResponse.json({
+    const base =
+      file.name
+        .replace(/\.[^.]*$/, "")
+        .replace(/[^a-zA-Z0-9_-]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .toLowerCase()
+        .slice(0, 40) || "image";
+    const filename = `${base}-${randomBytes(6).toString("hex")}.${kind.ext}`;
+
+    const url = await saveUpload(filename, buffer, kind.mime);
+    return json({
       ok: true,
-      url: relativeUrl,
-      filename: safeFilename,
+      url,
+      filename,
       originalName: file.name,
-      format: ext.replace(".", "").toUpperCase(),
+      format: kind.ext.toUpperCase(),
       size: file.size,
-      mimeType: file.type,
-      slotType,
+      mimeType: kind.mime,
     });
-  } catch (error) {
-    console.error("Admin file upload error:", error);
-    return NextResponse.json(
-      { error: (error as Error).message || "Failed to upload and save image to server storage." },
-      { status: 500 }
-    );
+  } catch (err) {
+    console.error("[upload] failed:", err instanceof Error ? err.message : err);
+    const message = err instanceof Error && /Blob store/i.test(err.message) ? err.message : "Could not save the image. Please try again.";
+    return jsonError(message, 500);
   }
 }
 
-export async function GET() {
-  if (!(await isAuthed())) {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  }
-  return NextResponse.json({ files: await listUploads() });
+export async function GET(req: Request) {
+  const denied = await adminGuard(req);
+  if (denied) return denied;
+  return json({ files: await listUploads() });
 }

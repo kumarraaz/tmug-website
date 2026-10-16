@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { COLLECTIONS } from "@/data/collections";
-import { PRODUCTS } from "@/data/products";
+import { useCatalog } from "@/lib/catalog-context";
 import { siteConfig } from "@/config/site";
 import FloatingLogo from "./motion/FloatingLogo";
 import { useSiteControls } from "@/lib/site-controls-context";
@@ -38,6 +38,7 @@ function SocialIcon({ name }: { name: "Instagram" | "Facebook" | "YouTube" | "Li
 }
 
 export default function Footer() {
+  const { products: PRODUCTS } = useCatalog();
   const { controls } = useSiteControls();
   const f = controls?.sectionsVisual?.footer;
   const year = new Date().getFullYear();

@@ -5,7 +5,12 @@ import { siteConfig } from "@/config/site";
 import { ShopProvider } from "@/lib/store";
 import { siteControlStore } from "@/lib/site-control-store";
 import { SiteControlsProvider } from "@/lib/site-controls-context";
+import { CatalogProvider } from "@/lib/catalog-context";
+import { getCatalog } from "@/server/catalog";
+import { isDatabaseConfigured } from "@/server/db";
+import { isPaymentConfigured } from "@/server/razorpay";
 import DynamicThemeProvider from "@/components/DynamicThemeProvider";
+import { jsonLdString } from "@/lib/json-ld";
 import "./globals.css";
 
 const display = Bricolage_Grotesque({
@@ -20,6 +25,9 @@ const sans = DM_Sans({
   variable: "--font-sans",
   display: "swap",
 });
+
+/** Pages are statically generated and refreshed at most once a minute (and immediately when the admin changes the catalogue). */
+export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await seoStore.get();
@@ -76,13 +84,13 @@ function JsonLd() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: jsonLdString(data) }}
     />
   );
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const initialControls = await siteControlStore.get("published");
+  const [initialControls, catalog] = await Promise.all([siteControlStore.get(), getCatalog()]);
 
   return (
     <html lang="en">
@@ -90,7 +98,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <JsonLd />
         <SiteControlsProvider initialControls={initialControls}>
           <DynamicThemeProvider>
-            <ShopProvider>{children}</ShopProvider>
+            <CatalogProvider products={catalog} checkoutEnabled={isDatabaseConfigured() && isPaymentConfigured()}>
+              <ShopProvider>{children}</ShopProvider>
+            </CatalogProvider>
           </DynamicThemeProvider>
         </SiteControlsProvider>
       </body>

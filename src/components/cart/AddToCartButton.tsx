@@ -65,6 +65,21 @@ export default function AddToCartButton({
     );
   };
 
+  // Availability is managed in the admin: unavailable / sold-out variants cannot be added.
+  if (!variant.inStock) {
+    return (
+      <button
+        type="button"
+        disabled
+        style={style}
+        aria-label={`${product.name} (${variant.label}) is out of stock`}
+        className={`inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-full bg-charcoal/15 font-extrabold text-charcoal/55 ${className}`}
+      >
+        Out of stock
+      </button>
+    );
+  }
+
   return (
     <button
       ref={btnRef}

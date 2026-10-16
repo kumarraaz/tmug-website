@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { IconArrowRight, IconSparkle } from "@/components/icons";
+import { AdminLogo } from "../_components/AdminLogo";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -38,6 +38,7 @@ export default function AdminLoginPage() {
       }
 
       router.push("/admin");
+      router.refresh();
     } catch {
       setError("Unable to connect to server. Please try again.");
       setLoading(false);
@@ -57,27 +58,20 @@ export default function AdminLoginPage() {
         <div className="overflow-hidden rounded-[2rem] border border-charcoal/10 bg-white p-8 shadow-[0_24px_60px_-18px_rgba(39,35,41,0.18)]">
           {/* Logo & Header */}
           <div className="text-center">
-            <Link href="/" className="inline-block transition-transform hover:scale-105">
-              <Image
-                src="/assets/logo.png"
-                alt="TMUG Logo"
-                width={120}
-                height={50}
-                className="mx-auto object-contain"
-                priority
-              />
+            <Link href="/" className="flex justify-center transition-transform hover:scale-105">
+              <AdminLogo heightClass="h-10" priority />
             </Link>
 
             <div className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-tea-gold/40 bg-warm-surface px-3 py-1 text-[11px] font-black uppercase tracking-wider text-charcoal">
               <IconSparkle className="h-3 w-3 text-tea-gold" />
-              TMUG Control Panel
+              TMUG Store Admin
             </div>
 
             <h1 className="mt-3 font-display text-2xl font-black text-charcoal">
-              Storefront Admin Access
+              Sign in to manage your store
             </h1>
             <p className="mt-1 text-xs text-charcoal/70">
-              Manage campaign banners, product prices, collections, and section visibility.
+              Products, orders, payments and monthly reports for your accountant.
             </p>
           </div>
 

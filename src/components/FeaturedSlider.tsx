@@ -2,11 +2,12 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { PRODUCTS } from "@/data/products";
+import { useCatalog } from "@/lib/catalog-context";
 import ProductCard from "./ProductCard";
 import Reveal from "./motion/Reveal";
 
 export default function FeaturedSlider() {
+  const { products: PRODUCTS } = useCatalog();
   const trackRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {

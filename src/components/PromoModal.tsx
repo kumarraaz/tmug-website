@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { siteConfig } from "@/config/site";
 import { IconClose } from "./icons";
@@ -12,9 +13,12 @@ export default function PromoModal() {
   const [visible, setVisible] = useState(false);
   const [copied, setCopied] = useState(false);
   const { promo } = siteConfig;
+  // Never cover the payment pages with a marketing popup.
+  const pathname = usePathname() ?? "";
+  const onPaymentPage = pathname.startsWith("/checkout") || pathname.startsWith("/order/");
 
   useEffect(() => {
-    if (!promo.enabled) return;
+    if (!promo.enabled || onPaymentPage) return;
     let dismissedAt = 0;
     try {
       dismissedAt = Number(localStorage.getItem(STORAGE_KEY) ?? 0);
@@ -23,7 +27,7 @@ export default function PromoModal() {
     if (dismissedAt && daysSince < promo.remindAfterDays) return;
     const t = setTimeout(() => setVisible(true), promo.delayMs);
     return () => clearTimeout(t);
-  }, [promo]);
+  }, [promo, onPaymentPage]);
 
   const dismiss = () => {
     try {
@@ -47,7 +51,7 @@ export default function PromoModal() {
 
   return (
     <AnimatePresence>
-      {visible && promo.enabled && (
+      {visible && promo.enabled && !onPaymentPage && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

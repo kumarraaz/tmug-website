@@ -5,8 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { PRODUCTS } from "@/data/products";
+import { frontImage } from "@/data/products";
+import { useCatalog } from "@/lib/catalog-context";
 import { useShop } from "@/lib/store";
+import { formatINR } from "@/lib/format";
 import { siteConfig } from "@/config/site";
 
 // ── SVG Icons ───────────────────────────────────────────────────────────────
@@ -173,40 +175,8 @@ interface BestsellerItem {
   image: string;
 }
 
-const BESTSELLER_PRODUCTS: BestsellerItem[] = [
-  {
-    id: "butterfly-pea",
-    name: "Butterfly Pea Flower Tea",
-    price: 99,
-    weight: "50g Jar",
-    slug: "butterfly-pea-flower-tea",
-    image: "/hero/butterfly-pea-50g-jar-front.png",
-  },
-  {
-    id: "chamomile",
-    name: "Chamomile Flower Tea",
-    price: 129,
-    weight: "50g Jar",
-    slug: "chamomile-flower-tea",
-    image: "/products/chamomile-50g-jar-front.png",
-  },
-  {
-    id: "hibiscus",
-    name: "Hibiscus Flower Tea",
-    price: 119,
-    weight: "50g Jar",
-    slug: "hibiscus-flower-tea",
-    image: "/hero/hibiscus-50g-jar-front.png",
-  },
-  {
-    id: "gold-tea",
-    name: "Assam Gold CTC Tea",
-    price: 399,
-    weight: "250g Pouch",
-    slug: "gold-tea",
-    image: "/hero/gold-250g-pouch-front.png",
-  },
-];
+/** Products highlighted in the navbar dropdown. Names, prices, links and images come from the live catalogue. */
+const BESTSELLER_IDS = ["butterfly-pea", "chamomile", "hibiscus", "gold-tea"];
 
 function BestsellerDropdown({
   isOpen,
@@ -216,6 +186,13 @@ function BestsellerDropdown({
   onClose: () => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { getProduct } = useCatalog();
+  const items: BestsellerItem[] = BESTSELLER_IDS.flatMap((id) => {
+    const product = getProduct(id);
+    if (!product) return [];
+    const variant = product.variants[0];
+    return [{ id, name: product.name, price: variant.price, weight: variant.label, slug: product.slug, image: frontImage(variant).src }];
+  });
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -256,7 +233,7 @@ function BestsellerDropdown({
             </div>
 
             <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {BESTSELLER_PRODUCTS.map((item) => (
+              {items.map((item) => (
                 <Link
                   key={item.id}
                   href={`/products/${item.slug}`}
@@ -276,7 +253,7 @@ function BestsellerDropdown({
                     {item.name}
                   </h4>
                   <p className="text-[10px] text-charcoal/60">{item.weight}</p>
-                  <p className="mt-1 text-xs font-black text-charcoal">₹{item.price}</p>
+                  <p className="mt-1 text-xs font-black text-charcoal">{formatINR(item.price)}</p>
                   <span className="mt-2 inline-block rounded-full bg-[#144E25] px-2.5 py-0.5 text-[9px] font-extrabold text-[#FBBF24] transition-colors group-hover:bg-[#FBBF24] group-hover:text-[#144E25]">
                     Order →
                   </span>

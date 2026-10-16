@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { getProduct, getVariant } from "@/data/products";
+import { getVariant } from "@/data/products";
+import { useCatalog } from "@/lib/catalog-context";
 import type { Product } from "@/types";
 import { useShop } from "@/lib/store";
 import { formatINR } from "@/lib/format";
@@ -159,6 +160,7 @@ function QuickViewBody({ product, onClose }: { product: Product; onClose: () => 
 /** Premium quick-view modal: gallery, variants, quantity, brew info. */
 export default function ProductQuickView() {
   const { quickViewId, setQuickViewId } = useShop();
+  const { getProduct } = useCatalog();
   const product = quickViewId ? getProduct(quickViewId) : undefined;
 
   useEffect(() => {

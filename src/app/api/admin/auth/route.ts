@@ -1,73 +1,57 @@
-import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { z } from "zod";
+import {
+  ADMIN_COOKIE,
+  checkAdminCredentials,
+  createSessionToken,
+  isAdmin,
+  sameOriginViolation,
+  sessionCookieOptions,
+} from "@/server/auth";
+import { json, jsonError, parseBody } from "@/server/http";
+import { clientIp, rateLimit } from "@/server/rate-limit";
 
-const COOKIE = "tmug-admin";
-const SESSION_VALUE = "ok";
-
-function getExpectedEmail(): string | undefined {
-  return process.env.ADMIN_EMAIL;
-}
-
-function getExpectedPassword(): string | undefined {
-  return process.env.ADMIN_PASSWORD;
-}
+const bodySchema = z.discriminatedUnion("action", [
+  z.object({ action: z.literal("login"), email: z.string().max(200), password: z.string().max(500) }),
+  z.object({ action: z.literal("logout") }),
+  z.object({ action: z.literal("status") }),
+]);
 
 export async function POST(req: Request) {
-  const body = (await req.json().catch(() => null)) as
-    | { action: "login"; email?: string; password?: string }
-    | { action: "logout" }
-    | { action: "status" }
-    | null;
+  const parsed = await parseBody(req, bodySchema);
+  if (!parsed.ok) return parsed.response;
+  const body = parsed.data;
 
-  if (!body) {
-    return NextResponse.json({ error: "Invalid request payload" }, { status: 400 });
+  if (body.action === "status") {
+    return json({ authed: await isAdmin() });
   }
+
+  const csrf = sameOriginViolation(req);
+  if (csrf) return csrf;
 
   const store = await cookies();
 
-  if (body.action === "status") {
-    const isAuthed = store.get(COOKIE)?.value === SESSION_VALUE;
-    return NextResponse.json({ authed: isAuthed });
-  }
-
   if (body.action === "logout") {
-    store.delete(COOKIE);
-    return NextResponse.json({ ok: true, authed: false });
+    store.delete(ADMIN_COOKIE);
+    return json({ ok: true, authed: false });
   }
 
-  if (body.action === "login") {
-    const expectedEmail = getExpectedEmail();
-    const expectedPassword = getExpectedPassword();
-
-    if (!expectedEmail || !expectedPassword) {
-      return NextResponse.json(
-        { error: "ADMIN_EMAIL or ADMIN_PASSWORD is not configured in server environment." },
-        { status: 500 }
-      );
-    }
-
-    const providedEmail = body.email?.trim().toLowerCase();
-    const providedPassword = body.password;
-
-    if (
-      !providedEmail ||
-      !providedPassword ||
-      providedEmail !== expectedEmail.trim().toLowerCase() ||
-      providedPassword !== expectedPassword
-    ) {
-      return NextResponse.json({ error: "Incorrect admin email or password." }, { status: 401 });
-    }
-
-    store.set(COOKIE, SESSION_VALUE, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      maxAge: 60 * 60 * 12, // 12 hours
+  // login — throttled per IP (best effort on serverless)
+  const limited = rateLimit(`admin-login:${clientIp(req)}`, 8, 10 * 60 * 1000);
+  if (!limited.ok) {
+    return json({ error: "Too many sign-in attempts. Please try again later." }, 429, {
+      "Retry-After": String(limited.retryAfterSeconds),
     });
-
-    return NextResponse.json({ ok: true, authed: true });
   }
 
-  return NextResponse.json({ error: "Invalid action" }, { status: 400 });
+  const result = checkAdminCredentials(body.email, body.password);
+  if (result === "not-configured") {
+    return jsonError("Admin sign-in is not configured on the server (set ADMIN_EMAIL and ADMIN_PASSWORD).", 500);
+  }
+  if (result === "invalid") {
+    return jsonError("Incorrect admin email or password.", 401);
+  }
+
+  store.set(ADMIN_COOKIE, await createSessionToken(), sessionCookieOptions);
+  return json({ ok: true, authed: true });
 }

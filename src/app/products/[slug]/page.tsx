@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { PRODUCTS, getProductBySlug } from "@/data/products";
+import { getCatalog } from "@/server/catalog";
 import { siteConfig } from "@/config/site";
 import PageShell from "@/components/PageShell";
 import ProductDetail from "@/components/ProductDetail";
 import ProductRail from "@/components/ProductRail";
 import Reveal from "@/components/motion/Reveal";
+import { jsonLdString } from "@/lib/json-ld";
 
 export async function generateStaticParams() {
-  return PRODUCTS.map((p) => ({ slug: p.slug }));
+  return (await getCatalog()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -18,7 +19,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = (await getCatalog()).find((p) => p.slug === slug);
   if (!product) return {};
   const url = `${siteConfig.url}/products/${product.slug}`;
   return {
@@ -57,10 +58,11 @@ const PRODUCT_FAQS = [
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const catalog = await getCatalog();
+  const product = catalog.find((p) => p.slug === slug);
   if (!product) notFound();
 
-  const related = PRODUCTS.filter((p) => p.id !== product.id).slice(0, 4);
+  const related = catalog.filter((p) => p.id !== product.id).slice(0, 4);
   const url = `${siteConfig.url}/products/${product.slug}`;
   const defaultVariant = product.variants[0];
 
@@ -79,7 +81,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             "@type": "Offer",
             priceCurrency: "INR",
             price: v.price,
-            availability: "https://schema.org/InStock",
+            availability: v.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
             sku: v.sku,
             url,
           })),
@@ -99,8 +101,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return (
     <PageShell>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(faqLd) }} />
       <ProductDetail product={product} />
 
       {/* Product FAQ */}

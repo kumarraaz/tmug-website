@@ -33,46 +33,6 @@ export async function readJson(localPath: string): Promise<unknown | null> {
   }
 }
 
-export async function writeJson(
-  localPath: string,
-  data: unknown,
-): Promise<{ persisted: boolean; durable: boolean; note?: string }> {
-  const body = JSON.stringify(data, null, 2);
-  if (hasBlob()) {
-    try {
-      await put(CONFIG_KEY, body, {
-        access: "public",
-        addRandomSuffix: false,
-        allowOverwrite: true,
-        contentType: "application/json",
-        cacheControlMaxAge: 60,
-      });
-      return { persisted: true, durable: true };
-    } catch (err) {
-      return { persisted: false, durable: false, note: `Blob save failed: ${(err as Error).message}` };
-    }
-  }
-  try {
-    await fs.mkdir(path.dirname(localPath), { recursive: true });
-    await fs.writeFile(localPath, body, "utf-8");
-    return {
-      persisted: true,
-      durable: !process.env.VERCEL,
-      note: process.env.VERCEL
-        ? "Not permanent: connect a Vercel Blob store (BLOB_STORE_ID or BLOB_READ_WRITE_TOKEN) to keep settings across deployments."
-        : undefined,
-    };
-  } catch (err) {
-    return {
-      persisted: false,
-      durable: false,
-      note: process.env.VERCEL
-        ? "NOT SAVED: production storage is not configured. Connect a Vercel Blob store (BLOB_STORE_ID or BLOB_READ_WRITE_TOKEN) in Vercel → Storage."
-        : `Not saved: ${(err as Error).message}`,
-    };
-  }
-}
-
 export async function saveUpload(
   filename: string,
   buffer: Buffer,

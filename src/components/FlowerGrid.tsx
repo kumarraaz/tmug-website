@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { getProduct, frontImage } from "@/data/products";
+import { frontImage } from "@/data/products";
+import { useCatalog } from "@/lib/catalog-context";
+import type { Product } from "@/types";
 import { formatINR } from "@/lib/format";
 import Reveal, { Stagger, RevealItem } from "./motion/Reveal";
 import { IconArrowRight } from "./icons";
@@ -16,7 +18,9 @@ const BLURBS: Record<string, string> = {
 
 /** Compact editorial grid — small image, title, one-liner, subtle accent. */
 export default function FlowerGrid() {
-  const products = FLOWER_IDS.map((id) => getProduct(id)!).filter(Boolean);
+  const { getProduct } = useCatalog();
+  const products = FLOWER_IDS.map((id) => getProduct(id)).filter((p): p is Product => Boolean(p));
+  if (products.length === 0) return null;
 
   return (
     <section aria-label="Flower teas" className="bg-cream-light py-10 sm:py-14">
