@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { databaseEnvNames } from "@/lib/env-names";
 
 /** Small presentational building blocks shared by the admin screens (server-component friendly). */
 
@@ -144,6 +145,10 @@ export function DatabaseNotConfigured() {
         Products, orders, payments and reports are stored in PostgreSQL. Set the <code className="rounded bg-white/70 px-1 font-mono text-xs">DATABASE_URL</code> environment
         variable (for example from a Neon or Vercel Postgres database) and redeploy. The tables are created automatically the first time this panel loads, and your existing
         catalogue is imported once. Until then the public store keeps working from its built-in catalogue and nothing here is simulated.
+      </p>
+      <p className="mt-2">
+        Database-related variable names this deployment can see (values are never shown):{" "}
+        <span className="font-mono text-xs">{databaseEnvNames().join(", ") || "none — the variable is not reaching this deployment (check it is enabled for Production, then redeploy)"}</span>
       </p>
       <p className="mt-2">
         See <Link href="/admin/settings" className="font-bold underline">Settings</Link> for the exact variables and their current status.
