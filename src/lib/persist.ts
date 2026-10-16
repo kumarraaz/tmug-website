@@ -8,7 +8,14 @@ import { put, list } from "@vercel/blob";
  * local filesystem. `durable` tells callers whether data survives a deploy.
  */
 /** Token auth, or Vercel OIDC (BLOB_STORE_ID + runtime OIDC token) — the SDK picks the credentials itself. */
-export const hasBlob = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID);
+export const hasBlob = () => {
+  // Vercel prefixes a second store's variables (e.g. BLOB_IMAGE_STORE_ID). The SDK only reads the unprefixed
+  // names, so point it at the prefixed store when one exists (it is the PUBLIC image store).
+  const prefixedToken = Object.keys(process.env).find((k) => /^BLOB_.+_READ_WRITE_TOKEN$/.test(k) && process.env[k]);
+  if (!process.env.BLOB_READ_WRITE_TOKEN && prefixedToken) process.env.BLOB_READ_WRITE_TOKEN = process.env[prefixedToken];
+  if (!process.env.BLOB_READ_WRITE_TOKEN && process.env.BLOB_IMAGE_STORE_ID) process.env.BLOB_STORE_ID = process.env.BLOB_IMAGE_STORE_ID;
+  return Boolean(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID);
+};
 
 const CONFIG_KEY = "tmug/site-controls.json";
 
